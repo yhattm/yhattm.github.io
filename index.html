@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ben - Backend Developer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Language Toggle -->
+    <div class="lang-toggle">
+        <button id="langToggle" class="lang-btn">中文</button>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">Ben</div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link" data-en="Home" data-zh="首頁">Home</a></li>
+                <li><a href="#about" class="nav-link" data-en="About" data-zh="關於">About</a></li>
+                <li><a href="#experience" class="nav-link" data-en="Experience" data-zh="經驗">Experience</a></li>
+                <li><a href="#tech" class="nav-link" data-en="Tech Stack" data-zh="技術棧">Tech Stack</a></li>
+                <li><a href="#contact" class="nav-link" data-en="Contact" data-zh="聯繫">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-tag" data-en="👋 Hello, I'm" data-zh="👋 你好，我是">👋 Hello, I'm</div>
+                <h1 class="hero-title">Ben</h1>
+                <h2 class="hero-subtitle" data-en="Backend Developer" data-zh="後端開發工程師">Backend Developer</h2>
+                <p class="hero-description"
+                   data-en="Specializing in Golang, AWS, and Cloud-based Video Surveillance Solutions"
+                   data-zh="專注於 Golang、AWS 和雲端影像監控解決方案">
+                   Specializing in Golang, AWS, and Cloud-based Video Surveillance Solutions
+                </p>
+                <div class="hero-cta">
+                    <a href="#contact" class="btn btn-primary" data-en="Get in Touch" data-zh="聯繫我">Get in Touch</a>
+                    <a href="https://www.linkedin.com/in/chihpin/" target="_blank" class="btn btn-secondary">LinkedIn</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="code-window">
+                    <div class="code-header">
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                    </div>
+                    <pre class="code-content"><code>package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello, World!")
+    // Building the future
+    // with clean code
+}</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title" data-en="About Me" data-zh="關於我">About Me</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p data-en="Backend Developer with 20+ years of experience in embedded systems, cloud architecture, and video surveillance solutions. Currently serving as R&D Manager at VIVOTEK, leading development of cloud-based video surveillance platforms and smart home products."
+                       data-zh="擁有 20 多年嵌入式系統、雲端架構和影像監控解決方案經驗的後端開發工程師。目前擔任晶睿通訊研發經理，領導雲端影像監控平台和智慧家居產品的開發。">
+                       Backend Developer with 20+ years of experience in embedded systems, cloud architecture, and video surveillance solutions. Currently serving as R&D Manager at VIVOTEK, leading development of cloud-based video surveillance platforms and smart home products.
+                    </p>
+                    <p data-en="Passionate about building scalable backend systems, exploring AWS services, and creating innovative IoT solutions. Former CTO at Infani, where I architected a comprehensive baby monitor service from firmware to cloud."
+                       data-zh="熱衷於建構可擴展的後端系統、探索 AWS 服務以及創建創新的物聯網解決方案。曾任 Infani 技術長，從韌體到雲端架構了完整的嬰兒監視器服務。">
+                       Passionate about building scalable backend systems, exploring AWS services, and creating innovative IoT solutions. Former CTO at Infani, where I architected a comprehensive baby monitor service from firmware to cloud.
+                    </p>
+                </div>
+                <div class="about-stats">
+                    <div class="stat-card">
+                        <div class="stat-number">20+</div>
+                        <div class="stat-label" data-en="Years Experience" data-zh="年經驗">Years Experience</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label" data-en="Major Companies" data-zh="主要公司">Major Companies</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label" data-en="Technologies" data-zh="技術">Technologies</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="experience">
+        <div class="container">
+            <h2 class="section-title" data-en="Professional Experience" data-zh="專業經驗">Professional Experience</h2>
+            <div class="timeline">
+                <!-- VIVOTEK R&D Manager -->
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date" data-en="Nov 2017 - Present · 8 yrs" data-zh="2017年11月 - 至今 · 8年">Nov 2017 - Present · 8 yrs</div>
+                        <h3 class="timeline-title">VIVOTEK</h3>
+                        <h4 class="timeline-subtitle" data-en="R&D Manager" data-zh="研發經理">R&D Manager</h4>
+                        <p class="timeline-description"
+                           data-en="Leading cloud-based video surveillance as a service (Vortex backend) and smart home product development using Golang, AWS services, and modern DevOps practices."
+                           data-zh="領導基於雲端的影像監控服務（Vortex 後端）和智慧家居產品開發，使用 Golang、AWS 服務和現代 DevOps 實踐。">
+                           Leading cloud-based video surveillance as a service (Vortex backend) and smart home product development using Golang, AWS services, and modern DevOps practices.
+                        </p>
+                        <div class="tech-tags">
+                            <span class="tag">Golang</span>
+                            <span class="tag">AWS</span>
+                            <span class="tag">Kubernetes</span>
+                            <span class="tag">Flutter</span>
+                            <span class="tag">React</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Infani CTO -->
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date" data-en="Jul 2015 - Nov 2017 · 2 yrs 5 mos" data-zh="2015年7月 - 2017年11月 · 2年5個月">Jul 2015 - Nov 2017 · 2 yrs 5 mos</div>
+                        <h3 class="timeline-title">Infani</h3>
+                        <h4 class="timeline-subtitle" data-en="Cofounder & CTO" data-zh="共同創辦人兼技術長">Cofounder & CTO</h4>
+                        <p class="timeline-description"
+                           data-en="Architected and developed comprehensive baby monitor service from firmware to cloud, including AI/ML for baby detection and sleep analysis. Managed full-stack development and DevOps infrastructure."
+                           data-zh="從韌體到雲端架構和開發完整的嬰兒監視器服務，包括用於嬰兒檢測和睡眠分析的 AI/ML。管理全端開發和 DevOps 基礎設施。">
+                           Architected and developed comprehensive baby monitor service from firmware to cloud, including AI/ML for baby detection and sleep analysis. Managed full-stack development and DevOps infrastructure.
+                        </p>
+                        <div class="tech-tags">
+                            <span class="tag">Golang</span>
+                            <span class="tag">AWS IoT</span>
+                            <span class="tag">React Native</span>
+                            <span class="tag">TensorFlow</span>
+                            <span class="tag">Docker</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIVOTEK Deputy Manager -->
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date" data-en="Jul 2005 - Jul 2015 · 10 yrs 1 mo" data-zh="2005年7月 - 2015年7月 · 10年1個月">Jul 2005 - Jul 2015 · 10 yrs 1 mo</div>
+                        <h3 class="timeline-title">VIVOTEK</h3>
+                        <h4 class="timeline-subtitle" data-en="Deputy Manager" data-zh="副理">Deputy Manager</h4>
+                        <p class="timeline-description"
+                           data-en="Progressed from Engineer to Deputy Manager, leading teams in network protocols, ONVIF, RTSP, P2P, and Video Content Analysis. Managed IP camera firmware development and intelligent video analytics."
+                           data-zh="從工程師晉升為副理，領導網路協定、ONVIF、RTSP、P2P 和影像內容分析團隊。管理 IP 攝影機韌體開發和智慧影像分析。">
+                           Progressed from Engineer to Deputy Manager, leading teams in network protocols, ONVIF, RTSP, P2P, and Video Content Analysis. Managed IP camera firmware development and intelligent video analytics.
+                        </p>
+                        <div class="tech-tags">
+                            <span class="tag">Embedded Linux</span>
+                            <span class="tag">DSP</span>
+                            <span class="tag">Video Analytics</span>
+                            <span class="tag">RTSP</span>
+                            <span class="tag">P2P</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack Section -->
+    <section id="tech" class="tech-stack">
+        <div class="container">
+            <h2 class="section-title" data-en="Tech Stack" data-zh="技術棧">Tech Stack</h2>
+            <div class="tech-categories">
+                <!-- Backend -->
+                <div class="tech-category">
+                    <h3 class="tech-category-title" data-en="Backend Development" data-zh="後端開發">Backend Development</h3>
+                    <div class="tech-grid">
+                        <div class="tech-item">
+                            <div class="tech-icon">Go</div>
+                            <div class="tech-name">Golang</div>
+                            <div class="tech-bar"><div class="tech-bar-fill" style="width: 95%"></div></div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-icon">JS</div>
+                            <div class="tech-name">Express.js</div>
+                            <div class="tech-bar"><div class="tech-bar-fill" style="width: 85%"></div></div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-icon">API</div>
+                            <div class="tech-name">REST/GraphQL</div>
+                            <div class="tech-bar"><div class="tech-bar-fill" style="width: 90%"></div></div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-icon">gRPC</div>
+                            <div class="tech-name">gRPC</div>
+                            <div class="tech-bar"><div class="tech-bar-fill" style="width: 80%"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cloud & DevOps -->
+                <div class="tech-category">
+                    <h3 class="tech-category-title" data-en="Cloud & DevOps" data-zh="雲端與 DevOps">Cloud & DevOps</h3>
+                    <div class="tech-grid">
+                        <div class="tech-item">
+                            <div class="tech-icon">AWS</div>
+                            <div class="tech-name">AWS Services</div>
+                            <div class="tech-bar"><div class="tech-bar-fill" style="width: 90%"></div></div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-icon">K8s</div>
+                            <div class="tech-name">Kubernetes</div>
+                            <div class="tech-bar"><div class="tech-bar-fill" style="width: 85%"></div></div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-icon">🐳</div>
+                            <div class="tech-name">Docker</div>
+                            <div class="tech-bar"><div class="tech-bar-fill" style="width: 90%"></div></div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-icon">CDK</div>
+                            <div class="tech-name">AWS CDK</div>
+                            <div class="tech-bar"><div class="tech-bar-fill" style="width: 85%"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Frontend & Mobile -->
+                <div class="tech-category">
+                    <h3 class="tech-category-title" data-en="Frontend & Mobile" data-zh="前端與行動">Frontend & Mobile</h3>
+                    <div class="tech-grid">
+                        <div class="tech-item">
+                            <div class="tech-icon">⚛️</div>
+                            <div class="tech-name">React</div>
+                            <div class="tech-bar"><div class="tech-bar-fill" style="width: 85%"></div></div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-icon">FL</div>
+                            <div class="tech-name">Flutter</div>
+                            <div class="tech-bar"><div class="tech-bar-fill" style="width: 80%"></div></div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-icon">RN</div>
+                            <div class="tech-name">React Native</div>
+                            <div class="tech-bar"><div class="tech-bar-fill" style="width: 75%"></div></div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-icon">TS</div>
+                            <div class="tech-name">TypeScript</div>
+                            <div class="tech-bar"><div class="tech-bar-fill" style="width: 85%"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Embedded & IoT -->
+                <div class="tech-category">
+                    <h3 class="tech-category-title" data-en="Embedded & IoT" data-zh="嵌入式與物聯網">Embedded & IoT</h3>
+                    <div class="tech-grid">
+                        <div class="tech-item">
+                            <div class="tech-icon">🐧</div>
+                            <div class="tech-name">Embedded Linux</div>
+                            <div class="tech-bar"><div class="tech-bar-fill" style="width: 95%"></div></div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-icon">MQTT</div>
+                            <div class="tech-name">MQTT/IoT</div>
+                            <div class="tech-bar"><div class="tech-bar-fill" style="width: 90%"></div></div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-icon">RTC</div>
+                            <div class="tech-name">WebRTC</div>
+                            <div class="tech-bar"><div class="tech-bar-fill" style="width: 85%"></div></div>
+                        </div>
+                        <div class="tech-item">
+                            <div class="tech-icon">RTOS</div>
+                            <div class="tech-name">RTOS</div>
+                            <div class="tech-bar"><div class="tech-bar-fill" style="width: 80%"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title" data-en="Get in Touch" data-zh="聯繫方式">Get in Touch</h2>
+            <p class="contact-description"
+               data-en="Interested in collaboration or have a question? Feel free to reach out!"
+               data-zh="有興趣合作或有問題？歡迎聯繫！">
+               Interested in collaboration or have a question? Feel free to reach out!
+            </p>
+            <div class="contact-links">
+                <a href="https://www.linkedin.com/in/chihpin/" target="_blank" class="contact-link">
+                    <span class="contact-icon">in</span>
+                    <span>LinkedIn</span>
+                </a>
+                <a href="https://github.com/yhattm" target="_blank" class="contact-link">
+                    <span class="contact-icon">GH</span>
+                    <span>GitHub</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p data-en="© 2025 Ben. Built with passion for clean code."
+               data-zh="© 2025 Ben. 用對簡潔程式碼的熱情打造。">
+               © 2025 Ben. Built with passion for clean code.
+            </p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
