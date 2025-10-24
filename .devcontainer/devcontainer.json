@@ -5,13 +5,16 @@
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
 	"features": {
-		"ghcr.io/devcontainers/features/github-cli:1": {}
+		"ghcr.io/devcontainers/features/github-cli:1": {},
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
 	},
 
 	// Mount host directories
 	"mounts": [
+		// Required: Claude Code configuration and credentials
 		"source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind",
 		"source=${localEnv:HOME}/.claude.json,target=/home/node/.claude.json,type=bind",
+		// Required: GitHub CLI configuration
 		"source=${localEnv:HOME}/.config/gh,target=/home/node/.config/gh,type=bind"
 	],
 
