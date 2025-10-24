@@ -89,9 +89,9 @@ describe('TimelineItem', () => {
 
     const tags = wrapper.findAll('.tag')
     expect(tags).toHaveLength(3)
-    expect(tags[0].text()).toBe('Golang')
-    expect(tags[1].text()).toBe('AWS')
-    expect(tags[2].text()).toBe('Kubernetes')
+    expect(tags[0]!.text()).toBe('Golang')
+    expect(tags[1]!.text()).toBe('AWS')
+    expect(tags[2]!.text()).toBe('Kubernetes')
   })
 
   it('updates description when language changes', async () => {
