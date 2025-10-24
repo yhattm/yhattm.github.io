@@ -10,9 +10,9 @@
 
 	// Mount host directories
 	"mounts": [
-		"source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind,consistency=cached",
-		"source=${localEnv:HOME}/.claude.json,target=/home/node/.claude.json,type=bind,consistency=cached",
-		"source=${localEnv:HOME}/.config/gh,target=/home/node/.config/gh,type=bind,consistency=cached"
+		"source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind",
+		"source=${localEnv:HOME}/.claude.json,target=/home/node/.claude.json,type=bind",
+		"source=${localEnv:HOME}/.config/gh,target=/home/node/.config/gh,type=bind"
 	],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
