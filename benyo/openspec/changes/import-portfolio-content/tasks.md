@@ -435,10 +435,10 @@
 4. Clean up listener on unmount
 
 **Validation**:
-- [ ] Navbar becomes more opaque after 100px scroll
-- [ ] Box shadow appears
-- [ ] Reverses when scrolling back to top
-- [ ] No performance issues
+- [x] Navbar becomes more opaque after 100px scroll
+- [x] Box shadow appears
+- [x] Reverses when scrolling back to top
+- [x] No performance issues
 
 ---
 
@@ -455,10 +455,10 @@
 5. Add CSS for active state
 
 **Validation**:
-- [ ] Correct link highlights on scroll
-- [ ] Only one link active at a time
-- [ ] Smooth transitions between active states
-- [ ] Works on page load
+- [x] Correct link highlights on scroll
+- [x] Only one link active at a time
+- [x] Smooth transitions between active states
+- [x] Works on page load
 
 ---
 
@@ -474,10 +474,10 @@
 4. Test with OS reduced motion setting
 
 **Validation**:
-- [ ] Animations disable when OS preference enabled
-- [ ] Functionality remains intact
-- [ ] No visual motion occurs
-- [ ] Tested on multiple browsers
+- [x] Animations disable when OS preference enabled
+- [x] Functionality remains intact
+- [x] No visual motion occurs
+- [x] Tested on multiple browsers
 
 ---
 
