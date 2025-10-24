@@ -16,10 +16,10 @@
 6. Export store
 
 **Validation**:
-- [ ] Store compiles without TypeScript errors
-- [ ] Can toggle between 'en' and 'zh'
-- [ ] localStorage saves preference
-- [ ] loadPreference() restores saved language
+- [x] Store compiles without TypeScript errors
+- [x] Can toggle between 'en' and 'zh'
+- [x] localStorage saves preference
+- [x] loadPreference() restores saved language
 
 ---
 
@@ -36,10 +36,10 @@
 5. Add cleanup on unmount
 
 **Validation**:
-- [ ] Composable compiles without errors
-- [ ] Returns correct refs with proper types
-- [ ] Observer unobserves after trigger
-- [ ] Works with custom threshold and rootMargin
+- [x] Composable compiles without errors
+- [x] Returns correct refs with proper types
+- [x] Observer unobserves after trigger
+- [x] Works with custom threshold and rootMargin
 
 ---
 
@@ -57,9 +57,9 @@
 6. Import in `src/main.ts`
 
 **Validation**:
-- [ ] Variables file compiles
-- [ ] Variables accessible in all components
-- [ ] No CSS syntax errors
+- [x] Variables file compiles
+- [x] Variables accessible in all components
+- [x] No CSS syntax errors
 
 ---
 
@@ -76,9 +76,9 @@
 5. Remove old styles, keep minimal global styles
 
 **Validation**:
-- [ ] App initializes language preference on load
-- [ ] RouterView renders correctly
-- [ ] No console errors
+- [x] App initializes language preference on load
+- [x] RouterView renders correctly
+- [x] No console errors
 
 ---
 
@@ -98,11 +98,11 @@
 6. Add ARIA label for accessibility
 
 **Validation**:
-- [ ] Button displays "中文" when language is 'en'
-- [ ] Button displays "English" when language is 'zh'
-- [ ] Click toggles language correctly
-- [ ] Button stays fixed on scroll
-- [ ] Hover effect works
+- [x] Button displays "中文" when language is 'en'
+- [x] Button displays "English" when language is 'zh'
+- [x] Click toggles language correctly
+- [x] Button stays fixed on scroll
+- [x] Hover effect works
 
 ---
 
@@ -120,11 +120,11 @@
 6. Style with backdrop filter blur
 
 **Validation**:
-- [ ] Navbar sticks to top on scroll
-- [ ] Links translate based on language
-- [ ] Active link highlights current section
-- [ ] Smooth scroll works on click
-- [ ] Opacity increases after 100px scroll
+- [x] Navbar sticks to top on scroll
+- [x] Links translate based on language
+- [x] Active link highlights current section
+- [x] Smooth scroll works on click
+- [x] Opacity increases after 100px scroll
 
 ---
 
@@ -142,11 +142,11 @@
 6. Add mouse leave reset
 
 **Validation**:
-- [ ] Code types out on hero section visible
-- [ ] Typing animation runs only once
-- [ ] 3D effect responds to mouse movement
-- [ ] Resets on mouse leave
-- [ ] Displays full Golang code snippet
+- [x] Code types out on hero section visible
+- [x] Typing animation runs only once
+- [x] 3D effect responds to mouse movement
+- [x] Resets on mouse leave
+- [x] Displays full Golang code snippet
 
 ---
 
@@ -163,10 +163,10 @@
 5. Make responsive
 
 **Validation**:
-- [ ] Card displays number and label
-- [ ] Animates on scroll into view
-- [ ] Scales on hover
-- [ ] Label translates with language change
+- [x] Card displays number and label
+- [x] Animates on scroll into view
+- [x] Scales on hover
+- [x] Label translates with language change
 
 ---
 
@@ -184,11 +184,11 @@
 6. Make responsive
 
 **Validation**:
-- [ ] Displays all timeline information
-- [ ] Marker changes to gradient on hover
-- [ ] Animates on scroll
-- [ ] Bilingual text translates
-- [ ] Tags display correctly
+- [x] Displays all timeline information
+- [x] Marker changes to gradient on hover
+- [x] Animates on scroll
+- [x] Bilingual text translates
+- [x] Tags display correctly
 
 ---
 
@@ -205,10 +205,10 @@
 5. Style with modern design
 
 **Validation**:
-- [ ] Displays icon, name, and progress bar
-- [ ] Bar animates from 0% to proficiency value
-- [ ] Animation triggers on scroll
-- [ ] Smooth transition effect
+- [x] Displays icon, name, and progress bar
+- [x] Bar animates from 0% to proficiency value
+- [x] Animation triggers on scroll
+- [x] Smooth transition effect
 
 ---
 
@@ -224,10 +224,10 @@
 4. Make grid responsive (1 column mobile, 2 columns desktop)
 
 **Validation**:
-- [ ] Title translates correctly
-- [ ] Renders all TechItem children
-- [ ] Grid layout responsive
-- [ ] Proper spacing
+- [x] Title translates correctly
+- [x] Renders all TechItem children
+- [x] Grid layout responsive
+- [x] Proper spacing
 
 ---
 
@@ -247,11 +247,11 @@
 6. Add gradient background
 
 **Validation**:
-- [ ] All text translates correctly
-- [ ] CodeWindow displays and animates
-- [ ] Buttons link correctly
-- [ ] Responsive layout works
-- [ ] Matches design from static HTML
+- [x] All text translates correctly
+- [x] CodeWindow displays and animates
+- [x] Buttons link correctly
+- [x] Responsive layout works
+- [x] Matches design from static HTML
 
 ---
 
@@ -269,11 +269,11 @@
 6. Make responsive
 
 **Validation**:
-- [ ] Title and paragraphs translate
-- [ ] Three stat cards display correctly
-- [ ] Cards animate on scroll
-- [ ] Layout responsive
-- [ ] Matches design
+- [x] Title and paragraphs translate
+- [x] Three stat cards display correctly
+- [x] Cards animate on scroll
+- [x] Layout responsive
+- [x] Matches design
 
 ---
 
@@ -290,11 +290,11 @@
 5. Make responsive (timeline adjusts on mobile)
 
 **Validation**:
-- [ ] All three positions display
-- [ ] Timeline line connects markers
-- [ ] Content translates correctly
-- [ ] Responsive layout works
-- [ ] Matches design
+- [x] All three positions display
+- [x] Timeline line connects markers
+- [x] Content translates correctly
+- [x] Responsive layout works
+- [x] Matches design
 
 ---
 
@@ -311,11 +311,11 @@
 5. Make responsive
 
 **Validation**:
-- [ ] Four categories display correctly
-- [ ] All tech items show with correct proficiency
-- [ ] Bars animate on scroll
-- [ ] Category titles translate
-- [ ] Grid responsive
+- [x] Four categories display correctly
+- [x] All tech items show with correct proficiency
+- [x] Bars animate on scroll
+- [x] Category titles translate
+- [x] Grid responsive
 
 ---
 
@@ -333,11 +333,11 @@
 6. Add target="_blank" and security attributes
 
 **Validation**:
-- [ ] Title and description translate
-- [ ] Links open in new tab
-- [ ] Hover effects work
-- [ ] Icons display correctly
-- [ ] Matches design
+- [x] Title and description translate
+- [x] Links open in new tab
+- [x] Hover effects work
+- [x] Icons display correctly
+- [x] Matches design
 
 ---
 
@@ -353,9 +353,9 @@
 4. Add border top
 
 **Validation**:
-- [ ] Text translates correctly
-- [ ] Centered and styled properly
-- [ ] Matches design
+- [x] Text translates correctly
+- [x] Centered and styled properly
+- [x] Matches design
 
 ---
 
@@ -374,10 +374,10 @@
 5. Ensure proper spacing between sections
 
 **Validation**:
-- [ ] All sections render in correct order
-- [ ] Navigation links scroll to correct sections
-- [ ] IDs match navbar hrefs
-- [ ] Proper spacing maintained
+- [x] All sections render in correct order
+- [x] Navigation links scroll to correct sections
+- [x] IDs match navbar hrefs
+- [x] Proper spacing maintained
 
 ---
 
@@ -393,9 +393,9 @@
 4. Test route navigation
 
 **Validation**:
-- [ ] Route loads HomeView correctly
-- [ ] No 404 errors
-- [ ] Scroll behavior works
+- [x] Route loads HomeView correctly
+- [x] No 404 errors
+- [x] Scroll behavior works
 
 ---
 
