@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "vite --host",
     "build": "run-p type-check \"build-only {@}\" --",
-    "preview": "vite preview",
+    "preview": "vite preview --host",
     "test:unit": "vitest",
     "test:e2e": "playwright test",
     "build-only": "vite build",

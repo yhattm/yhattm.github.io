@@ -42,7 +42,6 @@ test.describe('Portfolio Application', () => {
   test('navigation links scroll to correct sections', async ({ page }) => {
     // Click About link
     await page.locator('a[href="#about"]').click()
-    await page.waitForTimeout(1000) // Wait for smooth scroll
 
     // Check that we scrolled to about section
     const aboutSection = page.locator('#about')
@@ -50,21 +49,18 @@ test.describe('Portfolio Application', () => {
 
     // Click Experience link
     await page.locator('a[href="#experience"]').click()
-    await page.waitForTimeout(1000)
 
     const experienceSection = page.locator('#experience')
     await expect(experienceSection).toBeInViewport()
 
     // Click Tech Stack link
     await page.locator('a[href="#tech"]').click()
-    await page.waitForTimeout(1000)
 
     const techSection = page.locator('#tech')
     await expect(techSection).toBeInViewport()
 
     // Click Contact link
     await page.locator('a[href="#contact"]').click()
-    await page.waitForTimeout(1000)
 
     const contactSection = page.locator('#contact')
     await expect(contactSection).toBeInViewport()
@@ -72,7 +68,6 @@ test.describe('Portfolio Application', () => {
 
   test('displays statistics cards with correct numbers', async ({ page }) => {
     await page.locator('a[href="#about"]').click()
-    await page.waitForTimeout(500)
 
     const statCards = page.locator('.stat-card')
     await expect(statCards).toHaveCount(3)
@@ -85,7 +80,6 @@ test.describe('Portfolio Application', () => {
 
   test('displays timeline with three experiences', async ({ page }) => {
     await page.locator('a[href="#experience"]').click()
-    await page.waitForTimeout(500)
 
     const timelineItems = page.locator('.timeline-item')
     await expect(timelineItems).toHaveCount(3)
@@ -96,7 +90,6 @@ test.describe('Portfolio Application', () => {
 
   test('displays tech stack with four categories', async ({ page }) => {
     await page.locator('a[href="#tech"]').click()
-    await page.waitForTimeout(500)
 
     const techCategories = page.locator('.tech-category')
     await expect(techCategories).toHaveCount(4)
@@ -118,7 +111,6 @@ test.describe('Portfolio Application', () => {
 
   test('external links open in new tab', async ({ page }) => {
     await page.locator('a[href="#contact"]').click()
-    await page.waitForTimeout(500)
 
     // Check LinkedIn link
     const linkedInLink = page.locator('a[href="https://www.linkedin.com/in/chihpin/"]').first()
@@ -138,12 +130,8 @@ test.describe('Portfolio Application', () => {
     const codeContent = page.locator('.code-content code')
     await expect(codeContent).toBeVisible()
 
-    // Wait a bit for typing animation
-    await page.waitForTimeout(2000)
-
-    // Check that some code is displayed
-    const text = await codeContent.textContent()
-    expect(text).toContain('package main')
+    // Wait for typing animation to complete by checking for content
+    await expect(codeContent).toContainText('package main', { timeout: 5000 })
   })
 
   test('navbar is sticky on scroll', async ({ page }) => {
@@ -154,7 +142,6 @@ test.describe('Portfolio Application', () => {
 
     // Scroll down
     await page.evaluate(() => window.scrollTo(0, 500))
-    await page.waitForTimeout(300)
 
     // Navbar should still be visible (sticky)
     await expect(navbar).toBeVisible()
