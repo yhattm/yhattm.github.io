@@ -116,7 +116,7 @@ test.describe('Portfolio Application', () => {
     )
   })
 
-  test('external links open in new tab', async ({ page, context }) => {
+  test('external links open in new tab', async ({ page }) => {
     await page.locator('a[href="#contact"]').click()
     await page.waitForTimeout(500)
 
