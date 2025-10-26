@@ -16,7 +16,7 @@
     "type-check": "vue-tsc --build",
     "lint": "eslint . --fix --cache",
     "format": "prettier --write src/",
-    "deploy": "npm run build && mkdir -p ../../ben && cp -r dist/* ../../ben/"
+    "deploy": "npm run build && rm -rf ../../ben && mkdir -p ../../ben && cp -r dist/* ../../ben/"
   },
   "dependencies": {
     "pinia": "^3.0.3",
