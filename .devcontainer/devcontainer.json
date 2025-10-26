@@ -13,7 +13,7 @@
 	"mounts": [
 		// Required: Claude Code configuration and credentials
 		"source=${localEnv:HOME}/.claude,target=/home/node/.claude,type=bind",
-		"source=${localEnv:HOME}/.claude.json,target=/home/node/.claude.json,type=bind",
+		// "source=${localEnv:HOME}/.claude.json,target=/home/node/.claude.json,type=bind",
 		// Required: GitHub CLI configuration
 		"source=${localEnv:HOME}/.config/gh,target=/home/node/.config/gh,type=bind"
 	],
@@ -23,7 +23,8 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"Anthropic.claude-code"
+				"Anthropic.claude-code",
+				"Vue.volar"
 			]
 		}
 	}
