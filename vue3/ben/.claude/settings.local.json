@@ -3,7 +3,9 @@
     "allow": [
       "Bash(git add:*)",
       "Bash(npm run type-check:*)",
-      "Bash(npm run test:unit:*)"
+      "Bash(npm run test:unit:*)",
+      "Bash(openspec validate:*)",
+      "Bash(openspec list:*)"
     ],
     "deny": [],
     "ask": []
