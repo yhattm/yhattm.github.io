@@ -70,20 +70,20 @@ onUnmounted(() => {
 
 <template>
   <nav
-    class="navbar"
+    class="backdrop-blur-md sticky top-0 z-[999] border-b border-gray-700 py-4 transition-all"
     :style="{
       background: `rgba(15, 23, 42, ${navOpacity})`,
       boxShadow: navShadow,
     }"
   >
-    <div class="container">
-      <div class="nav-brand">Ben</div>
-      <ul class="nav-menu">
+    <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+      <div class="text-2xl md:text-3xl font-bold text-blue-500 tracking-tight">Ben</div>
+      <ul class="flex gap-4 md:gap-8 list-none m-0 p-0">
         <li v-for="link in navLinks" :key="link.href">
           <a
             :href="link.href"
-            class="nav-link"
-            :class="{ active: activeSectionId === link.href.substring(1) }"
+            class="text-gray-200 no-underline font-medium transition-colors py-2 relative text-sm md:text-base hover:text-blue-500"
+            :class="{ 'text-blue-500 after:content-[\'\'] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-blue-500': activeSectionId === link.href.substring(1) }"
             @click="smoothScroll($event, link.href)"
           >
             {{ link.text }}
@@ -93,77 +93,3 @@ onUnmounted(() => {
     </div>
   </nav>
 </template>
-
-<style scoped>
-.navbar {
-  backdrop-filter: blur(10px);
-  position: sticky;
-  top: 0;
-  z-index: 999;
-  border-bottom: 1px solid var(--dark-700);
-  padding: var(--spacing-sm) 0;
-  transition: var(--transition);
-}
-
-.navbar .container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.nav-brand {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--primary);
-  letter-spacing: -0.025em;
-}
-
-.nav-menu {
-  display: flex;
-  gap: var(--spacing-md);
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.nav-link {
-  color: var(--text);
-  text-decoration: none;
-  font-weight: 500;
-  transition: var(--transition);
-  padding: 0.5rem 0;
-  position: relative;
-}
-
-.nav-link:hover {
-  color: var(--primary);
-}
-
-.nav-link.active {
-  color: var(--primary);
-}
-
-.nav-link.active::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--primary);
-}
-
-@media (max-width: 768px) {
-  .nav-menu {
-    gap: var(--spacing-sm);
-  }
-
-  .nav-link {
-    font-size: 0.875rem;
-  }
-
-  .nav-brand {
-    font-size: 1.25rem;
-  }
-}
-</style>

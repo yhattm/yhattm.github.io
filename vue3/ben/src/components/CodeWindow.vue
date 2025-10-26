@@ -89,83 +89,20 @@ onUnmounted(() => {
 <template>
   <div
     ref="codeWindowRef"
-    class="code-window"
+    class="bg-gray-800 rounded-lg overflow-hidden shadow-2xl transition-transform duration-200 ease-out max-w-lg w-full"
     :style="{
       transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
     }"
     @mousemove="handleMouseMove"
     @mouseleave="handleMouseLeave"
   >
-    <div class="code-header">
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
+    <div class="bg-gray-700 px-4 py-3 flex gap-2 border-b border-gray-600">
+      <span class="w-3 h-3 rounded-full bg-red-500"></span>
+      <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+      <span class="w-3 h-3 rounded-full bg-green-500"></span>
     </div>
-    <pre class="code-content"><code>{{ codeContent }}</code></pre>
+    <pre
+      class="p-6 md:p-4 text-gray-100 font-mono text-sm leading-relaxed m-0 min-h-[200px] overflow-x-auto"
+    ><code>{{ codeContent }}</code></pre>
   </div>
 </template>
-
-<style scoped>
-.code-window {
-  background: var(--dark-800);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  transition: transform 0.2s ease-out;
-  max-width: 500px;
-  width: 100%;
-}
-
-.code-header {
-  background: var(--dark-700);
-  padding: 0.75rem 1rem;
-  display: flex;
-  gap: 0.5rem;
-  border-bottom: 1px solid var(--dark-600);
-}
-
-.dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--dark-600);
-}
-
-.dot:nth-child(1) {
-  background: #ff5f56;
-}
-
-.dot:nth-child(2) {
-  background: #ffbd2e;
-}
-
-.dot:nth-child(3) {
-  background: #27c93f;
-}
-
-.code-content {
-  padding: 1.5rem;
-  color: var(--text);
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 0.875rem;
-  line-height: 1.6;
-  margin: 0;
-  min-height: 200px;
-  overflow-x: auto;
-}
-
-.code-content code {
-  color: var(--text);
-}
-
-@media (max-width: 768px) {
-  .code-window {
-    max-width: 100%;
-  }
-
-  .code-content {
-    font-size: 0.75rem;
-    padding: 1rem;
-  }
-}
-</style>

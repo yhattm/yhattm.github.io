@@ -46,10 +46,14 @@ const categories = computed(() => [
 </script>
 
 <template>
-  <section id="tech" class="tech-stack">
-    <div class="container">
-      <h2 class="section-title">{{ t('techStack.title') }}</h2>
-      <div class="tech-categories">
+  <section id="tech" class="py-20 bg-gray-800">
+    <div class="max-w-7xl mx-auto px-6">
+      <h2
+        class="text-4xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-br from-blue-500 to-purple-600 bg-clip-text text-transparent"
+      >
+        {{ t('techStack.title') }}
+      </h2>
+      <div class="max-w-5xl mx-auto">
         <TechCategory
           v-for="(category, index) in categories"
           :key="index"
@@ -60,32 +64,3 @@ const categories = computed(() => [
     </div>
   </section>
 </template>
-
-<style scoped>
-.tech-stack {
-  padding: var(--spacing-xl) 0;
-  background: var(--dark-800);
-}
-
-.section-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: var(--spacing-lg);
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.tech-categories {
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-@media (max-width: 768px) {
-  .section-title {
-    font-size: 2rem;
-  }
-}
-</style>

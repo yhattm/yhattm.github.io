@@ -22,15 +22,19 @@ const stats = computed(() => [
 </script>
 
 <template>
-  <section id="about" class="about">
-    <div class="container">
-      <h2 class="section-title">{{ t('about.title') }}</h2>
-      <div class="about-content">
-        <div class="about-text">
-          <p>{{ t('about.paragraph1') }}</p>
+  <section id="about" class="py-20 bg-gray-800">
+    <div class="max-w-7xl mx-auto px-6">
+      <h2
+        class="text-4xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-br from-blue-500 to-purple-600 bg-clip-text text-transparent"
+      >
+        {{ t('about.title') }}
+      </h2>
+      <div class="grid gap-12">
+        <div class="text-gray-100 text-lg leading-relaxed max-w-3xl mx-auto">
+          <p class="mb-6">{{ t('about.paragraph1') }}</p>
           <p>{{ t('about.paragraph2') }}</p>
         </div>
-        <div class="about-stats">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mt-6">
           <StatCard
             v-for="(stat, index) in stats"
             :key="index"
@@ -42,64 +46,3 @@ const stats = computed(() => [
     </div>
   </section>
 </template>
-
-<style scoped>
-.about {
-  padding: var(--spacing-xl) 0;
-  background: var(--dark-800);
-}
-
-.section-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: var(--spacing-lg);
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.about-content {
-  display: grid;
-  gap: var(--spacing-lg);
-}
-
-.about-text {
-  color: var(--text);
-  font-size: 1.125rem;
-  line-height: 1.8;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.about-text p {
-  margin-bottom: var(--spacing-md);
-}
-
-.about-text p:last-child {
-  margin-bottom: 0;
-}
-
-.about-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-md);
-  margin-top: var(--spacing-md);
-}
-
-@media (max-width: 768px) {
-  .section-title {
-    font-size: 2rem;
-  }
-
-  .about-text {
-    font-size: 1rem;
-  }
-
-  .about-stats {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-sm);
-  }
-}
-</style>

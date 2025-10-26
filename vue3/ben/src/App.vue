@@ -23,29 +23,13 @@ watch(locale, (newLang) => {
 </script>
 
 <template>
-  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <a
+    href="#main-content"
+    class="absolute -top-10 left-0 bg-blue-600 text-white px-4 py-2 no-underline z-[10000] rounded-br font-semibold focus:top-0 transition-all"
+  >
+    Skip to main content
+  </a>
   <LanguageToggle />
   <NavBar />
   <RouterView id="main-content" />
 </template>
-
-<style scoped>
-/* Minimal app-level styles - component-specific styles are scoped */
-
-.skip-link {
-  position: absolute;
-  top: -40px;
-  left: 0;
-  background: var(--primary);
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-  z-index: 10000;
-  border-radius: 0 0 var(--radius-sm) 0;
-  font-weight: 600;
-}
-
-.skip-link:focus {
-  top: 0;
-}
-</style>

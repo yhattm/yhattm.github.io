@@ -6,7 +6,7 @@ interface Props {
   label: string
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 
 const { isVisible, targetRef } = useScrollAnimation(0.1)
 </script>
@@ -14,62 +14,14 @@ const { isVisible, targetRef } = useScrollAnimation(0.1)
 <template>
   <div
     ref="targetRef"
-    class="stat-card"
-    :class="{ 'is-visible': isVisible }"
+    class="bg-gray-700 border border-gray-600 rounded-lg p-6 md:p-4 text-center transition-all opacity-0 translate-y-8 hover:-translate-y-2 hover:scale-105 hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/20"
+    :class="{ 'opacity-100 translate-y-0': isVisible }"
   >
-    <div class="stat-number">{{ number }}</div>
-    <div class="stat-label">{{ label }}</div>
+    <div
+      class="text-5xl md:text-4xl font-bold bg-gradient-to-br from-blue-500 to-purple-600 bg-clip-text text-transparent mb-2"
+    >
+      {{ number }}
+    </div>
+    <div class="text-gray-400 text-sm font-medium uppercase tracking-wider">{{ label }}</div>
   </div>
 </template>
-
-<style scoped>
-.stat-card {
-  background: var(--dark-700);
-  border: 1px solid var(--dark-600);
-  border-radius: var(--radius-md);
-  padding: var(--spacing-md);
-  text-align: center;
-  transition: var(--transition);
-  opacity: 0;
-  transform: translateY(30px);
-}
-
-.stat-card.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.stat-card:hover {
-  transform: translateY(-10px) scale(1.05);
-  border-color: var(--primary);
-  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
-}
-
-.stat-number {
-  font-size: 3rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: var(--spacing-xs);
-}
-
-.stat-label {
-  color: var(--text-muted);
-  font-size: 0.875rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-@media (max-width: 768px) {
-  .stat-number {
-    font-size: 2.5rem;
-  }
-
-  .stat-card {
-    padding: var(--spacing-sm);
-  }
-}
-</style>

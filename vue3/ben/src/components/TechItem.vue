@@ -25,89 +25,18 @@ watch(isVisible, (newValue) => {
 <template>
   <div
     ref="targetRef"
-    class="tech-item"
-    :class="{ 'is-visible': isVisible }"
+    class="flex flex-col gap-2 p-4 md:p-3 bg-gray-700 border border-gray-600 rounded-lg transition-all opacity-0 translate-y-8 hover:border-blue-500 hover:shadow-md hover:shadow-blue-500/20 hover:-translate-y-1"
+    :class="{ 'opacity-100 translate-y-0': isVisible }"
   >
-    <div class="tech-icon">{{ icon }}</div>
-    <div class="tech-name">{{ name }}</div>
-    <div class="tech-bar">
+    <div class="text-2xl md:text-xl font-bold text-blue-500 text-center bg-gray-600 p-4 md:p-3 rounded">
+      {{ icon }}
+    </div>
+    <div class="text-gray-100 font-semibold text-sm md:text-xs text-center">{{ name }}</div>
+    <div class="h-2 bg-gray-600 rounded overflow-hidden relative">
       <div
-        class="tech-bar-fill"
+        class="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded transition-all duration-1000 ease-out w-0"
         :style="{ width: `${animatedProficiency}%` }"
       ></div>
     </div>
   </div>
 </template>
-
-<style scoped>
-.tech-item {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-sm);
-  background: var(--dark-700);
-  border: 1px solid var(--dark-600);
-  border-radius: var(--radius-md);
-  transition: var(--transition);
-  opacity: 0;
-  transform: translateY(30px);
-}
-
-.tech-item.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.tech-item:hover {
-  border-color: var(--primary);
-  box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
-  transform: translateY(-5px);
-}
-
-.tech-icon {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--primary);
-  text-align: center;
-  background: var(--dark-600);
-  padding: var(--spacing-sm);
-  border-radius: var(--radius-sm);
-}
-
-.tech-name {
-  color: var(--text);
-  font-weight: 600;
-  font-size: 0.875rem;
-  text-align: center;
-}
-
-.tech-bar {
-  height: 8px;
-  background: var(--dark-600);
-  border-radius: 4px;
-  overflow: hidden;
-  position: relative;
-}
-
-.tech-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--primary), var(--secondary));
-  border-radius: 4px;
-  transition: width 1s ease-out;
-  width: 0;
-}
-
-@media (max-width: 768px) {
-  .tech-item {
-    padding: var(--spacing-xs);
-  }
-
-  .tech-icon {
-    font-size: 1.25rem;
-  }
-
-  .tech-name {
-    font-size: 0.75rem;
-  }
-}
-</style>

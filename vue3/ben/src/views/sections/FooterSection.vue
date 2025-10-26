@@ -5,24 +5,9 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <footer class="footer">
-    <div class="container">
-      <p>{{ t('footer.copyright') }}</p>
+  <footer class="bg-gray-800 border-t border-gray-600 py-6 text-center text-gray-400 text-sm">
+    <div class="max-w-7xl mx-auto px-6">
+      <p class="m-0">{{ t('footer.copyright') }}</p>
     </div>
   </footer>
 </template>
-
-<style scoped>
-.footer {
-  background: var(--dark-800);
-  border-top: 1px solid var(--dark-600);
-  padding: var(--spacing-md) 0;
-  text-align: center;
-  color: var(--text-muted);
-  font-size: 0.875rem;
-}
-
-.footer p {
-  margin: 0;
-}
-</style>

@@ -1,87 +1,17 @@
 <template>
-  <div class="item">
-    <i>
+  <div
+    class="mt-8 lg:mt-0 lg:py-2 lg:px-0 lg:pb-4 flex relative lg:before:content-[''] lg:before:border-l lg:before:border-gray-300 dark:lg:before:border-gray-700 lg:before:absolute lg:before:left-0 lg:before:bottom-[calc(50%+25px)] lg:before:h-[calc(50%-25px)] lg:after:content-[''] lg:after:border-l lg:after:border-gray-300 dark:lg:after:border-gray-700 lg:after:absolute lg:after:left-0 lg:after:top-[calc(50%+25px)] lg:after:h-[calc(50%-25px)] first:lg:before:hidden last:lg:after:hidden"
+  >
+    <i
+      class="flex items-center justify-center w-8 h-8 lg:w-12 lg:h-12 text-gray-700 dark:text-gray-300 lg:absolute lg:top-[calc(50%-25px)] lg:left-[-26px] lg:border lg:border-gray-300 dark:lg:border-gray-700 lg:bg-white dark:lg:bg-gray-900 lg:rounded-lg"
+    >
       <slot name="icon"></slot>
     </i>
-    <div class="details">
-      <h3>
+    <div class="flex-1 ml-4">
+      <h3 class="text-xl font-medium mb-2 text-gray-800 dark:text-gray-200">
         <slot name="heading"></slot>
       </h3>
       <slot></slot>
     </div>
   </div>
 </template>
-
-<style scoped>
-.item {
-  margin-top: 2rem;
-  display: flex;
-  position: relative;
-}
-
-.details {
-  flex: 1;
-  margin-left: 1rem;
-}
-
-i {
-  display: flex;
-  place-items: center;
-  place-content: center;
-  width: 32px;
-  height: 32px;
-
-  color: var(--color-text);
-}
-
-h3 {
-  font-size: 1.2rem;
-  font-weight: 500;
-  margin-bottom: 0.4rem;
-  color: var(--color-heading);
-}
-
-@media (min-width: 1024px) {
-  .item {
-    margin-top: 0;
-    padding: 0.4rem 0 1rem calc(var(--section-gap) / 2);
-  }
-
-  i {
-    top: calc(50% - 25px);
-    left: -26px;
-    position: absolute;
-    border: 1px solid var(--color-border);
-    background: var(--color-background);
-    border-radius: 8px;
-    width: 50px;
-    height: 50px;
-  }
-
-  .item:before {
-    content: ' ';
-    border-left: 1px solid var(--color-border);
-    position: absolute;
-    left: 0;
-    bottom: calc(50% + 25px);
-    height: calc(50% - 25px);
-  }
-
-  .item:after {
-    content: ' ';
-    border-left: 1px solid var(--color-border);
-    position: absolute;
-    left: 0;
-    top: calc(50% + 25px);
-    height: calc(50% - 25px);
-  }
-
-  .item:first-of-type:before {
-    display: none;
-  }
-
-  .item:last-of-type:after {
-    display: none;
-  }
-}
-</style>

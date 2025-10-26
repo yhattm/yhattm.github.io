@@ -31,10 +31,14 @@ const experiences = computed(() => [
 </script>
 
 <template>
-  <section id="experience" class="experience">
-    <div class="container">
-      <h2 class="section-title">{{ t('experience.title') }}</h2>
-      <div class="timeline">
+  <section id="experience" class="py-20 bg-gray-900">
+    <div class="max-w-7xl mx-auto px-6">
+      <h2
+        class="text-4xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-br from-blue-500 to-purple-600 bg-clip-text text-transparent"
+      >
+        {{ t('experience.title') }}
+      </h2>
+      <div class="max-w-3xl mx-auto pt-6">
         <TimelineItem
           v-for="(exp, index) in experiences"
           :key="index"
@@ -48,33 +52,3 @@ const experiences = computed(() => [
     </div>
   </section>
 </template>
-
-<style scoped>
-.experience {
-  padding: var(--spacing-xl) 0;
-  background: var(--dark);
-}
-
-.section-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: var(--spacing-lg);
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.timeline {
-  max-width: 800px;
-  margin: 0 auto;
-  padding-top: var(--spacing-md);
-}
-
-@media (max-width: 768px) {
-  .section-title {
-    font-size: 2rem;
-  }
-}
-</style>

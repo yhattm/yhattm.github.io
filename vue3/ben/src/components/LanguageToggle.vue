@@ -19,10 +19,10 @@ const toggleLanguage = () => {
 </script>
 
 <template>
-  <div class="lang-toggle">
+  <div class="fixed top-4 right-4 md:right-6 z-[1000]">
     <button
       @click="toggleLanguage"
-      class="lang-btn"
+      class="bg-gray-800 text-gray-100 border-2 border-gray-700 px-4 py-2 rounded cursor-pointer font-medium transition-all text-sm hover:bg-blue-500 hover:border-blue-500 hover:-translate-y-0.5 focus:outline focus:outline-2 focus:outline-blue-500 focus:outline-offset-2"
       :aria-label="ariaLabel"
       type="button"
     >
@@ -30,36 +30,3 @@ const toggleLanguage = () => {
     </button>
   </div>
 </template>
-
-<style scoped>
-.lang-toggle {
-  position: fixed;
-  top: var(--spacing-sm);
-  right: var(--spacing-md);
-  z-index: 1000;
-}
-
-.lang-btn {
-  background: var(--dark-700);
-  color: var(--text);
-  border: 2px solid var(--dark-600);
-  padding: 0.5rem 1rem;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-weight: 500;
-  transition: var(--transition);
-  font-family: 'Inter', sans-serif;
-  font-size: 0.875rem;
-}
-
-.lang-btn:hover {
-  background: var(--primary);
-  border-color: var(--primary);
-  transform: translateY(-2px);
-}
-
-.lang-btn:focus {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
-</style>

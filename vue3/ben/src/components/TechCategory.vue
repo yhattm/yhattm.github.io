@@ -12,13 +12,15 @@ interface Props {
   items: TechItemData[]
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 </script>
 
 <template>
-  <div class="tech-category">
-    <h3 class="tech-category-title">{{ title }}</h3>
-    <div class="tech-grid">
+  <div class="mb-12">
+    <h3 class="text-gray-100 text-2xl md:text-xl font-bold mb-6 pb-4 border-b-2 border-gray-600">
+      {{ title }}
+    </h3>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-3">
       <TechItem
         v-for="(item, index) in items"
         :key="index"
@@ -29,35 +31,3 @@ const props = defineProps<Props>()
     </div>
   </div>
 </template>
-
-<style scoped>
-.tech-category {
-  margin-bottom: var(--spacing-lg);
-}
-
-.tech-category-title {
-  color: var(--text);
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: var(--spacing-md);
-  padding-bottom: var(--spacing-sm);
-  border-bottom: 2px solid var(--dark-600);
-}
-
-.tech-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: var(--spacing-sm);
-}
-
-@media (max-width: 768px) {
-  .tech-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-xs);
-  }
-
-  .tech-category-title {
-    font-size: 1.25rem;
-  }
-}
-</style>
