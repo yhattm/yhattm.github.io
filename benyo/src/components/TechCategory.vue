@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useLanguageStore, type BilingualText } from '@/stores/language'
 import TechItem from './TechItem.vue'
 
 interface TechItemData {
@@ -9,18 +8,16 @@ interface TechItemData {
 }
 
 interface Props {
-  title: BilingualText
+  title: string
   items: TechItemData[]
 }
 
-defineProps<Props>()
-
-const languageStore = useLanguageStore()
+const props = defineProps<Props>()
 </script>
 
 <template>
   <div class="tech-category">
-    <h3 class="tech-category-title">{{ languageStore.t(title) }}</h3>
+    <h3 class="tech-category-title">{{ title }}</h3>
     <div class="tech-grid">
       <TechItem
         v-for="(item, index) in items"

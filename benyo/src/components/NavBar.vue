@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useLanguageStore, type BilingualText } from '@/stores/language'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-const languageStore = useLanguageStore()
+const { t } = useI18n()
 
 const navOpacity = ref(0.8)
 const navShadow = ref('none')
 const activeSectionId = ref('home')
 
-const navLinks: Array<{ href: string; text: BilingualText }> = [
-  { href: '#home', text: { en: 'Home', zh: '首頁' } },
-  { href: '#about', text: { en: 'About', zh: '關於' } },
-  { href: '#experience', text: { en: 'Experience', zh: '經驗' } },
-  { href: '#tech', text: { en: 'Tech Stack', zh: '技術棧' } },
-  { href: '#contact', text: { en: 'Contact', zh: '聯繫' } },
-]
+const navLinks = computed(() => [
+  { href: '#home', text: t('nav.home') },
+  { href: '#about', text: t('nav.about') },
+  { href: '#experience', text: t('nav.experience') },
+  { href: '#tech', text: t('nav.techStack') },
+  { href: '#contact', text: t('nav.contact') },
+])
 
 const handleScroll = () => {
   const scrollPosition = window.pageYOffset
@@ -86,7 +86,7 @@ onUnmounted(() => {
             :class="{ active: activeSectionId === link.href.substring(1) }"
             @click="smoothScroll($event, link.href)"
           >
-            {{ languageStore.t(link.text) }}
+            {{ link.text }}
           </a>
         </li>
       </ul>

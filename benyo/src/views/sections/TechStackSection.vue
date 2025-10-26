@@ -1,17 +1,13 @@
 <script setup lang="ts">
-import { useLanguageStore, type BilingualText } from '@/stores/language'
+import { useI18n } from 'vue-i18n'
+import { computed } from 'vue'
 import TechCategory from '@/components/TechCategory.vue'
 
-const languageStore = useLanguageStore()
+const { t } = useI18n()
 
-const sectionTitle: BilingualText = {
-  en: 'Tech Stack',
-  zh: '技術棧',
-}
-
-const categories = [
+const categories = computed(() => [
   {
-    title: { en: 'Backend Development', zh: '後端開發' },
+    title: t('techStack.categories.backend'),
     items: [
       { icon: 'Go', name: 'Golang', proficiency: 95 },
       { icon: 'JS', name: 'Express.js', proficiency: 85 },
@@ -20,7 +16,7 @@ const categories = [
     ],
   },
   {
-    title: { en: 'Cloud & DevOps', zh: '雲端與 DevOps' },
+    title: t('techStack.categories.cloudDevOps'),
     items: [
       { icon: 'AWS', name: 'AWS Services', proficiency: 90 },
       { icon: 'K8s', name: 'Kubernetes', proficiency: 85 },
@@ -29,7 +25,7 @@ const categories = [
     ],
   },
   {
-    title: { en: 'Frontend & Mobile', zh: '前端與行動' },
+    title: t('techStack.categories.frontendMobile'),
     items: [
       { icon: '⚛️', name: 'React', proficiency: 85 },
       { icon: 'FL', name: 'Flutter', proficiency: 80 },
@@ -38,7 +34,7 @@ const categories = [
     ],
   },
   {
-    title: { en: 'Embedded & IoT', zh: '嵌入式與物聯網' },
+    title: t('techStack.categories.embeddedIoT'),
     items: [
       { icon: '🐧', name: 'Embedded Linux', proficiency: 95 },
       { icon: 'MQTT', name: 'MQTT/IoT', proficiency: 90 },
@@ -46,13 +42,13 @@ const categories = [
       { icon: 'RTOS', name: 'RTOS', proficiency: 80 },
     ],
   },
-]
+])
 </script>
 
 <template>
   <section id="tech" class="tech-stack">
     <div class="container">
-      <h2 class="section-title">{{ languageStore.t(sectionTitle) }}</h2>
+      <h2 class="section-title">{{ t('techStack.title') }}</h2>
       <div class="tech-categories">
         <TechCategory
           v-for="(category, index) in categories"

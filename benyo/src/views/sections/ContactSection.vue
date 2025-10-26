@@ -1,24 +1,14 @@
 <script setup lang="ts">
-import { useLanguageStore, type BilingualText } from '@/stores/language'
+import { useI18n } from 'vue-i18n'
 
-const languageStore = useLanguageStore()
-
-const sectionTitle: BilingualText = {
-  en: 'Get in Touch',
-  zh: '聯繫方式',
-}
-
-const description: BilingualText = {
-  en: 'Interested in collaboration or have a question? Feel free to reach out!',
-  zh: '有興趣合作或有問題？歡迎聯繫！',
-}
+const { t } = useI18n()
 </script>
 
 <template>
   <section id="contact" class="contact">
     <div class="container">
-      <h2 class="section-title">{{ languageStore.t(sectionTitle) }}</h2>
-      <p class="contact-description">{{ languageStore.t(description) }}</p>
+      <h2 class="section-title">{{ t('contact.title') }}</h2>
+      <p class="contact-description">{{ t('contact.description') }}</p>
       <div class="contact-links">
         <a
           href="https://www.linkedin.com/in/chihpin/"

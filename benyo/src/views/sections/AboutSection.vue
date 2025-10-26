@@ -1,48 +1,34 @@
 <script setup lang="ts">
-import { useLanguageStore, type BilingualText } from '@/stores/language'
+import { useI18n } from 'vue-i18n'
+import { computed } from 'vue'
 import StatCard from '@/components/StatCard.vue'
 
-const languageStore = useLanguageStore()
+const { t } = useI18n()
 
-const sectionTitle: BilingualText = {
-  en: 'About Me',
-  zh: '關於我',
-}
-
-const paragraph1: BilingualText = {
-  en: 'Backend Developer with 20+ years of experience in embedded systems, cloud architecture, and video surveillance solutions. Currently serving as R&D Manager at VIVOTEK, leading development of cloud-based video surveillance platforms and smart home products.',
-  zh: '擁有 20 多年嵌入式系統、雲端架構和影像監控解決方案經驗的後端開發工程師。目前擔任晶睿通訊研發經理，領導雲端影像監控平台和智慧家居產品的開發。',
-}
-
-const paragraph2: BilingualText = {
-  en: 'Passionate about building scalable backend systems, exploring AWS services, and creating innovative IoT solutions. Former CTO at Infani, where I architected a comprehensive baby monitor service from firmware to cloud.',
-  zh: '熱衷於建構可擴展的後端系統、探索 AWS 服務以及創建創新的物聯網解決方案。曾任 Infani 技術長，從韌體到雲端架構了完整的嬰兒監視器服務。',
-}
-
-const stats = [
+const stats = computed(() => [
   {
     number: '20+',
-    label: { en: 'Years Experience', zh: '年經驗' },
+    label: t('about.stats.yearsExperience'),
   },
   {
     number: '3',
-    label: { en: 'Major Companies', zh: '主要公司' },
+    label: t('about.stats.majorCompanies'),
   },
   {
     number: '50+',
-    label: { en: 'Technologies', zh: '技術' },
+    label: t('about.stats.technologies'),
   },
-]
+])
 </script>
 
 <template>
   <section id="about" class="about">
     <div class="container">
-      <h2 class="section-title">{{ languageStore.t(sectionTitle) }}</h2>
+      <h2 class="section-title">{{ t('about.title') }}</h2>
       <div class="about-content">
         <div class="about-text">
-          <p>{{ languageStore.t(paragraph1) }}</p>
-          <p>{{ languageStore.t(paragraph2) }}</p>
+          <p>{{ t('about.paragraph1') }}</p>
+          <p>{{ t('about.paragraph2') }}</p>
         </div>
         <div class="about-stats">
           <StatCard

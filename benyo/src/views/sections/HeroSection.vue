@@ -1,28 +1,8 @@
 <script setup lang="ts">
-import { useLanguageStore, type BilingualText } from '@/stores/language'
+import { useI18n } from 'vue-i18n'
 import CodeWindow from '@/components/CodeWindow.vue'
 
-const languageStore = useLanguageStore()
-
-const greeting: BilingualText = {
-  en: '👋 Hello, I\'m',
-  zh: '👋 你好，我是',
-}
-
-const role: BilingualText = {
-  en: 'Backend Developer',
-  zh: '後端開發工程師',
-}
-
-const tagline: BilingualText = {
-  en: 'Specializing in Golang, AWS, and Cloud-based Video Surveillance Solutions',
-  zh: '專注於 Golang、AWS 和雲端影像監控解決方案',
-}
-
-const ctaButton: BilingualText = {
-  en: 'Get in Touch',
-  zh: '聯繫我',
-}
+const { t } = useI18n()
 </script>
 
 <template>
@@ -30,12 +10,12 @@ const ctaButton: BilingualText = {
     <div class="container">
       <div class="hero-content">
         <div class="hero-text">
-          <div class="hero-tag">{{ languageStore.t(greeting) }}</div>
+          <div class="hero-tag">{{ t('hero.greeting') }}</div>
           <h1 class="hero-title">Ben</h1>
-          <h2 class="hero-subtitle">{{ languageStore.t(role) }}</h2>
-          <p class="hero-description">{{ languageStore.t(tagline) }}</p>
+          <h2 class="hero-subtitle">{{ t('hero.role') }}</h2>
+          <p class="hero-description">{{ t('hero.tagline') }}</p>
           <div class="hero-cta">
-            <a href="#contact" class="btn btn-primary">{{ languageStore.t(ctaButton) }}</a>
+            <a href="#contact" class="btn btn-primary">{{ t('hero.ctaButton') }}</a>
             <a
               href="https://www.linkedin.com/in/chihpin/"
               target="_blank"

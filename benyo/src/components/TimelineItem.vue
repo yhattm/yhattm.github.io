@@ -1,19 +1,17 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useScrollAnimation } from '@/composables/useScrollAnimation'
-import { useLanguageStore, type BilingualText } from '@/stores/language'
 
 interface Props {
-  date: BilingualText
+  date: string
   company: string
-  role: BilingualText
-  description: BilingualText
+  role: string
+  description: string
   tags: string[]
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 
-const languageStore = useLanguageStore()
 const { isVisible, targetRef } = useScrollAnimation(0.1)
 const isHovered = ref(false)
 </script>
@@ -28,10 +26,10 @@ const isHovered = ref(false)
   >
     <div class="timeline-marker" :class="{ 'is-hovered': isHovered }"></div>
     <div class="timeline-content">
-      <div class="timeline-date">{{ languageStore.t(date) }}</div>
+      <div class="timeline-date">{{ date }}</div>
       <h3 class="timeline-title">{{ company }}</h3>
-      <h4 class="timeline-subtitle">{{ languageStore.t(role) }}</h4>
-      <p class="timeline-description">{{ languageStore.t(description) }}</p>
+      <h4 class="timeline-subtitle">{{ role }}</h4>
+      <p class="timeline-description">{{ description }}</p>
       <div class="tech-tags">
         <span v-for="tag in tags" :key="tag" class="tag">{{ tag }}</span>
       </div>

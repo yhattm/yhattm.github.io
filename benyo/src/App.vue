@@ -1,25 +1,21 @@
 <script setup lang="ts">
 import { onMounted, watch } from 'vue'
 import { RouterView } from 'vue-router'
-import { useLanguageStore } from './stores/language'
+import { useI18n } from 'vue-i18n'
 import LanguageToggle from './components/LanguageToggle.vue'
 import NavBar from './components/NavBar.vue'
 
-const languageStore = useLanguageStore()
+const { locale } = useI18n()
 
 onMounted(() => {
-  languageStore.loadPreference()
   // Set initial lang attribute
-  document.documentElement.lang = languageStore.currentLang === 'zh' ? 'zh-CN' : 'en'
+  document.documentElement.lang = locale.value === 'zh' ? 'zh-CN' : 'en'
 })
 
 // Update HTML lang attribute when language changes
-watch(
-  () => languageStore.currentLang,
-  (newLang) => {
-    document.documentElement.lang = newLang === 'zh' ? 'zh-CN' : 'en'
-  }
-)
+watch(locale, (newLang) => {
+  document.documentElement.lang = newLang === 'zh' ? 'zh-CN' : 'en'
+})
 </script>
 
 <template>

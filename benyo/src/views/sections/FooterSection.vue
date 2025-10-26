@@ -1,18 +1,13 @@
 <script setup lang="ts">
-import { useLanguageStore, type BilingualText } from '@/stores/language'
+import { useI18n } from 'vue-i18n'
 
-const languageStore = useLanguageStore()
-
-const copyrightText: BilingualText = {
-  en: '© 2025 Ben. Built with passion for clean code.',
-  zh: '© 2025 Ben. 用對簡潔程式碼的熱情打造。',
-}
+const { t } = useI18n()
 </script>
 
 <template>
   <footer class="footer">
     <div class="container">
-      <p>{{ languageStore.t(copyrightText) }}</p>
+      <p>{{ t('footer.copyright') }}</p>
     </div>
   </footer>
 </template>

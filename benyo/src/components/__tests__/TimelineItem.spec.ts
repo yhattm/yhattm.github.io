@@ -1,28 +1,27 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { setActivePinia, createPinia } from 'pinia'
 import TimelineItem from '../TimelineItem.vue'
-import { useLanguageStore } from '@/stores/language'
 
 describe('TimelineItem', () => {
-  const defaultProps = {
-    date: { en: 'Nov 2017 - Present', zh: '2017年11月 - 至今' },
+  const defaultEnglishProps = {
+    date: 'Nov 2017 - Present',
     company: 'VIVOTEK',
-    role: { en: 'R&D Manager', zh: '研發經理' },
-    description: {
-      en: 'Leading cloud-based video surveillance development',
-      zh: '領導雲端影像監控開發',
-    },
+    role: 'R&D Manager',
+    description: 'Leading cloud-based video surveillance development',
     tags: ['Golang', 'AWS', 'Kubernetes'],
   }
 
-  beforeEach(() => {
-    setActivePinia(createPinia())
-  })
+  const defaultChineseProps = {
+    date: '2017年11月 - 至今',
+    company: 'VIVOTEK',
+    role: '研發經理',
+    description: '領導雲端影像監控開發',
+    tags: ['Golang', 'AWS', 'Kubernetes'],
+  }
 
   it('renders correctly with all props', () => {
     const wrapper = mount(TimelineItem, {
-      props: defaultProps,
+      props: defaultEnglishProps,
     })
 
     expect(wrapper.find('.timeline-item').exists()).toBe(true)
@@ -32,59 +31,37 @@ describe('TimelineItem', () => {
 
   it('displays company name', () => {
     const wrapper = mount(TimelineItem, {
-      props: defaultProps,
+      props: defaultEnglishProps,
     })
 
     expect(wrapper.find('.timeline-title').text()).toBe('VIVOTEK')
   })
 
-  it('displays English date when language is English', () => {
-    const store = useLanguageStore()
-    store.currentLang = 'en'
-
+  it('displays English content', () => {
     const wrapper = mount(TimelineItem, {
-      props: defaultProps,
+      props: defaultEnglishProps,
     })
 
     expect(wrapper.find('.timeline-date').text()).toBe('Nov 2017 - Present')
+    expect(wrapper.find('.timeline-subtitle').text()).toBe('R&D Manager')
+    expect(wrapper.find('.timeline-description').text()).toBe(
+      'Leading cloud-based video surveillance development'
+    )
   })
 
-  it('displays Chinese date when language is Chinese', () => {
-    const store = useLanguageStore()
-    store.currentLang = 'zh'
-
+  it('displays Chinese content', () => {
     const wrapper = mount(TimelineItem, {
-      props: defaultProps,
+      props: defaultChineseProps,
     })
 
     expect(wrapper.find('.timeline-date').text()).toBe('2017年11月 - 至今')
-  })
-
-  it('displays English role when language is English', () => {
-    const store = useLanguageStore()
-    store.currentLang = 'en'
-
-    const wrapper = mount(TimelineItem, {
-      props: defaultProps,
-    })
-
-    expect(wrapper.find('.timeline-subtitle').text()).toBe('R&D Manager')
-  })
-
-  it('displays Chinese role when language is Chinese', () => {
-    const store = useLanguageStore()
-    store.currentLang = 'zh'
-
-    const wrapper = mount(TimelineItem, {
-      props: defaultProps,
-    })
-
     expect(wrapper.find('.timeline-subtitle').text()).toBe('研發經理')
+    expect(wrapper.find('.timeline-description').text()).toBe('領導雲端影像監控開發')
   })
 
   it('displays all tags', () => {
     const wrapper = mount(TimelineItem, {
-      props: defaultProps,
+      props: defaultEnglishProps,
     })
 
     const tags = wrapper.findAll('.tag')
@@ -94,25 +71,9 @@ describe('TimelineItem', () => {
     expect(tags[2]!.text()).toBe('Kubernetes')
   })
 
-  it('updates description when language changes', async () => {
-    const store = useLanguageStore()
-    const wrapper = mount(TimelineItem, {
-      props: defaultProps,
-    })
-
-    expect(wrapper.find('.timeline-description').text()).toBe(
-      'Leading cloud-based video surveillance development'
-    )
-
-    store.toggleLanguage()
-    await wrapper.vm.$nextTick()
-
-    expect(wrapper.find('.timeline-description').text()).toBe('領導雲端影像監控開發')
-  })
-
   it('applies hover state to marker', async () => {
     const wrapper = mount(TimelineItem, {
-      props: defaultProps,
+      props: defaultEnglishProps,
     })
 
     const marker = wrapper.find('.timeline-marker')

@@ -1,22 +1,27 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useLanguageStore } from '@/stores/language'
+import { useI18n } from 'vue-i18n'
 
-const languageStore = useLanguageStore()
+const { locale } = useI18n()
 
 const buttonText = computed(() => {
-  return languageStore.currentLang === 'en' ? '中文' : 'English'
+  return locale.value === 'en' ? '中文' : 'English'
 })
 
 const ariaLabel = computed(() => {
-  return `Switch to ${languageStore.currentLang === 'en' ? 'Chinese' : 'English'}`
+  return `Switch to ${locale.value === 'en' ? 'Chinese' : 'English'}`
 })
+
+const toggleLanguage = () => {
+  locale.value = locale.value === 'en' ? 'zh' : 'en'
+  localStorage.setItem('preferredLanguage', locale.value)
+}
 </script>
 
 <template>
   <div class="lang-toggle">
     <button
-      @click="languageStore.toggleLanguage()"
+      @click="toggleLanguage"
       class="lang-btn"
       :aria-label="ariaLabel"
       type="button"

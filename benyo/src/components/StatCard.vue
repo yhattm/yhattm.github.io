@@ -1,15 +1,13 @@
 <script setup lang="ts">
 import { useScrollAnimation } from '@/composables/useScrollAnimation'
-import { useLanguageStore, type BilingualText } from '@/stores/language'
 
 interface Props {
   number: string
-  label: BilingualText
+  label: string
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 
-const languageStore = useLanguageStore()
 const { isVisible, targetRef } = useScrollAnimation(0.1)
 </script>
 
@@ -20,7 +18,7 @@ const { isVisible, targetRef } = useScrollAnimation(0.1)
     :class="{ 'is-visible': isVisible }"
   >
     <div class="stat-number">{{ number }}</div>
-    <div class="stat-label">{{ languageStore.t(label) }}</div>
+    <div class="stat-label">{{ label }}</div>
   </div>
 </template>
 
