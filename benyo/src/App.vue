@@ -4,8 +4,12 @@ import { RouterView } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import LanguageToggle from './components/LanguageToggle.vue'
 import NavBar from './components/NavBar.vue'
+import { useParticles } from './composables/useParticles'
 
 const { locale } = useI18n()
+
+// Initialize particle background effect
+useParticles()
 
 onMounted(() => {
   // Set initial lang attribute
