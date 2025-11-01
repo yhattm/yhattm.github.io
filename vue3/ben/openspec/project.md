@@ -16,6 +16,19 @@ Personal website/portfolio project (ben) hosted on GitHub Pages. Built with mode
 - **Pinia** (v3.0.3) - Official Vue state management
 - **Vue Router** (v4.6.3) - Official Vue routing
 
+### UI & Styling
+- **Tailwind CSS** (v4.1.16) - Utility-first CSS framework
+- **@tailwindcss/postcss** (v4.1.16) - PostCSS plugin
+- **Tailwind Plugins**:
+  - @tailwindcss/container-queries (v0.1.1)
+  - @tailwindcss/forms (v0.5.10)
+  - @tailwindcss/typography (v0.5.19)
+
+### Internationalization
+- **Vue i18n** (v9.14.5) - Official Vue internationalization plugin
+- Supports English and Chinese (繁體中文)
+- JSON-based translation files
+
 ### Development Tools
 - **Node.js** (v20.19.0+ or v22.12.0+) - JavaScript runtime
 - **ESLint** (v9.37.0) - Code linting
@@ -65,18 +78,48 @@ Personal website/portfolio project (ben) hosted on GitHub Pages. Built with mode
 **Project Structure**:
 ```
 src/
-├── assets/       # Static assets (CSS, images, fonts)
-├── components/   # Reusable Vue components
-│   ├── __tests__/  # Component unit tests
-│   └── icons/      # Icon components
-├── router/       # Vue Router configuration
-├── stores/       # Pinia stores (state management)
-├── views/        # Page-level components (routes)
-├── App.vue       # Root component
-└── main.ts       # Application entry point
+├── assets/          # Static assets (images, Tailwind CSS)
+│   ├── logo.svg
+│   └── tailwind.css
+├── components/      # Reusable Vue components
+│   ├── __tests__/     # Component unit tests
+│   ├── icons/         # Icon components
+│   ├── CodeWindow.vue
+│   ├── LanguageToggle.vue
+│   ├── NavBar.vue
+│   ├── StatCard.vue
+│   ├── TechCategory.vue
+│   ├── TimelineItem.vue
+│   └── ...
+├── composables/     # Reusable composition functions
+│   ├── useParticles.ts
+│   └── useScrollAnimation.ts
+├── i18n/            # Internationalization configuration
+│   └── index.ts
+├── locales/         # Translation files (JSON)
+│   ├── en.json
+│   └── zh.json
+├── router/          # Vue Router configuration
+│   └── index.ts
+├── stores/          # Pinia stores (state management)
+│   ├── __tests__/     # Store unit tests
+│   ├── counter.ts
+│   └── language.ts
+├── views/           # Page-level components (routes)
+│   ├── sections/      # Modular page sections
+│   │   ├── AboutSection.vue
+│   │   ├── ContactSection.vue
+│   │   ├── ExperienceSection.vue
+│   │   ├── FooterSection.vue
+│   │   ├── HeroSection.vue
+│   │   └── TechStackSection.vue
+│   ├── AboutView.vue
+│   └── HomeView.vue
+├── App.vue          # Root component
+└── main.ts          # Application entry point
 
-e2e/              # Playwright end-to-end tests
-public/           # Static public assets
+e2e/                 # Playwright end-to-end tests
+public/              # Static public assets
 ```
 
 **Component Guidelines**:
@@ -87,15 +130,62 @@ public/           # Static public assets
 - Use props for parent-to-child communication
 - Use events/emits for child-to-parent communication
 
+**Composables Pattern** (NEW):
+- Reusable composition functions in `/src/composables/`
+- Naming convention: `use{Name}.ts` (e.g., `useParticles.ts`, `useScrollAnimation.ts`)
+- Extract and share common logic across components
+- Return reactive state and methods
+- Examples:
+  - `useParticles` - Canvas-based particle animation system
+  - `useScrollAnimation` - Scroll-triggered animation utilities
+
+**View Sections Pattern** (NEW):
+- Large views are broken into modular section components
+- Section components live in `/src/views/sections/`
+- Each section is self-contained and reusable
+- Naming convention: `{Name}Section.vue`
+- Sections include:
+  - `HeroSection` - Landing/hero content
+  - `AboutSection` - Personal information
+  - `ExperienceSection` - Work history and timeline
+  - `TechStackSection` - Technical skills showcase
+  - `ContactSection` - Contact information
+  - `FooterSection` - Footer content
+
+**Styling with Tailwind CSS** (NEW):
+- Utility-first CSS approach using Tailwind CSS v4
+- Global styles in `/src/assets/tailwind.css`
+- Use Tailwind utility classes directly in templates
+- Custom theme configuration (if needed) in tailwind config
+- Plugins enabled:
+  - Container queries for responsive design
+  - Forms for better form styling
+  - Typography for rich text content
+
+**Internationalization (i18n)** (NEW):
+- Vue i18n for multi-language support (English + Chinese)
+- Translation files in `/src/locales/` (JSON format)
+- i18n configuration in `/src/i18n/index.ts`
+- Language preference stored in localStorage
+- Language state managed via Pinia store (`/src/stores/language.ts`)
+- Use `$t()` function in templates for translations
+- Type-safe translations with TypeScript schema
+
 **State Management**:
 - Use Pinia stores for application-wide state
-- Keep stores focused on specific domains (e.g., user, cart, counter)
+- Keep stores focused on specific domains
+- Current stores:
+  - `counter` - Example counter state (demo)
+  - `language` - Language preference and i18n integration
 - Use composition-style stores (setup function pattern)
 
 **Routing**:
 - Define routes in `src/router/index.ts`
 - Use route-level code splitting for better performance
 - Page components live in `src/views/`
+- Current routes:
+  - `/` - HomeView (main portfolio page)
+  - `/about` - AboutView (detailed about page)
 
 ### Testing Strategy
 
@@ -151,6 +241,7 @@ chore(deps): update vue to 3.5.22
 npm run dev          # Start dev server with hot reload (--host enabled)
 npm run build        # Type-check and build for production
 npm run preview      # Preview production build locally
+npm run deploy       # Build and deploy to GitHub Pages (/ben directory)
 ```
 
 **Code Quality**:
@@ -159,6 +250,12 @@ npm run lint         # Run ESLint with auto-fix
 npm run format       # Format code with Prettier
 npm run type-check   # Run TypeScript type checking
 ```
+
+**Deployment**:
+- Manual deployment: `npm run deploy`
+- Deployment script builds the project and copies output to `../../ben`
+- Old files are removed before copying to ensure clean deployment
+- GitHub Pages serves static files from `/ben` subdirectory
 
 ## Domain Context
 
