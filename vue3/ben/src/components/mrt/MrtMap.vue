@@ -20,6 +20,7 @@ const { locale } = useI18n()
 const mapContainer = ref<HTMLDivElement | null>(null)
 let map: L.Map | null = null
 const markers = ref<Map<string, L.Marker>>(new Map())
+const polylines = ref<L.Polyline[]>([])
 
 onMounted(() => {
   if (!mapContainer.value) return
@@ -33,7 +34,8 @@ onMounted(() => {
     maxZoom: 18,
   }).addTo(map)
 
-  // Render station markers
+  // Render lines and markers
+  renderLines()
   renderMarkers()
 })
 
@@ -55,6 +57,55 @@ watch(
   { deep: true },
 )
 
+// Group stations by line and draw connecting lines
+function renderLines() {
+  if (!map) return
+
+  // Clear existing polylines
+  polylines.value.forEach((line) => line.remove())
+  polylines.value = []
+
+  // Group stations by line
+  const lineGroups = new Map<string, Station[]>()
+  props.stations.forEach((station) => {
+    if (!lineGroups.has(station.line)) {
+      lineGroups.set(station.line, [])
+    }
+    lineGroups.get(station.line)!.push(station)
+  })
+
+  // Draw polyline for each line
+  lineGroups.forEach((stations) => {
+    if (stations.length < 2) return
+
+    // Sort stations by ID to maintain line order
+    const sortedStations = [...stations].sort((a, b) => {
+      const numA = parseInt(a.id.replace(/[^0-9]/g, ''))
+      const numB = parseInt(b.id.replace(/[^0-9]/g, ''))
+      return numA - numB
+    })
+
+    // Get coordinates for the line
+    const coordinates: [number, number][] = sortedStations.map((station) => [
+      station.lat,
+      station.lng,
+    ])
+
+    // Get line color (safe since we checked length > 1)
+    const lineColor = sortedStations[0]?.lineColor || '#888888'
+
+    // Create polyline
+    const polyline = L.polyline(coordinates, {
+      color: lineColor,
+      weight: 4,
+      opacity: 0.7,
+      smoothFactor: 1,
+    }).addTo(map!)
+
+    polylines.value.push(polyline)
+  })
+}
+
 function renderMarkers() {
   if (!map) return
 
@@ -66,45 +117,74 @@ function renderMarkers() {
     const isOrigin = station.id === props.selectedOrigin
     const stationName = locale.value === 'zh' ? station.nameZh : station.nameEn
 
-    let labelHtml = stationName
+    let fareText = ''
+    let markerSize = 28
+    let fontSize = '11px'
 
-    // If origin is selected and this is not the origin, show fare
+    // Calculate fare to display in marker
     if (props.selectedOrigin && !isOrigin) {
       const fare = calculateFare(props.selectedOrigin, station.id, props.fares)
       if (fare !== null) {
-        labelHtml = `${stationName}<br/><strong>NT$${fare}</strong>`
+        fareText = `$${fare}`
+        markerSize = 36
+        fontSize = '12px'
       } else {
-        labelHtml = `${stationName}<br/><span style="color: #999;">N/A</span>`
+        fareText = 'N/A'
+        markerSize = 32
+        fontSize = '10px'
       }
     } else if (isOrigin) {
-      labelHtml = `<strong>${stationName}</strong><br/><em style="font-size: 0.8em;">Origin</em>`
+      fareText = '起點'
+      markerSize = 40
+      fontSize = '11px'
     }
 
-    // Create custom icon with station color
+    // Create custom icon with fare inside circle
     const iconHtml = `
       <div style="
-        background: ${station.lineColor};
-        border: ${isOrigin ? '3px solid #000' : '2px solid #fff'};
-        border-radius: 50%;
-        width: ${isOrigin ? '16px' : '12px'};
-        height: ${isOrigin ? '16px' : '12px'};
-        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-      "></div>
+        position: relative;
+        width: ${markerSize}px;
+        height: ${markerSize}px;
+      ">
+        <div style="
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: ${station.lineColor};
+          border: ${isOrigin ? '3px solid #000' : '2px solid #fff'};
+          border-radius: 50%;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        ">
+          <span style="
+            color: #fff;
+            font-size: ${fontSize};
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            text-align: center;
+            line-height: 1;
+          ">${fareText}</span>
+        </div>
+      </div>
     `
 
     const icon = L.divIcon({
       html: iconHtml,
       className: 'custom-marker',
-      iconSize: [isOrigin ? 16 : 12, isOrigin ? 16 : 12],
-      iconAnchor: [isOrigin ? 8 : 6, isOrigin ? 8 : 6],
+      iconSize: [markerSize, markerSize],
+      iconAnchor: [markerSize / 2, markerSize / 2],
     })
 
     const marker = L.marker([station.lat, station.lng], { icon })
       .addTo(map!)
-      .bindTooltip(labelHtml, {
+      .bindTooltip(stationName, {
         permanent: false,
         direction: 'top',
-        offset: [0, -10],
+        offset: [0, -markerSize / 2 - 5],
       })
 
     // Click handler to select origin
@@ -139,11 +219,20 @@ function renderMarkers() {
 
 /* Override Leaflet styles for custom markers */
 :deep(.custom-marker) {
-  background: transparent;
-  border: none;
+  background: transparent !important;
+  border: none !important;
 }
 
 :deep(.leaflet-popup-content-wrapper) {
   border-radius: 8px;
+}
+
+/* Ensure polylines appear behind markers */
+:deep(.leaflet-overlay-pane) {
+  z-index: 400;
+}
+
+:deep(.leaflet-marker-pane) {
+  z-index: 600;
 }
 </style>
