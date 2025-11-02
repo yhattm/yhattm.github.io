@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import { Card, CardHeader, CardContent } from '@/components/ui/card'
 
 const codeContent = ref('')
 const codeWindowRef = ref<HTMLElement | null>(null)
@@ -87,22 +88,24 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div
+  <Card
     ref="codeWindowRef"
-    class="bg-gray-800 rounded-lg overflow-hidden shadow-2xl transition-transform duration-200 ease-out max-w-lg w-full"
+    class="bg-gray-800 overflow-hidden shadow-2xl transition-transform duration-200 ease-out max-w-lg w-full border-gray-700"
     :style="{
       transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
     }"
     @mousemove="handleMouseMove"
     @mouseleave="handleMouseLeave"
   >
-    <div class="bg-gray-700 px-4 py-3 flex gap-2 border-b border-gray-600">
+    <CardHeader class="bg-gray-700 px-4 py-3 flex flex-row gap-2 border-b border-gray-600 p-3">
       <span class="w-3 h-3 rounded-full bg-red-500"></span>
       <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
       <span class="w-3 h-3 rounded-full bg-green-500"></span>
-    </div>
-    <pre
-      class="p-6 md:p-4 text-gray-100 font-mono text-sm leading-relaxed m-0 min-h-[200px] overflow-x-auto"
-    ><code>{{ codeContent }}</code></pre>
-  </div>
+    </CardHeader>
+    <CardContent class="p-6 md:p-4">
+      <pre
+        class="text-gray-100 font-mono text-sm leading-relaxed m-0 min-h-[200px] overflow-x-auto"
+      ><code>{{ codeContent }}</code></pre>
+    </CardContent>
+  </Card>
 </template>

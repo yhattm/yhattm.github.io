@@ -19,10 +19,19 @@ Personal website/portfolio project (ben) hosted on GitHub Pages. Built with mode
 ### UI & Styling
 - **Tailwind CSS** (v4.1.16) - Utility-first CSS framework
 - **@tailwindcss/postcss** (v4.1.16) - PostCSS plugin
+- **shadcn-vue** (CLI tool) - Accessible Vue component library built on Reka UI
+- **Reka UI** - Headless accessible UI primitives
 - **Tailwind Plugins**:
   - @tailwindcss/container-queries (v0.1.1)
   - @tailwindcss/forms (v0.5.10)
   - @tailwindcss/typography (v0.5.19)
+  - tailwindcss-animate (v1.0.7)
+- **Component Utilities**:
+  - clsx (v2.1.1) - Conditional class names utility
+  - tailwind-merge (v3.3.1) - Tailwind class merging utility
+  - class-variance-authority (v0.7.1) - Component variant management
+- **Icons**:
+  - lucide-vue-next (v0.552.0) - Icon library for Vue
 
 ### Internationalization
 - **Vue i18n** (v9.14.5) - Official Vue internationalization plugin
@@ -84,6 +93,18 @@ src/
 ├── components/      # Reusable Vue components
 │   ├── __tests__/     # Component unit tests
 │   ├── icons/         # Icon components
+│   ├── ui/            # shadcn-vue components (NEW)
+│   │   ├── accordion/
+│   │   ├── alert/
+│   │   ├── badge/
+│   │   ├── button/
+│   │   ├── card/
+│   │   ├── dialog/
+│   │   ├── dropdown-menu/
+│   │   ├── input/
+│   │   ├── select/
+│   │   ├── tooltip/
+│   │   └── ... (27 components total)
 │   ├── CodeWindow.vue
 │   ├── LanguageToggle.vue
 │   ├── NavBar.vue
@@ -96,6 +117,8 @@ src/
 │   └── useScrollAnimation.ts
 ├── i18n/            # Internationalization configuration
 │   └── index.ts
+├── lib/             # Utility functions (NEW)
+│   └── utils.ts       # cn() helper for class merging
 ├── locales/         # Translation files (JSON)
 │   ├── en.json
 │   └── zh.json
@@ -118,6 +141,7 @@ src/
 ├── App.vue          # Root component
 └── main.ts          # Application entry point
 
+components.json      # shadcn-vue configuration (NEW)
 e2e/                 # Playwright end-to-end tests
 public/              # Static public assets
 ```
@@ -161,6 +185,26 @@ public/              # Static public assets
   - Container queries for responsive design
   - Forms for better form styling
   - Typography for rich text content
+
+**shadcn-vue Component Library** (NEW):
+- Accessible UI component library built on Reka UI headless primitives
+- Components copied into project (`/src/components/ui/`) for full customization
+- 27+ components installed: Button, Card, Badge, Dialog, Dropdown, Input, Select, Tooltip, etc.
+- Usage pattern:
+  ```typescript
+  import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+  import { Button } from '@/components/ui/button'
+  import { Badge } from '@/components/ui/badge'
+  ```
+- Customization approaches:
+  - Add custom Tailwind classes via `class` prop
+  - Use component variants (e.g., `variant="outline"`)
+  - Compose multiple components (Card with CardHeader, CardContent, etc.)
+- Utility function: `cn()` from `@/lib/utils` for intelligent class merging
+- Neutral theme with CSS variables for color tokens (`:root` and `.dark`)
+- Automatic dark mode support via Tailwind's `dark:` variant
+- All migrated components (StatCard, TechCategory, TechItem, TimelineItem, CodeWindow) now use shadcn-vue
+- Documentation: https://www.shadcn-vue.com/
 
 **Internationalization (i18n)** (NEW):
 - Vue i18n for multi-language support (English + Chinese)

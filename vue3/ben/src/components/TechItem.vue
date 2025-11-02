@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useScrollAnimation } from '@/composables/useScrollAnimation'
+import { Card } from '@/components/ui/card'
 
 interface Props {
   icon: string
@@ -23,9 +24,9 @@ watch(isVisible, (newValue) => {
 </script>
 
 <template>
-  <div
+  <Card
     ref="targetRef"
-    class="flex flex-col gap-2 p-4 md:p-3 bg-gray-700 border border-gray-600 rounded-lg transition-all opacity-0 translate-y-8 hover:border-blue-500 hover:shadow-md hover:shadow-blue-500/20 hover:-translate-y-1"
+    class="flex flex-col gap-2 p-4 md:p-3 bg-gray-700 border border-gray-600 transition-all opacity-0 translate-y-8 hover:border-blue-500 hover:shadow-md hover:shadow-blue-500/20 hover:-translate-y-1"
     :class="{ 'opacity-100 translate-y-0': isVisible }"
   >
     <div class="text-2xl md:text-xl font-bold text-blue-500 text-center bg-gray-600 p-4 md:p-3 rounded">
@@ -38,5 +39,5 @@ watch(isVisible, (newValue) => {
         :style="{ width: `${animatedProficiency}%` }"
       ></div>
     </div>
-  </div>
+  </Card>
 </template>

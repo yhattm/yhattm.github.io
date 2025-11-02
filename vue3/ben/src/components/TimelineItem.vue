@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useScrollAnimation } from '@/composables/useScrollAnimation'
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
 
 interface Props {
   date: string
@@ -28,22 +30,27 @@ const isHovered = ref(false)
       class="absolute left-0 top-1 w-8 h-8 md:w-6 md:h-6 bg-blue-600 border-4 border-gray-900 rounded-full z-10 transition-all"
       :class="{ 'bg-gradient-to-br from-blue-500 to-purple-600 scale-110': isHovered }"
     ></div>
-    <div
-      class="bg-gray-700 border border-gray-600 rounded-lg p-6 transition-all hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/10"
+    <Card
+      class="bg-gray-700 border border-gray-600 transition-all hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/10"
     >
-      <div class="text-gray-400 text-sm font-medium mb-2">{{ date }}</div>
-      <h3 class="text-gray-100 text-2xl md:text-xl font-bold mb-2">{{ company }}</h3>
-      <h4 class="text-blue-500 text-lg md:text-base font-semibold mb-4">{{ role }}</h4>
-      <p class="text-gray-100 leading-relaxed mb-4">{{ description }}</p>
-      <div class="flex flex-wrap gap-2">
-        <span
-          v-for="tag in tags"
-          :key="tag"
-          class="bg-gray-600 text-gray-100 px-3 py-1 rounded text-xs font-medium border border-gray-600 transition-all hover:bg-blue-600 hover:border-blue-600 hover:text-white"
-        >
-          {{ tag }}
-        </span>
-      </div>
-    </div>
+      <CardHeader>
+        <CardDescription class="text-gray-400 text-sm font-medium mb-2">{{ date }}</CardDescription>
+        <CardTitle class="text-gray-100 text-2xl md:text-xl mb-2">{{ company }}</CardTitle>
+        <CardDescription class="text-blue-500 text-lg md:text-base font-semibold">{{ role }}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p class="text-gray-100 leading-relaxed mb-4">{{ description }}</p>
+        <div class="flex flex-wrap gap-2">
+          <Badge
+            v-for="tag in tags"
+            :key="tag"
+            variant="secondary"
+            class="bg-gray-600 text-gray-100 border border-gray-600 transition-all hover:bg-blue-600 hover:border-blue-600 hover:text-white"
+          >
+            {{ tag }}
+          </Badge>
+        </div>
+      </CardContent>
+    </Card>
   </div>
 </template>
