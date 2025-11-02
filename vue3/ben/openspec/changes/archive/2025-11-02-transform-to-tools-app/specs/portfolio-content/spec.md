@@ -1,6 +1,6 @@
 # Portfolio Content
 
-## MODIFIED Requirements
+## ADDED Requirements
 
 ### Requirement: Portfolio Content Location
 The portfolio content MUST be accessible from the About Me page instead of the home page.

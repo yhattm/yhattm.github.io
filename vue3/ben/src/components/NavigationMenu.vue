@@ -1,80 +1,99 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { RouterLink, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { Tabs, TabsList, TabsTrigger } from './ui/tabs'
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  navigationMenuTriggerStyle,
+} from './ui/navigation-menu'
+import { cn } from '@/lib/utils'
 
 const route = useRoute()
-const router = useRouter()
 const { t } = useI18n()
 
-// Map route names to tab values
-const currentTab = computed(() => {
-  const routeName = route.name as string
-  switch (routeName) {
-    case 'tools-home':
-      return 'home'
-    case 'settings':
-      return 'settings'
-    case 'about':
-      return 'about'
-    case 'app-info':
-      return 'app-info'
-    default:
-      return 'home'
-  }
-})
-
-const handleTabChange = (value: string | number) => {
-  const val = String(value)
-  switch (val) {
-    case 'home':
-      router.push('/')
-      break
-    case 'settings':
-      router.push('/settings')
-      break
-    case 'about':
-      router.push('/about')
-      break
-    case 'app-info':
-      router.push('/app-info')
-      break
-  }
+// Check if a route is active
+const isActive = (routeName: string) => {
+  return computed(() => route.name === routeName)
 }
 </script>
 
 <template>
-  <nav class="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-    <div class="container mx-auto px-4">
-      <Tabs :model-value="currentTab" @update:model-value="handleTabChange" class="w-full">
-        <TabsList class="w-full justify-start h-14 bg-transparent border-0">
-          <TabsTrigger
-            value="home"
-            class="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-4 sm:px-6"
-          >
-            {{ t('nav.home') }}
-          </TabsTrigger>
-          <TabsTrigger
-            value="settings"
-            class="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-4 sm:px-6"
-          >
-            {{ t('nav.settings') }}
-          </TabsTrigger>
-          <TabsTrigger
-            value="about"
-            class="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-4 sm:px-6"
-          >
-            {{ t('nav.about') }}
-          </TabsTrigger>
-          <TabsTrigger
-            value="app-info"
-            class="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-4 sm:px-6"
-          >
-            {{ t('nav.appInfo') }}
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
+  <nav
+    class="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+    aria-label="Main navigation"
+  >
+    <div class="container mx-auto px-4 py-2">
+      <NavigationMenu class="mx-0 max-w-full">
+        <NavigationMenuList class="flex-wrap justify-start gap-1">
+          <NavigationMenuItem>
+            <NavigationMenuLink as-child :active="isActive('tools-home').value">
+              <RouterLink
+                to="/"
+                :class="
+                  cn(
+                    navigationMenuTriggerStyle(),
+                    isActive('tools-home').value &&
+                      'bg-accent text-accent-foreground font-semibold',
+                  )
+                "
+              >
+                {{ t('nav.home') }}
+              </RouterLink>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+
+          <NavigationMenuItem>
+            <NavigationMenuLink as-child :active="isActive('settings').value">
+              <RouterLink
+                to="/settings"
+                :class="
+                  cn(
+                    navigationMenuTriggerStyle(),
+                    isActive('settings').value && 'bg-accent text-accent-foreground font-semibold',
+                  )
+                "
+              >
+                {{ t('nav.settings') }}
+              </RouterLink>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+
+          <NavigationMenuItem>
+            <NavigationMenuLink as-child :active="isActive('about').value">
+              <RouterLink
+                to="/about"
+                :class="
+                  cn(
+                    navigationMenuTriggerStyle(),
+                    isActive('about').value && 'bg-accent text-accent-foreground font-semibold',
+                  )
+                "
+              >
+                {{ t('nav.about') }}
+              </RouterLink>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+
+          <NavigationMenuItem>
+            <NavigationMenuLink as-child :active="isActive('app-info').value">
+              <RouterLink
+                to="/app-info"
+                :class="
+                  cn(
+                    navigationMenuTriggerStyle(),
+                    isActive('app-info').value && 'bg-accent text-accent-foreground font-semibold',
+                  )
+                "
+              >
+                {{ t('nav.appInfo') }}
+              </RouterLink>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
     </div>
   </nav>
 </template>
