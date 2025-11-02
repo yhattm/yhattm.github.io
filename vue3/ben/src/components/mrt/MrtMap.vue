@@ -139,7 +139,7 @@ function renderMarkers() {
 
     // Calculate fare to display in marker
     if (props.selectedOrigin && !isOrigin) {
-      const fare = calculateFare(props.selectedOrigin, station.id, props.fares)
+      const fare = calculateFare(props.selectedOrigin, station.id, props.fares, props.stations)
       if (fare !== null) {
         fareText = `$${fare}`
         markerSize = 36
