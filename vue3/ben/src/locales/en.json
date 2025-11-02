@@ -3,6 +3,7 @@
     "home": "Home",
     "settings": "Settings",
     "about": "About Me",
+    "mrtFareFinder": "MRT Fare Finder",
     "appInfo": "App Info",
     "experience": "Experience",
     "techStack": "Tech Stack",
@@ -89,5 +90,22 @@
     "techStack": "Built With",
     "developer": "Developer",
     "viewProfile": "View Profile"
+  },
+  "mrtFareFinder": {
+    "title": "Taipei MRT Fare Finder",
+    "subtitle": "Select a starting station to see fares to all destinations",
+    "selectOrigin": "Select Origin Station",
+    "selectInstruction": "Choose a starting station from the list or click on the map",
+    "origin": "Origin",
+    "loading": "Loading MRT data...",
+    "error": "Failed to load MRT data. Please refresh the page.",
+    "noFare": "N/A",
+    "infoTitle": "How it works",
+    "infoDesc1": "All fares shown are in NT$ (New Taiwan Dollar).",
+    "infoDesc2": "Click on any station marker or use the dropdown to select your origin station.",
+    "howToUse": "How to Use",
+    "step1": "Select your origin station from the dropdown or click on a station marker on the map.",
+    "step2": "All other station markers will display the fare from your selected origin.",
+    "step3": "Hover over or click markers to see station names and fares."
   }
 }

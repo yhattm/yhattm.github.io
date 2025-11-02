@@ -1,0 +1,308 @@
+[
+  {
+    "id": "BL12",
+    "nameEn": "Taipei Main Station",
+    "nameZh": "台北車站",
+    "lat": 25.047924,
+    "lng": 121.517081,
+    "line": "BL",
+    "lineColor": "#0070BD"
+  },
+  {
+    "id": "BL13",
+    "nameEn": "Ximen",
+    "nameZh": "西門",
+    "lat": 25.042311,
+    "lng": 121.508210,
+    "line": "BL",
+    "lineColor": "#0070BD"
+  },
+  {
+    "id": "BL14",
+    "nameEn": "Longshan Temple",
+    "nameZh": "龍山寺",
+    "lat": 25.035125,
+    "lng": 121.500130,
+    "line": "BL",
+    "lineColor": "#0070BD"
+  },
+  {
+    "id": "BL15",
+    "nameEn": "Jiangzicui",
+    "nameZh": "江子翠",
+    "lat": 25.028913,
+    "lng": 121.472485,
+    "line": "BL",
+    "lineColor": "#0070BD"
+  },
+  {
+    "id": "BL16",
+    "nameEn": "Xinpu",
+    "nameZh": "新埔",
+    "lat": 25.023285,
+    "lng": 121.467889,
+    "line": "BL",
+    "lineColor": "#0070BD"
+  },
+  {
+    "id": "BL11",
+    "nameEn": "Shandao Temple",
+    "nameZh": "善導寺",
+    "lat": 25.044583,
+    "lng": 121.523944,
+    "line": "BL",
+    "lineColor": "#0070BD"
+  },
+  {
+    "id": "BL10",
+    "nameEn": "Zhongxiao Xinsheng",
+    "nameZh": "忠孝新生",
+    "lat": 25.042410,
+    "lng": 121.533483,
+    "line": "BL",
+    "lineColor": "#0070BD"
+  },
+  {
+    "id": "BL09",
+    "nameEn": "Zhongxiao Fuxing",
+    "nameZh": "忠孝復興",
+    "lat": 25.041554,
+    "lng": 121.543834,
+    "line": "BL",
+    "lineColor": "#0070BD"
+  },
+  {
+    "id": "BL08",
+    "nameEn": "Zhongxiao Dunhua",
+    "nameZh": "忠孝敦化",
+    "lat": 25.041452,
+    "lng": 121.550741,
+    "line": "BL",
+    "lineColor": "#0070BD"
+  },
+  {
+    "id": "BL07",
+    "nameEn": "Sun Yat-sen Memorial Hall",
+    "nameZh": "國父紀念館",
+    "lat": 25.041246,
+    "lng": 121.557544,
+    "line": "BL",
+    "lineColor": "#0070BD"
+  },
+  {
+    "id": "BL06",
+    "nameEn": "Taipei City Hall",
+    "nameZh": "市政府",
+    "lat": 25.041058,
+    "lng": 121.565227,
+    "line": "BL",
+    "lineColor": "#0070BD"
+  },
+  {
+    "id": "R10",
+    "nameEn": "Taipei Main Station",
+    "nameZh": "台北車站",
+    "lat": 25.047924,
+    "lng": 121.517081,
+    "line": "R",
+    "lineColor": "#E3002C"
+  },
+  {
+    "id": "R11",
+    "nameEn": "Taipei 101/World Trade Center",
+    "nameZh": "台北101/世貿",
+    "lat": 25.033004,
+    "lng": 121.563845,
+    "line": "R",
+    "lineColor": "#E3002C"
+  },
+  {
+    "id": "R12",
+    "nameEn": "Xiangshan",
+    "nameZh": "象山",
+    "lat": 25.032964,
+    "lng": 121.569875,
+    "line": "R",
+    "lineColor": "#E3002C"
+  },
+  {
+    "id": "R09",
+    "nameEn": "Chiang Kai-shek Memorial Hall",
+    "nameZh": "中正紀念堂",
+    "lat": 25.032541,
+    "lng": 121.518107,
+    "line": "R",
+    "lineColor": "#E3002C"
+  },
+  {
+    "id": "R08",
+    "nameEn": "Dongmen",
+    "nameZh": "東門",
+    "lat": 25.034055,
+    "lng": 121.528208,
+    "line": "R",
+    "lineColor": "#E3002C"
+  },
+  {
+    "id": "R07",
+    "nameEn": "Daan Park",
+    "nameZh": "大安公園",
+    "lat": 25.033254,
+    "lng": 121.535407,
+    "line": "R",
+    "lineColor": "#E3002C"
+  },
+  {
+    "id": "R06",
+    "nameEn": "Daan",
+    "nameZh": "大安",
+    "lat": 25.032934,
+    "lng": 121.543323,
+    "line": "R",
+    "lineColor": "#E3002C"
+  },
+  {
+    "id": "R05",
+    "nameEn": "Technology Building",
+    "nameZh": "科技大樓",
+    "lat": 25.025678,
+    "lng": 121.543342,
+    "line": "R",
+    "lineColor": "#E3002C"
+  },
+  {
+    "id": "G09",
+    "nameEn": "Songshan",
+    "nameZh": "松山",
+    "lat": 25.049425,
+    "lng": 121.578105,
+    "line": "G",
+    "lineColor": "#008659"
+  },
+  {
+    "id": "G10",
+    "nameEn": "Nanjing Fuxing",
+    "nameZh": "南京復興",
+    "lat": 25.051866,
+    "lng": 121.544551,
+    "line": "G",
+    "lineColor": "#008659"
+  },
+  {
+    "id": "G11",
+    "nameEn": "Songjiang Nanjing",
+    "nameZh": "松江南京",
+    "lat": 25.052277,
+    "lng": 121.532675,
+    "line": "G",
+    "lineColor": "#008659"
+  },
+  {
+    "id": "G12",
+    "nameEn": "Zhongshan",
+    "nameZh": "中山",
+    "lat": 25.052625,
+    "lng": 121.520389,
+    "line": "G",
+    "lineColor": "#008659"
+  },
+  {
+    "id": "G13",
+    "nameEn": "Taipei Main Station",
+    "nameZh": "台北車站",
+    "lat": 25.047924,
+    "lng": 121.517081,
+    "line": "G",
+    "lineColor": "#008659"
+  },
+  {
+    "id": "G14",
+    "nameEn": "Ximen",
+    "nameZh": "西門",
+    "lat": 25.042311,
+    "lng": 121.508210,
+    "line": "G",
+    "lineColor": "#008659"
+  },
+  {
+    "id": "O07",
+    "nameEn": "Dingxi",
+    "nameZh": "頂溪",
+    "lat": 24.953341,
+    "lng": 121.515228,
+    "line": "O",
+    "lineColor": "#F8B61C"
+  },
+  {
+    "id": "O08",
+    "nameEn": "Guting",
+    "nameZh": "古亭",
+    "lat": 25.026452,
+    "lng": 121.522919,
+    "line": "O",
+    "lineColor": "#F8B61C"
+  },
+  {
+    "id": "O09",
+    "nameEn": "Dongmen",
+    "nameZh": "東門",
+    "lat": 25.034055,
+    "lng": 121.528208,
+    "line": "O",
+    "lineColor": "#F8B61C"
+  },
+  {
+    "id": "O10",
+    "nameEn": "Zhongxiao Xinsheng",
+    "nameZh": "忠孝新生",
+    "lat": 25.042410,
+    "lng": 121.533483,
+    "line": "O",
+    "lineColor": "#F8B61C"
+  },
+  {
+    "id": "O11",
+    "nameEn": "Songshan Airport",
+    "nameZh": "松山機場",
+    "lat": 25.062589,
+    "lng": 121.551630,
+    "line": "O",
+    "lineColor": "#F8B61C"
+  },
+  {
+    "id": "BR01",
+    "nameEn": "Taipei Nangang Exhibition Center",
+    "nameZh": "南港展覽館",
+    "lat": 25.055417,
+    "lng": 121.616944,
+    "line": "BR",
+    "lineColor": "#A25F3E"
+  },
+  {
+    "id": "BR09",
+    "nameEn": "Zhongxiao Fuxing",
+    "nameZh": "忠孝復興",
+    "lat": 25.041554,
+    "lng": 121.543834,
+    "line": "BR",
+    "lineColor": "#A25F3E"
+  },
+  {
+    "id": "BR10",
+    "nameEn": "Daan",
+    "nameZh": "大安",
+    "lat": 25.032934,
+    "lng": 121.543323,
+    "line": "BR",
+    "lineColor": "#A25F3E"
+  },
+  {
+    "id": "BR11",
+    "nameEn": "Technology Building",
+    "nameZh": "科技大樓",
+    "lat": 25.025678,
+    "lng": 121.543342,
+    "line": "BR",
+    "lineColor": "#A25F3E"
+  }
+]

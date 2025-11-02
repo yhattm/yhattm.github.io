@@ -3,6 +3,7 @@
     "home": "首頁",
     "settings": "設定",
     "about": "關於我",
+    "mrtFareFinder": "捷運票價查詢",
     "appInfo": "應用程式資訊",
     "experience": "經驗",
     "techStack": "技術棧",
@@ -89,5 +90,22 @@
     "techStack": "使用技術",
     "developer": "開發者",
     "viewProfile": "查看個人檔案"
+  },
+  "mrtFareFinder": {
+    "title": "台北捷運票價查詢",
+    "subtitle": "選擇起點站即可查看到所有站點的票價",
+    "selectOrigin": "選擇起點站",
+    "selectInstruction": "從下拉選單選擇或點擊地圖上的站點",
+    "origin": "起點",
+    "loading": "載入捷運資料中...",
+    "error": "載入捷運資料失敗，請重新整理頁面。",
+    "noFare": "無資料",
+    "infoTitle": "使用說明",
+    "infoDesc1": "所有票價以新台幣（NT$）顯示。",
+    "infoDesc2": "點擊任一站點標記或使用下拉選單選擇起點站。",
+    "howToUse": "如何使用",
+    "step1": "從下拉選單或點擊地圖上的站點標記選擇起點站。",
+    "step2": "其他站點標記將顯示從起點出發的票價。",
+    "step3": "將滑鼠移到標記上或點擊以查看站名和票價。"
   }
 }

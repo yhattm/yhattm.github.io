@@ -78,6 +78,22 @@ const isActive = (routeName: string) => {
           </NavigationMenuItem>
 
           <NavigationMenuItem>
+            <NavigationMenuLink as-child :active="isActive('mrt-fare-finder').value">
+              <RouterLink
+                to="/mrt-fare-finder"
+                :class="
+                  cn(
+                    navigationMenuTriggerStyle(),
+                    isActive('mrt-fare-finder').value && 'bg-accent text-accent-foreground font-semibold',
+                  )
+                "
+              >
+                {{ t('nav.mrtFareFinder') }}
+              </RouterLink>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+
+          <NavigationMenuItem>
             <NavigationMenuLink as-child :active="isActive('app-info').value">
               <RouterLink
                 to="/app-info"

@@ -23,6 +23,11 @@ const router = createRouter({
       name: 'app-info',
       component: () => import('../views/AppInfoView.vue'),
     },
+    {
+      path: '/mrt-fare-finder',
+      name: 'mrt-fare-finder',
+      component: () => import('../views/MrtFareFinderView.vue'),
+    },
     // Redirect old portfolio route to about
     {
       path: '/portfolio',
