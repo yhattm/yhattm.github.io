@@ -2,7 +2,6 @@
 import { onMounted, watch } from 'vue'
 import { RouterView } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import LanguageToggle from './components/LanguageToggle.vue'
 import NavigationMenu from './components/NavigationMenu.vue'
 import { useThemeStore } from './stores/theme'
 
@@ -30,9 +29,6 @@ watch(locale, (newLang) => {
   >
     Skip to main content
   </a>
-  <div class="fixed top-4 right-4 z-50">
-    <LanguageToggle />
-  </div>
   <NavigationMenu />
   <RouterView id="main-content" />
 </template>
