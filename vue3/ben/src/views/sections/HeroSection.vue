@@ -8,7 +8,7 @@ const { t } = useI18n()
 <template>
   <section
     id="home"
-    class="min-h-screen flex items-center py-20 lg:py-24 bg-gradient-to-b from-gray-900 to-gray-800 relative overflow-hidden"
+    class="hero min-h-screen flex items-center py-20 lg:py-24 bg-gradient-to-b from-gray-900 to-gray-800 relative overflow-hidden"
   >
     <div class="max-w-7xl mx-auto px-6 w-full">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
