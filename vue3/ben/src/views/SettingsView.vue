@@ -23,9 +23,13 @@ const handleThemeChange = (value: any) => {
   }
 }
 
+const { locale } = useI18n()
+
 const handleLanguageChange = (value: any) => {
   if (value && typeof value === 'string' && (value === 'en' || value === 'zh')) {
-    languageStore.setLanguage(value as Language)
+    const lang = value as Language
+    languageStore.setLanguage(lang)
+    locale.value = lang // Update Vue I18n locale immediately
   }
 }
 </script>
@@ -89,7 +93,7 @@ const handleLanguageChange = (value: any) => {
             <div class="space-y-2">
               <Label for="language-select">{{ t('settings.selectLanguage') }}</Label>
               <Select
-                :model-value="languageStore.currentLang"
+                :model-value="locale"
                 @update:model-value="handleLanguageChange"
               >
                 <SelectTrigger id="language-select">
