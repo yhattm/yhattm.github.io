@@ -1,7 +1,9 @@
 {
   "nav": {
     "home": "Home",
-    "about": "About",
+    "settings": "Settings",
+    "about": "About Me",
+    "appInfo": "App Info",
     "experience": "Experience",
     "techStack": "Tech Stack",
     "contact": "Contact"
@@ -55,5 +57,37 @@
   },
   "footer": {
     "copyright": "© 2025 Ben. Built with passion for clean code."
+  },
+  "toolsHome": {
+    "title": "Useful Tools",
+    "subtitle": "Simple utilities for everyday tasks",
+    "currentTime": "Current Time",
+    "currentDate": "Current Date"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Customize your experience",
+    "appearance": "Appearance",
+    "appearanceDescription": "Customize how the app looks",
+    "language": "Language",
+    "languageDescription": "Choose your preferred language",
+    "themeMode": "Theme Mode",
+    "selectLanguage": "Select Language"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "auto": "Auto",
+    "autoDescription": "Follows system preference"
+  },
+  "appInfo": {
+    "title": "App Information",
+    "subtitle": "About this application",
+    "version": "Version",
+    "buildDate": "Build Date",
+    "description": "A collection of useful tools and utilities for everyday tasks, featuring time/date tools, customizable themes, and more.",
+    "techStack": "Built With",
+    "developer": "Developer",
+    "viewProfile": "View Profile"
   }
 }

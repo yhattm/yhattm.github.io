@@ -3,17 +3,18 @@ import { onMounted, watch } from 'vue'
 import { RouterView } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import LanguageToggle from './components/LanguageToggle.vue'
-import NavBar from './components/NavBar.vue'
-import { useParticles } from './composables/useParticles'
+import NavigationMenu from './components/NavigationMenu.vue'
+import { useThemeStore } from './stores/theme'
 
 const { locale } = useI18n()
-
-// Initialize particle background effect
-useParticles()
+const themeStore = useThemeStore()
 
 onMounted(() => {
   // Set initial lang attribute
   document.documentElement.lang = locale.value === 'zh' ? 'zh-CN' : 'en'
+
+  // Initialize theme
+  themeStore.initializeTheme()
 })
 
 // Update HTML lang attribute when language changes
@@ -29,7 +30,9 @@ watch(locale, (newLang) => {
   >
     Skip to main content
   </a>
-  <LanguageToggle />
-  <NavBar />
+  <div class="fixed top-4 right-4 z-50">
+    <LanguageToggle />
+  </div>
+  <NavigationMenu />
   <RouterView id="main-content" />
 </template>

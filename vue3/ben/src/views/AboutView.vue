@@ -1,5 +1,19 @@
+<script setup lang="ts">
+import HeroSection from './sections/HeroSection.vue'
+import AboutSection from './sections/AboutSection.vue'
+import ExperienceSection from './sections/ExperienceSection.vue'
+import TechStackSection from './sections/TechStackSection.vue'
+import ContactSection from './sections/ContactSection.vue'
+import FooterSection from './sections/FooterSection.vue'
+</script>
+
 <template>
-  <div class="lg:min-h-screen lg:flex lg:items-center">
-    <h1>This is an about page</h1>
-  </div>
+  <main>
+    <HeroSection />
+    <AboutSection />
+    <ExperienceSection />
+    <TechStackSection />
+    <ContactSection />
+    <FooterSection />
+  </main>
 </template>
