@@ -57,6 +57,25 @@ watch(
   { deep: true },
 )
 
+// Define correct route sequences for each line (including branches)
+const routeSequences: Record<string, string[][]> = {
+  BR: [['BR01', 'BR02', 'BR03', 'BR04', 'BR05', 'BR06', 'BR07', 'BR08', 'BR09', 'BR10', 'BR11', 'BR12', 'BR13', 'BR14', 'BR15', 'BR16', 'BR17', 'BR18', 'BR19', 'BR20', 'BR21', 'BR22', 'BR23', 'BR24']],
+  R: [
+    ['R02', 'R03', 'R04', 'R05', 'R06', 'R07', 'R08', 'R09', 'R10', 'R11', 'R12', 'R13', 'R14', 'R15', 'R16', 'R17', 'R18', 'R19', 'R20', 'R21', 'R22', 'R23', 'R24', 'R25', 'R26', 'R27', 'R28'], // Main line
+    ['R22', 'R22A'], // Xinbeitou branch
+  ],
+  G: [
+    ['G01', 'G02', 'G03', 'G04', 'G05', 'G06', 'G07', 'G08', 'G09', 'G10', 'G11', 'G12', 'G13', 'G14', 'G15', 'G16', 'G17', 'G18', 'G19'], // Main line
+    ['G03', 'G03A'], // Xiaobitan branch
+  ],
+  O: [
+    ['O01', 'O02', 'O03', 'O04', 'O05', 'O06', 'O07', 'O08', 'O09', 'O10', 'O11', 'O12', 'O13', 'O14', 'O15', 'O16', 'O17', 'O18', 'O19', 'O20', 'O21'], // Main line (Zhonghe-Xinlu to Huilong)
+    ['O12', 'O50', 'O51', 'O52', 'O53', 'O54'], // Luzhou branch
+  ],
+  BL: [['BL01', 'BL02', 'BL03', 'BL04', 'BL05', 'BL06', 'BL07', 'BL08', 'BL09', 'BL10', 'BL11', 'BL12', 'BL13', 'BL14', 'BL15', 'BL16', 'BL17', 'BL18', 'BL19', 'BL20', 'BL21', 'BL22', 'BL23']],
+  Y: [['Y07', 'Y08', 'Y09', 'Y10', 'Y11', 'Y12', 'Y13', 'Y14', 'Y15', 'Y16', 'Y17', 'Y18', 'Y19', 'Y20']], // Circular line (partial)
+}
+
 // Group stations by line and draw connecting lines
 function renderLines() {
   if (!map) return
@@ -65,44 +84,41 @@ function renderLines() {
   polylines.value.forEach((line) => line.remove())
   polylines.value = []
 
-  // Group stations by line
-  const lineGroups = new Map<string, Station[]>()
+  // Create station lookup map
+  const stationMap = new Map<string, Station>()
   props.stations.forEach((station) => {
-    if (!lineGroups.has(station.line)) {
-      lineGroups.set(station.line, [])
-    }
-    lineGroups.get(station.line)!.push(station)
+    stationMap.set(station.id, station)
   })
 
-  // Draw polyline for each line
-  lineGroups.forEach((stations) => {
-    if (stations.length < 2) return
+  // Draw each route segment
+  Object.entries(routeSequences).forEach(([, segments]) => {
+    segments.forEach((sequence) => {
+      // Get coordinates for this segment
+      const coordinates: [number, number][] = []
+      let lineColor = '#888888'
 
-    // Sort stations by ID to maintain line order
-    const sortedStations = [...stations].sort((a, b) => {
-      const numA = parseInt(a.id.replace(/[^0-9]/g, ''))
-      const numB = parseInt(b.id.replace(/[^0-9]/g, ''))
-      return numA - numB
+      sequence.forEach((stationId) => {
+        const station = stationMap.get(stationId)
+        if (station) {
+          coordinates.push([station.lat, station.lng])
+          if (lineColor === '#888888') {
+            lineColor = station.lineColor
+          }
+        }
+      })
+
+      // Only draw if we have at least 2 points
+      if (coordinates.length >= 2) {
+        const polyline = L.polyline(coordinates, {
+          color: lineColor,
+          weight: 4,
+          opacity: 0.7,
+          smoothFactor: 1,
+        }).addTo(map!)
+
+        polylines.value.push(polyline)
+      }
     })
-
-    // Get coordinates for the line
-    const coordinates: [number, number][] = sortedStations.map((station) => [
-      station.lat,
-      station.lng,
-    ])
-
-    // Get line color (safe since we checked length > 1)
-    const lineColor = sortedStations[0]?.lineColor || '#888888'
-
-    // Create polyline
-    const polyline = L.polyline(coordinates, {
-      color: lineColor,
-      weight: 4,
-      opacity: 0.7,
-      smoothFactor: 1,
-    }).addTo(map!)
-
-    polylines.value.push(polyline)
   })
 }
 
