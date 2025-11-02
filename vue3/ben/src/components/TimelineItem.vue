@@ -21,7 +21,7 @@ const isHovered = ref(false)
 <template>
   <div
     ref="targetRef"
-    class="relative pl-12 md:pl-10 pb-12 last:pb-0 opacity-0 translate-y-8 transition-all duration-500 before:content-[''] before:absolute before:left-3 before:top-8 before:bottom-0 before:w-0.5 before:bg-gray-600 last:before:hidden"
+    class="relative pl-12 md:pl-10 pb-12 last:pb-0 transition-all duration-500 opacity-0 translate-y-8 before:content-[''] before:absolute before:left-3 before:top-8 before:bottom-0 before:w-0.5 before:bg-gray-600 last:before:hidden"
     :class="{ 'opacity-100 translate-y-0': isVisible }"
     @mouseenter="isHovered = true"
     @mouseleave="isHovered = false"

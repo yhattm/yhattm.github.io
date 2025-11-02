@@ -24,20 +24,24 @@ watch(isVisible, (newValue) => {
 </script>
 
 <template>
-  <Card
+  <div
     ref="targetRef"
-    class="flex flex-col gap-2 p-4 md:p-3 bg-gray-700 border border-gray-600 transition-all opacity-0 translate-y-8 hover:border-blue-500 hover:shadow-md hover:shadow-blue-500/20 hover:-translate-y-1"
+    class="transition-all opacity-0 translate-y-8"
     :class="{ 'opacity-100 translate-y-0': isVisible }"
   >
-    <div class="text-2xl md:text-xl font-bold text-blue-500 text-center bg-gray-600 p-4 md:p-3 rounded">
-      {{ icon }}
-    </div>
-    <div class="text-gray-100 font-semibold text-sm md:text-xs text-center">{{ name }}</div>
-    <div class="h-2 bg-gray-600 rounded overflow-hidden relative">
-      <div
-        class="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded transition-all duration-1000 ease-out w-0"
-        :style="{ width: `${animatedProficiency}%` }"
-      ></div>
-    </div>
-  </Card>
+    <Card
+      class="flex flex-col gap-2 p-4 md:p-3 bg-gray-700 border border-gray-600 hover:border-blue-500 hover:shadow-md hover:shadow-blue-500/20 hover:-translate-y-1 transition-all"
+    >
+      <div class="text-2xl md:text-xl font-bold text-blue-500 text-center bg-gray-600 p-4 md:p-3 rounded">
+        {{ icon }}
+      </div>
+      <div class="text-gray-100 font-semibold text-sm md:text-xs text-center">{{ name }}</div>
+      <div class="h-2 bg-gray-600 rounded overflow-hidden relative">
+        <div
+          class="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded transition-all duration-1000 ease-out w-0"
+          :style="{ width: `${animatedProficiency}%` }"
+        ></div>
+      </div>
+    </Card>
+  </div>
 </template>
