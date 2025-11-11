@@ -28,6 +28,11 @@ const router = createRouter({
       name: 'mrt-fare-finder',
       component: () => import('../views/MrtFareFinderView.vue'),
     },
+    {
+      path: '/business-card-scanner',
+      name: 'business-card-scanner',
+      component: () => import('../views/BusinessCardScannerView.vue'),
+    },
     // Redirect old portfolio route to about
     {
       path: '/portfolio',

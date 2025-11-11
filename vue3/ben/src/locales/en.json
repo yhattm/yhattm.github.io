@@ -4,6 +4,7 @@
     "settings": "Settings",
     "about": "About Me",
     "mrtFareFinder": "MRT Fare Finder",
+    "businessCardScanner": "Business Card Scanner",
     "appInfo": "App Info",
     "experience": "Experience",
     "techStack": "Tech Stack",
@@ -107,5 +108,94 @@
     "step1": "Select your origin station from the dropdown or click on a station marker on the map.",
     "step2": "All other station markers will display the fare from your selected origin.",
     "step3": "Hover over or click markers to see station names and fares."
+  },
+  "businessCardScanner": {
+    "title": "Business Card Scanner",
+    "subtitle": "Scan and manage business cards with OCR",
+    "openCamera": "Open Camera",
+    "uploadImage": "Upload Image",
+    "capture": "Capture",
+    "retake": "Retake",
+    "scanning": "Processing...",
+    "ocrProgress": "OCR Progress",
+    "scanSuccess": "Card scanned successfully!",
+    "scanError": "Failed to scan card",
+    "uploadInstructions": "Click to upload or drag and drop an image",
+    "supportedFormats": "Supported: JPEG, PNG, WebP",
+    "invalidFileType": "Invalid file type. Please upload an image.",
+    "cameraError": "Camera access denied or not available",
+    "cameraFallback": "Please use the upload option instead",
+    "fields": {
+      "name": "Name",
+      "title": "Title",
+      "company": "Company",
+      "phone": "Phone",
+      "email": "Email",
+      "address": "Address",
+      "website": "Website",
+      "socialMedia": "Social Media",
+      "fax": "Fax",
+      "rawOcr": "Raw OCR Text"
+    },
+    "actions": {
+      "save": "Save",
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "export": "Export",
+      "exportAll": "Export All",
+      "exportSelected": "Export Selected",
+      "viewImage": "View Image",
+      "download": "Download",
+      "copyToClipboard": "Copy to Clipboard",
+      "deleteAll": "Delete All",
+      "selectAll": "Select All",
+      "clearSelection": "Clear Selection"
+    },
+    "list": {
+      "title": "Scanned Cards",
+      "empty": "No cards yet",
+      "emptyMessage": "Scan your first business card to get started",
+      "count": "{count} cards",
+      "selected": "{count} selected",
+      "search": "Search cards...",
+      "noResults": "No cards found",
+      "sortBy": "Sort by",
+      "sortDate": "Date",
+      "sortName": "Name",
+      "sortCompany": "Company"
+    },
+    "confirm": {
+      "deleteTitle": "Delete Card?",
+      "deleteMessage": "This action cannot be undone. The card and its image will be permanently deleted.",
+      "deleteMultipleTitle": "Delete {count} Cards?",
+      "deleteMultipleMessage": "This action cannot be undone. All selected cards and their images will be permanently deleted.",
+      "confirmDelete": "Yes, Delete",
+      "cancel": "Cancel"
+    },
+    "export": {
+      "title": "Export Cards",
+      "description": "Export your business cards as JSON",
+      "preview": "Preview",
+      "cardsToExport": "{count} cards will be exported",
+      "downloadSuccess": "Cards exported successfully",
+      "copySuccess": "Copied to clipboard!",
+      "exportError": "Failed to export cards"
+    },
+    "storage": {
+      "usage": "Storage Usage",
+      "quotaWarning": "Storage is {percent}% full",
+      "quotaExceeded": "Storage quota exceeded. Please delete some cards."
+    },
+    "messages": {
+      "cardSaved": "Card saved successfully",
+      "cardUpdated": "Card updated successfully",
+      "cardDeleted": "Card deleted successfully",
+      "cardsDeleted": "{count} cards deleted successfully",
+      "saveFailed": "Failed to save card",
+      "updateFailed": "Failed to update card",
+      "deleteFailed": "Failed to delete card",
+      "loadFailed": "Failed to load cards"
+    }
   }
 }

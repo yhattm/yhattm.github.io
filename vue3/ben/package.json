@@ -22,15 +22,18 @@
     "@vueuse/core": "^14.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "idb": "^8.0.3",
     "leaflet": "^1.9.4",
     "lucide-vue-next": "^0.552.0",
     "pinia": "^3.0.3",
     "reka-ui": "^2.6.0",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
+    "tesseract.js": "^6.0.1",
     "vue": "^3.5.22",
     "vue-i18n": "^9.14.5",
-    "vue-router": "^4.6.3"
+    "vue-router": "^4.6.3",
+    "ws": "^8.18.3"
   },
   "devDependencies": {
     "@playwright/test": "^1.56.1",

@@ -4,6 +4,7 @@
     "settings": "設定",
     "about": "關於我",
     "mrtFareFinder": "捷運票價查詢",
+    "businessCardScanner": "名片掃描器",
     "appInfo": "應用程式資訊",
     "experience": "經驗",
     "techStack": "技術棧",
@@ -107,5 +108,94 @@
     "step1": "從下拉選單或點擊地圖上的站點標記選擇起點站。",
     "step2": "其他站點標記將顯示從起點出發的票價。",
     "step3": "將滑鼠移到標記上或點擊以查看站名和票價。"
+  },
+  "businessCardScanner": {
+    "title": "名片掃描器",
+    "subtitle": "使用 OCR 掃描和管理名片",
+    "openCamera": "開啟相機",
+    "uploadImage": "上傳圖片",
+    "capture": "拍攝",
+    "retake": "重拍",
+    "scanning": "處理中...",
+    "ocrProgress": "OCR 進度",
+    "scanSuccess": "名片掃描成功！",
+    "scanError": "名片掃描失敗",
+    "uploadInstructions": "點擊上傳或拖放圖片",
+    "supportedFormats": "支援格式：JPEG、PNG、WebP",
+    "invalidFileType": "無效的檔案類型。請上傳圖片。",
+    "cameraError": "無法存取相機或相機不可用",
+    "cameraFallback": "請改用上傳功能",
+    "fields": {
+      "name": "姓名",
+      "title": "職稱",
+      "company": "公司",
+      "phone": "電話",
+      "email": "電子郵件",
+      "address": "地址",
+      "website": "網站",
+      "socialMedia": "社群媒體",
+      "fax": "傳真",
+      "rawOcr": "原始 OCR 文字"
+    },
+    "actions": {
+      "save": "儲存",
+      "edit": "編輯",
+      "delete": "刪除",
+      "cancel": "取消",
+      "export": "匯出",
+      "exportAll": "全部匯出",
+      "exportSelected": "匯出選取項目",
+      "viewImage": "查看圖片",
+      "download": "下載",
+      "copyToClipboard": "複製到剪貼簿",
+      "deleteAll": "全部刪除",
+      "selectAll": "全選",
+      "clearSelection": "取消選取"
+    },
+    "list": {
+      "title": "已掃描名片",
+      "empty": "尚無名片",
+      "emptyMessage": "掃描您的第一張名片以開始使用",
+      "count": "{count} 張名片",
+      "selected": "已選取 {count} 張",
+      "search": "搜尋名片...",
+      "noResults": "找不到名片",
+      "sortBy": "排序方式",
+      "sortDate": "日期",
+      "sortName": "姓名",
+      "sortCompany": "公司"
+    },
+    "confirm": {
+      "deleteTitle": "刪除名片？",
+      "deleteMessage": "此操作無法復原。名片及其圖片將被永久刪除。",
+      "deleteMultipleTitle": "刪除 {count} 張名片？",
+      "deleteMultipleMessage": "此操作無法復原。所有選取的名片及其圖片將被永久刪除。",
+      "confirmDelete": "確認刪除",
+      "cancel": "取消"
+    },
+    "export": {
+      "title": "匯出名片",
+      "description": "將名片匯出為 JSON 格式",
+      "preview": "預覽",
+      "cardsToExport": "將匯出 {count} 張名片",
+      "downloadSuccess": "名片匯出成功",
+      "copySuccess": "已複製到剪貼簿！",
+      "exportError": "名片匯出失敗"
+    },
+    "storage": {
+      "usage": "儲存空間使用量",
+      "quotaWarning": "儲存空間已使用 {percent}%",
+      "quotaExceeded": "儲存空間已滿。請刪除部分名片。"
+    },
+    "messages": {
+      "cardSaved": "名片儲存成功",
+      "cardUpdated": "名片更新成功",
+      "cardDeleted": "名片刪除成功",
+      "cardsDeleted": "已刪除 {count} 張名片",
+      "saveFailed": "名片儲存失敗",
+      "updateFailed": "名片更新失敗",
+      "deleteFailed": "名片刪除失敗",
+      "loadFailed": "名片載入失敗"
+    }
   }
 }
