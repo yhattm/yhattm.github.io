@@ -23,8 +23,26 @@ export class TesseractOcrService implements OcrService {
     }
 
     try {
-      this.worker = await createWorker('eng+chi_tra', 1, {
+      // Create worker with Chinese first (better for Chinese-heavy cards)
+      // Use chi_tra (Traditional Chinese) + eng (English)
+      this.worker = await createWorker('chi_tra+eng', 1, {
         errorHandler: (err) => console.error('Tesseract error:', err),
+        logger: (m) => {
+          // Optionally log progress
+          if (m.status === 'recognizing text') {
+            console.log(`OCR Progress: ${Math.round(m.progress * 100)}%`)
+          }
+        },
+      })
+
+      // Configure Tesseract parameters for better business card recognition
+      // PSM 6 = Assume a single uniform block of text (good for business cards)
+      // OEM 1 = Neural nets LSTM engine only (better accuracy)
+      await this.worker.setParameters({
+        tessedit_pageseg_mode: '6', // Single block of text
+        tessedit_ocr_engine_mode: '1', // LSTM only
+        tessedit_char_whitelist: '', // Allow all characters
+        preserve_interword_spaces: '1', // Preserve spacing
       })
 
       this.initialized = true
@@ -63,11 +81,18 @@ export class TesseractOcrService implements OcrService {
     }
 
     try {
-      // Convert Blob/File to image data for Tesseract
-      const imageData = await this.blobToImageData(image)
+      // Preprocess image for better OCR accuracy
+      const processedImage = await this.preprocessImage(image)
 
-      // Recognize text
-      const result = await this.worker.recognize(imageData)
+      // Recognize text with progress tracking
+      const result = await this.worker.recognize(processedImage, {
+        // Tesseract will call this with progress updates
+        logger: (m) => {
+          if (m.status === 'recognizing text' && onProgress) {
+            onProgress(m.progress * 100)
+          }
+        },
+      })
 
       // Call progress callback with 100% when done
       if (onProgress) {
@@ -76,6 +101,9 @@ export class TesseractOcrService implements OcrService {
 
       const rawText = result.data.text
       const confidence = result.data.confidence
+
+      console.log('OCR Confidence:', confidence)
+      console.log('OCR Raw Text:', rawText)
 
       // Parse extracted text into structured fields
       const extractedData = parseCardFields(rawText)
@@ -89,6 +117,78 @@ export class TesseractOcrService implements OcrService {
       console.error('OCR recognition failed:', error)
       throw new Error('Failed to process image with OCR')
     }
+  }
+
+  /**
+   * Preprocess image to improve OCR accuracy
+   * 預處理圖片以提高 OCR 準確度
+   */
+  private async preprocessImage(blob: Blob): Promise<HTMLCanvasElement> {
+    return new Promise((resolve, reject) => {
+      const img = new Image()
+      const url = URL.createObjectURL(blob)
+
+      img.onload = () => {
+        try {
+          // Create canvas
+          const canvas = document.createElement('canvas')
+          const ctx = canvas.getContext('2d')
+
+          if (!ctx) {
+            reject(new Error('Could not get canvas context'))
+            return
+          }
+
+          // Set canvas size to image size
+          canvas.width = img.width
+          canvas.height = img.height
+
+          // Draw image
+          ctx.drawImage(img, 0, 0)
+
+          // Get image data for processing
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+          const data = imageData.data
+
+          // Apply image enhancements
+          // 1. Convert to grayscale and increase contrast
+          for (let i = 0; i < data.length; i += 4) {
+            // Convert to grayscale using luminance formula
+            const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2]
+
+            // Increase contrast (simple threshold)
+            // Adjust these values if needed: lower threshold = darker, higher = lighter
+            const contrast = gray < 128 ? gray * 0.8 : gray * 1.2
+
+            // Clamp to 0-255
+            const final = Math.min(255, Math.max(0, contrast))
+
+            data[i] = final // R
+            data[i + 1] = final // G
+            data[i + 2] = final // B
+            // Alpha channel (i+3) stays the same
+          }
+
+          // Put processed image data back
+          ctx.putImageData(imageData, 0, 0)
+
+          // Clean up
+          URL.revokeObjectURL(url)
+
+          resolve(canvas)
+        } catch (err) {
+          URL.revokeObjectURL(url)
+          reject(err)
+        }
+      }
+
+      img.onerror = () => {
+        URL.revokeObjectURL(url)
+        reject(new Error('Failed to load image for preprocessing'))
+      }
+
+      img.src = url
+    })
   }
 
   /**

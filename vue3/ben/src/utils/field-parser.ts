@@ -14,9 +14,9 @@ const PATTERNS = {
 
   // Phone: various formats including international, parentheses, dashes, spaces
   // 電話：各種格式，包括國際、括號、破折號、空格
-  // Must have separators (-, ., space, parentheses) or be of specific length
+  // Enhanced to handle more formats and OCR errors
   phone:
-    /(\+?\d{1,3}[-.\s])\(?\d{2,4}\)?[-.\s]\d{3,4}[-.\s]\d{3,4}|\(?\d{2,4}\)?[-.\s]\d{3,4}[-.\s]\d{3,4}|\d{2,4}-\d{3,4}-\d{3,4}/g,
+    /(\+?886[-.\s])?\(?0?\d{2,4}\)?[-.\s]?\d{3,4}[-.\s]?\d{3,4}|(\+?\d{1,3}[-.\s])?\(?\d{2,4}\)?[-.\s]\d{3,4}[-.\s]\d{3,4}|\d{2,4}-\d{3,4}-\d{3,4}|\d{10}/g,
 
   // URL: http/https URLs
   // 網址：http/https 網址
@@ -43,6 +43,116 @@ const PATTERNS = {
   // Address keywords for better detection
   // 地址關鍵字以提高偵測準確度
   addressKeywords: /(?:地址|址|address|展示館|辦公室|office)[:：]?\s*/gi,
+
+  // Noise detection patterns
+  // 雜訊偵測模式
+  garbageChars: /[^\u4e00-\u9fff\w\s@.+\-()\/,;:："]/g, // Allow Chinese, alphanumeric, basic punctuation
+  repeatingChars: /(.)\1{4,}/g, // 5+ same characters in a row
+  excessiveSpaces: /\s{3,}/g, // 3+ consecutive spaces
+}
+
+/**
+ * Calculate quality score for an OCR line (0-100)
+ * Higher score means better quality / less noise
+ * 計算 OCR 行的品質分數（0-100）
+ * 分數越高表示品質越好 / 雜訊越少
+ */
+function calculateLineQuality(line: string): number {
+  if (!line || line.length === 0) return 0
+
+  let score = 100
+
+  // Penalize excessive garbage characters
+  const garbageCount = (line.match(PATTERNS.garbageChars) || []).length
+  score -= garbageCount * 5
+
+  // Penalize repeating characters
+  if (PATTERNS.repeatingChars.test(line)) {
+    score -= 30
+  }
+
+  // Penalize excessive spaces
+  if (PATTERNS.excessiveSpaces.test(line)) {
+    score -= 20
+  }
+
+  // Penalize very short lines (< 2 chars, likely noise)
+  if (line.length < 2) {
+    score -= 50
+  }
+
+  // Penalize lines with very high ratio of numbers (unless phone/fax)
+  const digitCount = (line.match(/\d/g) || []).length
+  const digitRatio = digitCount / line.length
+  if (digitRatio > 0.8 && !PATTERNS.phone.test(line)) {
+    score -= 20
+  }
+
+  // Boost score for lines with Chinese characters (likely real content)
+  const chineseCount = (line.match(/[\u4e00-\u9fff]/g) || []).length
+  if (chineseCount > 0) {
+    score += Math.min(chineseCount * 2, 20)
+  }
+
+  // Boost score for lines with email/phone/url (structured data)
+  if (PATTERNS.email.test(line) || PATTERNS.phone.test(line) || PATTERNS.url.test(line)) {
+    score += 20
+  }
+
+  return Math.max(0, Math.min(100, score))
+}
+
+/**
+ * Clean an OCR line by removing garbage and normalizing
+ * 清理 OCR 行，移除雜訊並正規化
+ */
+function cleanOcrLine(line: string): string {
+  let cleaned = line
+
+  // Remove obvious garbage characters
+  cleaned = cleaned.replace(PATTERNS.garbageChars, '')
+
+  // Normalize excessive spaces
+  cleaned = cleaned.replace(PATTERNS.excessiveSpaces, ' ')
+
+  // Remove repeating characters (keep only 2 repetitions)
+  cleaned = cleaned.replace(/(.)\1{2,}/g, '$1$1')
+
+  return cleaned.trim()
+}
+
+/**
+ * Filter and clean OCR lines based on quality
+ * 根據品質篩選並清理 OCR 行
+ */
+function filterNoiseLines(lines: string[]): string[] {
+  return lines
+    .map((line) => cleanOcrLine(line))
+    .filter((line) => {
+      if (line.length === 0) return false
+
+      const quality = calculateLineQuality(line)
+      // Keep lines with quality score >= 40
+      return quality >= 40
+    })
+}
+
+/**
+ * Normalize phone number to remove OCR errors
+ * 正規化電話號碼以移除 OCR 錯誤
+ */
+function normalizePhoneNumber(phone: string): string {
+  // Remove common OCR confusion characters
+  let normalized = phone
+    .replace(/[oO]/g, '0') // O -> 0
+    .replace(/[lI]/g, '1') // l/I -> 1
+    .replace(/[zZ]/g, '2') // z -> 2
+    .replace(/[sS]/g, '5') // s -> 5
+
+  // Remove non-digit, non-separator characters
+  normalized = normalized.replace(/[^\d\-+().\s]/g, '')
+
+  return normalized.trim()
 }
 
 /**
@@ -50,10 +160,24 @@ const PATTERNS = {
  * 解析 OCR 文字並提取結構化聯絡欄位
  */
 export function parseCardFields(ocrText: string): CardData {
-  const lines = ocrText
+  // Split into lines and do basic filtering
+  const rawLines = ocrText
     .split('\n')
     .map((line) => line.trim())
     .filter((line) => line.length > 0)
+
+  // Filter out noise lines and clean up
+  const lines = filterNoiseLines(rawLines)
+
+  // Debug: log quality scores for inspection
+  if (process.env.NODE_ENV === 'development') {
+    console.log('=== OCR Line Quality Analysis ===')
+    rawLines.forEach((line, idx) => {
+      const quality = calculateLineQuality(line)
+      const kept = lines.includes(cleanOcrLine(line))
+      console.log(`Line ${idx + 1} [Q:${quality}] ${kept ? '✓' : '✗'}: ${line.substring(0, 50)}`)
+    })
+  }
 
   const cardData: CardData = {}
 
@@ -78,46 +202,51 @@ export function parseCardFields(ocrText: string): CardData {
     return cardData
   }
 
+  // Use cleaned text for pattern matching (reduces false positives from noise)
+  const cleanedText = lines.join('\n')
+
   // Extract email
-  const emailMatch = ocrText.match(PATTERNS.email)
+  const emailMatch = cleanedText.match(PATTERNS.email)
   if (emailMatch && emailMatch.length > 0) {
     cardData.email = emailMatch[0]
   }
 
   // Extract phone (excluding fax)
-  const phoneMatches = ocrText.match(PATTERNS.phone)
+  const phoneMatches = cleanedText.match(PATTERNS.phone)
   if (phoneMatches && phoneMatches.length > 0) {
     // Filter out fax numbers if they're labeled
     const phones = phoneMatches.filter((p) => {
-      const context = ocrText.substring(
-        Math.max(0, ocrText.indexOf(p) - 10),
-        ocrText.indexOf(p),
+      const context = cleanedText.substring(
+        Math.max(0, cleanedText.indexOf(p) - 10),
+        cleanedText.indexOf(p),
       )
       return !/(fax|傳真)/i.test(context)
     })
     if (phones.length > 0) {
-      cardData.phone = phones[0]
+      // Normalize phone number to fix OCR errors
+      cardData.phone = normalizePhoneNumber(phones[0])
     }
   }
 
   // Extract fax
-  const faxMatch = ocrText.match(PATTERNS.fax)
+  const faxMatch = cleanedText.match(PATTERNS.fax)
   if (faxMatch && faxMatch.length > 0) {
-    // Clean up "fax:" or "傳真:" prefix
-    cardData.fax = faxMatch[0].replace(/(?:fax|傳真)[:：]?\s*/gi, '').trim()
+    // Clean up "fax:" or "傳真:" prefix and normalize
+    const faxNum = faxMatch[0].replace(/(?:fax|傳真)[:：]?\s*/gi, '').trim()
+    cardData.fax = normalizePhoneNumber(faxNum)
   }
 
   // Extract website URL
-  const urlMatches = ocrText.match(PATTERNS.url)
+  const urlMatches = cleanedText.match(PATTERNS.url)
   if (urlMatches && urlMatches.length > 0) {
     cardData.website = urlMatches[0]
   }
 
   // Extract social media
   const socialMediaMatches = [
-    ...(ocrText.match(PATTERNS.linkedin) || []),
-    ...(ocrText.match(PATTERNS.twitter) || []),
-    ...(ocrText.match(PATTERNS.facebook) || []),
+    ...(cleanedText.match(PATTERNS.linkedin) || []),
+    ...(cleanedText.match(PATTERNS.twitter) || []),
+    ...(cleanedText.match(PATTERNS.facebook) || []),
   ]
   if (socialMediaMatches.length > 0) {
     cardData.socialMedia = socialMediaMatches.join(', ')
@@ -125,7 +254,7 @@ export function parseCardFields(ocrText: string): CardData {
 
   // Extract company registration/tax ID (Taiwan)
   // 提取公司統一編號（台灣）
-  const taxIdMatch = ocrText.match(PATTERNS.taxId)
+  const taxIdMatch = cleanedText.match(PATTERNS.taxId)
   if (taxIdMatch && taxIdMatch.length > 0) {
     // Extract just the 8-digit number
     const numberMatch = taxIdMatch[0].match(/\d{8}/)
