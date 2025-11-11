@@ -35,6 +35,10 @@ const sortBy = ref<'date' | 'name' | 'company'>('date')
 const viewerOpen = ref(false)
 const viewerImageId = ref<string | null>(null)
 
+// Rescan state
+const rescanningCardId = ref<string | null>(null)
+const rescanProgress = ref(0)
+
 // Detect if mobile to set default tab
 onMounted(() => {
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
@@ -189,6 +193,31 @@ function formatDate(timestamp: number): string {
 function viewImage(imageId: string) {
   viewerImageId.value = imageId
   viewerOpen.value = true
+}
+
+// Rescan card with OCR
+async function rescanCard(cardId: string) {
+  if (!confirm(t('businessCardScanner.confirm.rescanMessage'))) {
+    return
+  }
+
+  rescanningCardId.value = cardId
+  rescanProgress.value = 0
+  error.value = null
+
+  try {
+    await store.rescanCard(cardId, (progress) => {
+      rescanProgress.value = Math.round(progress)
+    })
+
+    alert(t('businessCardScanner.messages.rescanSuccess'))
+  } catch (err) {
+    console.error('Rescan error:', err)
+    error.value = t('businessCardScanner.messages.rescanFailed')
+  } finally {
+    rescanningCardId.value = null
+    rescanProgress.value = 0
+  }
 }
 </script>
 
@@ -418,9 +447,24 @@ function viewImage(imageId: string) {
 
                 <div class="flex items-center justify-between pt-2 border-t">
                   <Badge variant="secondary">{{ formatDate(card.timestamp) }}</Badge>
-                  <Button @click="deleteCard(card.id)" variant="ghost" size="sm">
-                    {{ t('businessCardScanner.actions.delete') }}
-                  </Button>
+                  <div class="flex gap-2">
+                    <Button
+                      @click="rescanCard(card.id)"
+                      variant="outline"
+                      size="sm"
+                      :disabled="rescanningCardId === card.id"
+                    >
+                      <span v-if="rescanningCardId === card.id">
+                        {{ t('businessCardScanner.actions.rescanning') }} {{ rescanProgress }}%
+                      </span>
+                      <span v-else>
+                        {{ t('businessCardScanner.actions.rescan') }}
+                      </span>
+                    </Button>
+                    <Button @click="deleteCard(card.id)" variant="ghost" size="sm">
+                      {{ t('businessCardScanner.actions.delete') }}
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>

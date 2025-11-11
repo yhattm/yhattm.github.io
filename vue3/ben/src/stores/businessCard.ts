@@ -139,6 +139,64 @@ export const useBusinessCardStore = defineStore('businessCard', () => {
   }
 
   /**
+   * Re-run OCR on an existing card's image
+   * 重新對現有名片的圖片執行 OCR
+   */
+  async function rescanCard(
+    id: string,
+    onProgress?: (progress: number) => void,
+  ): Promise<CardData> {
+    isLoading.value = true
+    error.value = null
+
+    try {
+      // Get the card
+      const card = await db.getCard(id)
+      if (!card) {
+        throw new Error('Card not found')
+      }
+
+      // Get the full-size image
+      const cardImage = await db.getImage(card.imageId)
+      if (!cardImage) {
+        throw new Error('Card image not found')
+      }
+
+      // Convert ArrayBuffer back to Blob
+      const imageBlob = arrayBufferToBlob(cardImage.image, cardImage.imageType)
+
+      // Dynamically import OCR service to avoid circular dependency
+      const { getOcrService } = await import('@/services/ocr-service')
+      const ocrService = getOcrService()
+
+      // Ensure OCR is ready
+      await ocrService.isReady()
+
+      // Run OCR again
+      const result = await ocrService.recognize(imageBlob, onProgress)
+
+      // Update card with new OCR data
+      const updatedCard: BusinessCard = {
+        ...card,
+        data: toRaw(result.extractedData), // New parsed data
+        rawOcr: result.text, // New raw OCR text
+        lastModified: Date.now(),
+      }
+
+      await db.updateCard(updatedCard)
+      await loadCards()
+
+      return result.extractedData
+    } catch (e) {
+      error.value = 'Failed to rescan card'
+      console.error('Rescan card error:', e)
+      throw e
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  /**
    * Delete a business card and its image
    * 刪除名片及其圖片
    */
@@ -369,6 +427,7 @@ export const useBusinessCardStore = defineStore('businessCard', () => {
     loadCards,
     addCard,
     updateCard,
+    rescanCard,
     deleteCard,
     deleteCards,
     getCardImage,

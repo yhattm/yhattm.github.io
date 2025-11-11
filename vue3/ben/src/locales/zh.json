@@ -164,7 +164,9 @@
       "copyToClipboard": "複製到剪貼簿",
       "deleteAll": "全部刪除",
       "selectAll": "全選",
-      "clearSelection": "取消選取"
+      "clearSelection": "取消選取",
+      "rescan": "重新掃描 OCR",
+      "rescanning": "掃描中"
     },
     "list": {
       "title": "已掃描名片",
@@ -185,7 +187,8 @@
       "deleteMultipleTitle": "刪除 {count} 張名片？",
       "deleteMultipleMessage": "此操作無法復原。所有選取的名片及其圖片將被永久刪除。",
       "confirmDelete": "確認刪除",
-      "cancel": "取消"
+      "cancel": "取消",
+      "rescanMessage": "重新對此名片執行 OCR？這將會以新偵測到的資訊取代目前資料。"
     },
     "export": {
       "title": "匯出名片",
@@ -209,7 +212,9 @@
       "saveFailed": "名片儲存失敗",
       "updateFailed": "名片更新失敗",
       "deleteFailed": "名片刪除失敗",
-      "loadFailed": "名片載入失敗"
+      "loadFailed": "名片載入失敗",
+      "rescanSuccess": "名片重新掃描成功，OCR 資料已更新",
+      "rescanFailed": "名片重新掃描失敗，請再試一次。"
     }
   }
 }

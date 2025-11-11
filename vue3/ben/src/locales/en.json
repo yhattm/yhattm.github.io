@@ -158,6 +158,8 @@
       "cancel": "Cancel",
       "export": "Export",
       "exportAll": "Export All",
+      "rescan": "Re-scan OCR",
+      "rescanning": "Rescanning",
       "exportSelected": "Export Selected",
       "viewImage": "View Image",
       "download": "Download",
@@ -185,7 +187,8 @@
       "deleteMultipleTitle": "Delete {count} Cards?",
       "deleteMultipleMessage": "This action cannot be undone. All selected cards and their images will be permanently deleted.",
       "confirmDelete": "Yes, Delete",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "rescanMessage": "Re-run OCR on this card? This will replace the current data with newly detected information."
     },
     "export": {
       "title": "Export Cards",
@@ -209,7 +212,9 @@
       "saveFailed": "Failed to save card",
       "updateFailed": "Failed to update card",
       "deleteFailed": "Failed to delete card",
-      "loadFailed": "Failed to load cards"
+      "loadFailed": "Failed to load cards",
+      "rescanSuccess": "Card re-scanned successfully with updated OCR data",
+      "rescanFailed": "Failed to re-scan card. Please try again."
     }
   }
 }
