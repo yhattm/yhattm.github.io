@@ -41,6 +41,9 @@ export default defineConfig({
 
     /* Only on CI systems run the tests headless */
     headless: !!process.env.CI,
+
+    /* Grant camera and microphone permissions */
+    permissions: ['camera', 'microphone'],
   },
 
   /* Configure projects for major browsers */
