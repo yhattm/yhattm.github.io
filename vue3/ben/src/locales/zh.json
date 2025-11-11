@@ -114,7 +114,6 @@
     "subtitle": "使用 OCR 掃描和管理名片",
     "openCamera": "開啟相機",
     "uploadImage": "上傳圖片",
-    "capture": "拍攝",
     "retake": "重拍",
     "scanning": "處理中...",
     "ocrProgress": "OCR 進度",
@@ -123,8 +122,23 @@
     "uploadInstructions": "點擊上傳或拖放圖片",
     "supportedFormats": "支援格式：JPEG、PNG、WebP",
     "invalidFileType": "無效的檔案類型。請上傳圖片。",
-    "cameraError": "無法存取相機或相機不可用",
-    "cameraFallback": "請改用上傳功能",
+    "tabs": {
+      "camera": "相機",
+      "upload": "上傳"
+    },
+    "capture": {
+      "title": "掃描名片",
+      "description": "使用相機或上傳圖片來掃描名片"
+    },
+    "form": {
+      "title": "編輯名片資訊"
+    },
+    "camera": {
+      "notSupported": "此裝置不支援相機",
+      "useUploadInstead": "請改用上傳分頁",
+      "permissionInstructions": "請在瀏覽器設定中啟用相機存取權限",
+      "useThisImage": "使用此圖片"
+    },
     "fields": {
       "name": "姓名",
       "title": "職稱",

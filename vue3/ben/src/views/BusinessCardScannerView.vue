@@ -5,18 +5,21 @@ import { useBusinessCardStore } from '@/stores/businessCard'
 import { getOcrService } from '@/services/ocr-service'
 import { isValidImageFile, blobToObjectURL, revokeObjectURL } from '@/utils/image-processing'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import CardThumbnail from '@/components/scanner/CardThumbnail.vue'
+import CameraCapture from '@/components/scanner/CameraCapture.vue'
 import type { CardData } from '@/types/business-card'
 
 const { t } = useI18n()
 const store = useBusinessCardStore()
 
 // State
+const activeTab = ref('camera') // Default to camera on mobile, upload on desktop
 const isScanning = ref(false)
 const ocrProgress = ref(0)
 const error = ref<string | null>(null)
@@ -26,6 +29,12 @@ const formData = ref<CardData>({})
 const rawOcrText = ref('')
 const searchQuery = ref('')
 const sortBy = ref<'date' | 'name' | 'company'>('date')
+
+// Detect if mobile to set default tab
+onMounted(() => {
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+  activeTab.value = isMobile ? 'camera' : 'upload'
+})
 
 // Computed
 const filteredCards = computed(() => {
@@ -51,6 +60,11 @@ async function handleFileUpload(event: Event) {
   }
 
   await processImage(file)
+}
+
+// Handle camera capture
+async function handleCameraCapture(blob: Blob) {
+  await processImage(blob)
 }
 
 // Process image with OCR
@@ -185,30 +199,49 @@ function formatDate(timestamp: number): string {
         <AlertDescription>{{ error }}</AlertDescription>
       </Alert>
 
-      <!-- Scanner Section -->
+      <!-- Scanner Section with Tabs -->
       <Card>
         <CardHeader>
-          <CardTitle>{{ t('businessCardScanner.uploadImage') }}</CardTitle>
-          <CardDescription>{{ t('businessCardScanner.uploadInstructions') }}</CardDescription>
+          <CardTitle>{{ t('businessCardScanner.capture.title') }}</CardTitle>
+          <CardDescription>{{ t('businessCardScanner.capture.description') }}</CardDescription>
         </CardHeader>
-        <CardContent class="space-y-4">
-          <!-- File Upload -->
-          <div class="flex gap-4">
-            <Input
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-              @change="handleFileUpload"
-              :disabled="isScanning"
-            />
-          </div>
+        <CardContent>
+          <Tabs v-model="activeTab" class="w-full">
+            <TabsList class="grid w-full grid-cols-2 mb-4">
+              <TabsTrigger value="camera">
+                {{ t('businessCardScanner.tabs.camera') }}
+              </TabsTrigger>
+              <TabsTrigger value="upload">
+                {{ t('businessCardScanner.tabs.upload') }}
+              </TabsTrigger>
+            </TabsList>
 
-          <!-- Image Preview -->
-          <div v-if="imagePreviewUrl" class="border rounded-lg p-4">
-            <img :src="imagePreviewUrl" alt="Card preview" class="max-w-full h-auto max-h-64 mx-auto" />
-          </div>
+            <!-- Camera Tab -->
+            <TabsContent value="camera" class="space-y-4">
+              <CameraCapture @captured="handleCameraCapture" />
+            </TabsContent>
 
-          <!-- OCR Progress -->
-          <div v-if="isScanning" class="space-y-2">
+            <!-- Upload Tab -->
+            <TabsContent value="upload" class="space-y-4">
+              <!-- File Upload -->
+              <div class="flex gap-4">
+                <Input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  @change="handleFileUpload"
+                  :disabled="isScanning"
+                />
+              </div>
+
+              <!-- Image Preview -->
+              <div v-if="imagePreviewUrl" class="border rounded-lg p-4">
+                <img :src="imagePreviewUrl" alt="Card preview" class="max-w-full h-auto max-h-64 mx-auto" />
+              </div>
+            </TabsContent>
+          </Tabs>
+
+          <!-- OCR Progress (shared across both tabs) -->
+          <div v-if="isScanning" class="space-y-2 mt-4">
             <p class="text-sm text-muted-foreground">{{ t('businessCardScanner.scanning') }}</p>
             <div class="w-full bg-secondary rounded-full h-2">
               <div
@@ -219,9 +252,9 @@ function formatDate(timestamp: number): string {
             <p class="text-xs text-center">{{ ocrProgress }}%</p>
           </div>
 
-          <!-- Card Form -->
-          <div v-if="capturedImage && !isScanning" class="space-y-4 border-t pt-4">
-            <h3 class="font-semibold">{{ t('businessCardScanner.fields.name') }}</h3>
+          <!-- Card Form (shared across both tabs) -->
+          <div v-if="capturedImage && !isScanning" class="space-y-4 border-t pt-4 mt-4">
+            <h3 class="font-semibold">{{ t('businessCardScanner.form.title') }}</h3>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>

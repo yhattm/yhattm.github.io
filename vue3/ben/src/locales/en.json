@@ -114,7 +114,6 @@
     "subtitle": "Scan and manage business cards with OCR",
     "openCamera": "Open Camera",
     "uploadImage": "Upload Image",
-    "capture": "Capture",
     "retake": "Retake",
     "scanning": "Processing...",
     "ocrProgress": "OCR Progress",
@@ -123,8 +122,23 @@
     "uploadInstructions": "Click to upload or drag and drop an image",
     "supportedFormats": "Supported: JPEG, PNG, WebP",
     "invalidFileType": "Invalid file type. Please upload an image.",
-    "cameraError": "Camera access denied or not available",
-    "cameraFallback": "Please use the upload option instead",
+    "tabs": {
+      "camera": "Camera",
+      "upload": "Upload"
+    },
+    "capture": {
+      "title": "Capture Card",
+      "description": "Use your camera or upload an image to scan a business card"
+    },
+    "form": {
+      "title": "Edit Card Information"
+    },
+    "camera": {
+      "notSupported": "Camera not supported on this device",
+      "useUploadInstead": "Please use the Upload tab instead",
+      "permissionInstructions": "Please enable camera access in your browser settings",
+      "useThisImage": "Use This Image"
+    },
     "fields": {
       "name": "Name",
       "title": "Title",
