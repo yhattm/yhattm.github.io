@@ -408,6 +408,14 @@ function viewImage(imageId: string) {
                   </p>
                 </div>
 
+                <!-- Raw OCR Text -->
+                <div v-if="card.rawOcr" class="pt-2 border-t">
+                  <p class="text-xs text-muted-foreground mb-1">{{ t('businessCardScanner.fields.rawOcr') }}:</p>
+                  <div class="bg-muted/50 rounded p-2 text-xs font-mono whitespace-pre-wrap break-words max-h-24 overflow-y-auto">
+                    {{ card.rawOcr }}
+                  </div>
+                </div>
+
                 <div class="flex items-center justify-between pt-2 border-t">
                   <Badge variant="secondary">{{ formatDate(card.timestamp) }}</Badge>
                   <Button @click="deleteCard(card.id)" variant="ghost" size="sm">
