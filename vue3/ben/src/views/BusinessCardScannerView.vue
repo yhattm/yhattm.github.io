@@ -13,6 +13,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import CardThumbnail from '@/components/scanner/CardThumbnail.vue'
 import CameraCapture from '@/components/scanner/CameraCapture.vue'
+import ImageViewer from '@/components/scanner/ImageViewer.vue'
 import type { CardData } from '@/types/business-card'
 
 const { t } = useI18n()
@@ -29,6 +30,10 @@ const formData = ref<CardData>({})
 const rawOcrText = ref('')
 const searchQuery = ref('')
 const sortBy = ref<'date' | 'name' | 'company'>('date')
+
+// Image viewer state
+const viewerOpen = ref(false)
+const viewerImageId = ref<string | null>(null)
 
 // Detect if mobile to set default tab
 onMounted(() => {
@@ -178,6 +183,12 @@ function exportCards() {
 // Format timestamp
 function formatDate(timestamp: number): string {
   return new Date(timestamp).toLocaleDateString()
+}
+
+// View full-size image
+function viewImage(imageId: string) {
+  viewerImageId.value = imageId
+  viewerOpen.value = true
 }
 </script>
 
@@ -333,7 +344,7 @@ function formatDate(timestamp: number): string {
           <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <Card v-for="card in filteredCards" :key="card.id" class="hover:shadow-lg transition-shadow">
               <CardHeader>
-                <CardThumbnail :image-id="card.imageId" />
+                <CardThumbnail :image-id="card.imageId" @click="viewImage(card.imageId)" />
               </CardHeader>
               <CardContent class="space-y-2">
                 <CardTitle class="text-lg">{{ card.data.name || 'Unknown' }}</CardTitle>
@@ -353,5 +364,8 @@ function formatDate(timestamp: number): string {
         </CardContent>
       </Card>
     </div>
+
+    <!-- Image Viewer Modal -->
+    <ImageViewer :image-id="viewerImageId" :open="viewerOpen" @update:open="viewerOpen = $event" />
   </main>
 </template>
