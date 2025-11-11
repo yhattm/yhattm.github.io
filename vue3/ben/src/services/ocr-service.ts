@@ -84,15 +84,9 @@ export class TesseractOcrService implements OcrService {
       // Preprocess image for better OCR accuracy
       const processedImage = await this.preprocessImage(image)
 
-      // Recognize text with progress tracking
-      const result = await this.worker.recognize(processedImage, {
-        // Tesseract will call this with progress updates
-        logger: (m) => {
-          if (m.status === 'recognizing text' && onProgress) {
-            onProgress(m.progress * 100)
-          }
-        },
-      })
+      // Note: Can't pass logger callback to recognize() due to Web Worker serialization
+      // Progress tracking is handled by the worker's init-time logger
+      const result = await this.worker.recognize(processedImage)
 
       // Call progress callback with 100% when done
       if (onProgress) {
