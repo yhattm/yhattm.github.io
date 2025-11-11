@@ -25,6 +25,7 @@ export class TesseractOcrService implements OcrService {
     try {
       // Create worker with Chinese first (better for Chinese-heavy cards)
       // Use chi_tra (Traditional Chinese) + eng (English)
+      // OEM (OCR Engine Mode): 1 = LSTM neural nets only
       this.worker = await createWorker('chi_tra+eng', 1, {
         errorHandler: (err) => console.error('Tesseract error:', err),
         logger: (m) => {
@@ -37,11 +38,9 @@ export class TesseractOcrService implements OcrService {
 
       // Configure Tesseract parameters for better business card recognition
       // PSM 6 = Assume a single uniform block of text (good for business cards)
-      // OEM 1 = Neural nets LSTM engine only (better accuracy)
+      // Note: tessedit_ocr_engine_mode must be set during createWorker, not here
       await this.worker.setParameters({
         tessedit_pageseg_mode: '6', // Single block of text
-        tessedit_ocr_engine_mode: '1', // LSTM only
-        tessedit_char_whitelist: '', // Allow all characters
         preserve_interword_spaces: '1', // Preserve spacing
       })
 
@@ -81,12 +80,13 @@ export class TesseractOcrService implements OcrService {
     }
 
     try {
-      // Preprocess image for better OCR accuracy
-      const processedImage = await this.preprocessImage(image)
+      // Temporarily disable preprocessing to test raw image quality
+      // If raw image works better, we'll need to adjust preprocessing algorithm
+      // const processedImage = await this.preprocessImage(image)
 
       // Note: Can't pass logger callback to recognize() due to Web Worker serialization
       // Progress tracking is handled by the worker's init-time logger
-      const result = await this.worker.recognize(processedImage)
+      const result = await this.worker.recognize(image)
 
       // Call progress callback with 100% when done
       if (onProgress) {
