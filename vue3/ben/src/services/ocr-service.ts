@@ -12,6 +12,7 @@ import { parseCardFields } from '@/utils/field-parser'
 export class TesseractOcrService implements OcrService {
   private worker: Worker | null = null
   private initialized = false
+  private readonly version = 'v2.1.0' // OCR service version for debugging
 
   /**
    * Initialize Tesseract worker with English and Chinese languages
@@ -21,6 +22,8 @@ export class TesseractOcrService implements OcrService {
     if (this.initialized && this.worker) {
       return
     }
+
+    console.log(`🔍 OCR Service initializing... Version: ${this.version}`)
 
     try {
       // Create worker with Chinese first (better for Chinese-heavy cards)
@@ -96,7 +99,7 @@ export class TesseractOcrService implements OcrService {
       const rawText = result.data.text
       const confidence = result.data.confidence
 
-      console.log('OCR Confidence:', confidence)
+      console.log(`📊 OCR Service ${this.version} - Confidence: ${confidence}%`)
       console.log('OCR Raw Text:', rawText)
 
       // Parse extracted text into structured fields
