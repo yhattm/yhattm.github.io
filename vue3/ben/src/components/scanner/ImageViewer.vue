@@ -18,9 +18,9 @@ const store = useBusinessCardStore()
 const imageUrl = ref<string | null>(null)
 const isLoading = ref(false)
 
-// Load full-size image when dialog opens
-watch(() => props.imageId, async (newImageId) => {
-  if (newImageId && props.open) {
+// Load full-size image when dialog opens or imageId changes
+watch([() => props.imageId, () => props.open], async ([newImageId, isOpen]) => {
+  if (newImageId && isOpen) {
     isLoading.value = true
     try {
       imageUrl.value = await store.getCardImageUrl(newImageId)
