@@ -185,8 +185,8 @@ export function parseCardFields(ocrText: string): CardData {
   // 特殊情況：如果只有一行且包含公司關鍵字，則視為公司名稱
   // Note: \b doesn't work with Chinese, so we use lookahead/lookbehind or just match the pattern
   const companyKeywords = /(inc\.|ltd\.|corp\.|limited|company|公司|有限公司|股份|集團|企業)/i
-  if (lines.length === 1 && companyKeywords.test(lines[0])) {
-    cardData.company = lines[0]
+  if (lines.length === 1 && lines[0] && companyKeywords.test(lines[0])) {
+    cardData.company = cleanCompanyName(lines[0])
     return cardData
   }
 
@@ -194,10 +194,12 @@ export function parseCardFields(ocrText: string): CardData {
   // 特殊情況：如果兩行，第一行是公司，第二行是地址
   if (
     lines.length === 2 &&
+    lines[0] &&
+    lines[1] &&
     companyKeywords.test(lines[0]) &&
     /(?:市|區|路|街|巷|弄|號|樓|street|road|avenue|floor)/i.test(lines[1])
   ) {
-    cardData.company = lines[0]
+    cardData.company = cleanCompanyName(lines[0])
     cardData.address = lines[1]
     return cardData
   }
@@ -222,7 +224,7 @@ export function parseCardFields(ocrText: string): CardData {
       )
       return !/(fax|傳真)/i.test(context)
     })
-    if (phones.length > 0) {
+    if (phones.length > 0 && phones[0]) {
       // Normalize phone number to fix OCR errors
       cardData.phone = normalizePhoneNumber(phones[0])
     }
@@ -265,29 +267,79 @@ export function parseCardFields(ocrText: string): CardData {
     }
   }
 
-  // Heuristic: first non-empty line is often the name
-  // 啟發式：第一個非空白行通常是姓名
-  // Support bilingual names (Chinese + English)
-  if (lines.length > 0 && lines[0]) {
+  // Improved heuristic for name: look for bilingual names (Chinese + English)
+  // 改進的姓名啟發式：尋找雙語姓名（中文 + 英文）
+  // Priority: lines with both Chinese characters and English letters
+  let nameFound = false
+  for (let i = 0; i < Math.min(lines.length, 10); i++) {
+    const line = lines[i]
+    if (!line) continue
+
+    const hasChinese = /[\u4e00-\u9fff]/.test(line)
+    const hasEnglish = /[A-Za-z]{2,}/.test(line)
+
+    // Skip if it's email, phone, url, or company
+    if (
+      PATTERNS.email.test(line) ||
+      PATTERNS.phone.test(line) ||
+      PATTERNS.url.test(line) ||
+      companyKeywords.test(line)
+    ) {
+      continue
+    }
+
+    // Look for bilingual name pattern (Chinese + English)
+    if (hasChinese && hasEnglish && line.length < 50) {
+      cardData.name = line
+      nameFound = true
+      break
+    }
+  }
+
+  // Fallback: if no bilingual name found, use first reasonable line
+  if (!nameFound && lines.length > 0 && lines[0]) {
     const firstLine = lines[0]
-    // Skip if it's too long (likely company name or address)
-    // Allow longer names for bilingual (Chinese + English) names
-    if (firstLine.length < 80 && !PATTERNS.email.test(firstLine) && !PATTERNS.phone.test(firstLine)) {
+    // Skip if it's too long or looks like noise
+    if (firstLine.length > 3 && firstLine.length < 80 &&
+        !PATTERNS.email.test(firstLine) && !PATTERNS.phone.test(firstLine)) {
       cardData.name = firstLine
     }
   }
 
-  // Heuristic: second line is often the title/position
-  // 啟發式：第二行通常是職稱/職位
-  // Enhanced: Check for Chinese titles explicitly
-  if (lines.length > 1 && lines[1]) {
-    const secondLine = lines[1]
-    // Check if it matches a known Chinese title
-    if (PATTERNS.chineseTitle.test(secondLine.trim())) {
-      cardData.title = secondLine
+  // Heuristic: look for title/position
+  // 啟發式：尋找職稱/職位
+  // Enhanced: Search through lines for known Chinese titles
+  let titleFound = false
+  for (let i = 0; i < Math.min(lines.length, 8); i++) {
+    const line = lines[i]
+    if (!line) continue
+
+    // Skip if already identified as name
+    if (cardData.name && line === cardData.name) continue
+
+    // Skip structured data
+    if (
+      PATTERNS.email.test(line) ||
+      PATTERNS.phone.test(line) ||
+      PATTERNS.url.test(line) ||
+      companyKeywords.test(line)
+    ) {
+      continue
     }
-    // Or if it looks like a generic title
-    else if (
+
+    // Check if it matches a known Chinese title
+    if (PATTERNS.chineseTitle.test(line.trim())) {
+      cardData.title = line
+      titleFound = true
+      break
+    }
+  }
+
+  // Fallback: second line if it looks reasonable
+  if (!titleFound && lines.length > 1 && lines[1]) {
+    const secondLine = lines[1]
+    if (
+      secondLine !== cardData.name &&
       secondLine.length < 60 &&
       !PATTERNS.email.test(secondLine) &&
       !PATTERNS.phone.test(secondLine) &&
@@ -303,7 +355,7 @@ export function parseCardFields(ocrText: string): CardData {
   // (companyKeywords already defined above for early return case)
   const companyLine = lines.find((line) => companyKeywords.test(line))
   if (companyLine && companyLine.length < 100) {
-    cardData.company = companyLine
+    cardData.company = cleanCompanyName(companyLine)
   } else {
     // Fallback: third line might be company if not already identified
     // or if it's just a company name without keywords (for simple cases)
@@ -322,7 +374,7 @@ export function parseCardFields(ocrText: string): CardData {
       ) {
         // Check if line looks like a company (has company keywords or is short enough)
         if (companyKeywords.test(line) || (line.length < 50 && i <= 3)) {
-          cardData.company = line
+          cardData.company = cleanCompanyName(line)
           break
         }
       }
@@ -379,6 +431,23 @@ export function parseCardFields(ocrText: string): CardData {
   }
 
   return cardData
+}
+
+/**
+ * Clean company name by removing leading garbage characters
+ * 清理公司名稱，移除前導雜訊字元
+ */
+function cleanCompanyName(companyName: string): string {
+  // Remove leading digits, punctuation, and single letters that are likely OCR errors
+  // 移除可能是 OCR 錯誤的前導數字、標點符號和單個字母
+  let cleaned = companyName.trim()
+
+  // Remove leading garbage: numbers, single letters, special chars
+  // Keep Chinese characters and meaningful English words
+  cleaned = cleaned.replace(/^[\d\s\-_.,:;!?@#$%^&*()[\]{}|\\/<>~`'"]+/, '')
+  cleaned = cleaned.replace(/^[A-Za-z]\s+/, '') // Single letter followed by space
+
+  return cleaned.trim()
 }
 
 /**
