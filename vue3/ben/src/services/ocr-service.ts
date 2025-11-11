@@ -80,13 +80,13 @@ export class TesseractOcrService implements OcrService {
     }
 
     try {
-      // Temporarily disable preprocessing to test raw image quality
-      // If raw image works better, we'll need to adjust preprocessing algorithm
-      // const processedImage = await this.preprocessImage(image)
+      // Apply improved preprocessing with Otsu's thresholding for colored backgrounds
+      // Re-enabled with better algorithm for green/blue business cards
+      const processedImage = await this.preprocessImage(image)
 
       // Note: Can't pass logger callback to recognize() due to Web Worker serialization
       // Progress tracking is handled by the worker's init-time logger
-      const result = await this.worker.recognize(image)
+      const result = await this.worker.recognize(processedImage)
 
       // Call progress callback with 100% when done
       if (onProgress) {
@@ -115,7 +115,9 @@ export class TesseractOcrService implements OcrService {
 
   /**
    * Preprocess image to improve OCR accuracy
+   * Enhanced for colored backgrounds (like green/blue business cards)
    * 預處理圖片以提高 OCR 準確度
+   * 改進以處理彩色背景（如綠色/藍色名片）
    */
   private async preprocessImage(blob: Blob): Promise<HTMLCanvasElement> {
     return new Promise((resolve, reject) => {
@@ -133,34 +135,73 @@ export class TesseractOcrService implements OcrService {
             return
           }
 
-          // Set canvas size to image size
-          canvas.width = img.width
-          canvas.height = img.height
+          // Set canvas size to image size (or scale up for better OCR)
+          const scale = 2 // Scale up for better resolution
+          canvas.width = img.width * scale
+          canvas.height = img.height * scale
 
-          // Draw image
-          ctx.drawImage(img, 0, 0)
+          // Draw image with scaling
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
 
           // Get image data for processing
           const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
           const data = imageData.data
 
-          // Apply image enhancements
-          // 1. Convert to grayscale and increase contrast
-          for (let i = 0; i < data.length; i += 4) {
-            // Convert to grayscale using luminance formula
-            const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2]
+          // Apply adaptive preprocessing
+          // 1. Convert to grayscale
+          // 2. Apply adaptive thresholding (Otsu-like approach)
+          const grayscale = new Uint8Array(data.length / 4)
+          for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+            grayscale[j] = Math.round(0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2])
+          }
 
-            // Increase contrast (simple threshold)
-            // Adjust these values if needed: lower threshold = darker, higher = lighter
-            const contrast = gray < 128 ? gray * 0.8 : gray * 1.2
+          // Calculate histogram and optimal threshold (simplified Otsu's method)
+          const histogram = new Array(256).fill(0)
+          grayscale.forEach((value) => histogram[value]++)
 
-            // Clamp to 0-255
-            const final = Math.min(255, Math.max(0, contrast))
+          // Calculate total pixels and weighted sum
+          const total = grayscale.length
+          let sum = 0
+          for (let i = 0; i < 256; i++) {
+            sum += i * histogram[i]
+          }
 
-            data[i] = final // R
-            data[i + 1] = final // G
-            data[i + 2] = final // B
-            // Alpha channel (i+3) stays the same
+          // Find threshold that maximizes between-class variance
+          let sumB = 0
+          let wB = 0
+          let wF = 0
+          let maxVariance = 0
+          let threshold = 128
+
+          for (let t = 0; t < 256; t++) {
+            wB += histogram[t]
+            if (wB === 0) continue
+
+            wF = total - wB
+            if (wF === 0) break
+
+            sumB += t * histogram[t]
+            const mB = sumB / wB
+            const mF = (sum - sumB) / wF
+            const variance = wB * wF * (mB - mF) * (mB - mF)
+
+            if (variance > maxVariance) {
+              maxVariance = variance
+              threshold = t
+            }
+          }
+
+          // Apply threshold with slight adjustment for better results
+          // Prefer lighter text (increase threshold slightly for dark backgrounds)
+          threshold = Math.min(threshold + 20, 255)
+
+          // Apply binary threshold
+          for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+            const value = grayscale[j] > threshold ? 255 : 0
+            data[i] = value // R
+            data[i + 1] = value // G
+            data[i + 2] = value // B
+            // Alpha stays the same
           }
 
           // Put processed image data back
