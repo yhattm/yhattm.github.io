@@ -32,9 +32,10 @@ const PATTERNS = {
   // 傳真：類似電話但通常有標籤
   fax: /(?:fax|傳真)[:：]?\s*(\+?\d{1,3}[-.\s]?)?\(?\d{2,4}\)?[-.\s]?\d{3,4}[-.\s]?\d{3,4}/gi,
 
-  // Chinese job titles
-  // 中文職稱
+  // Chinese job titles (exact match or contains key title words)
+  // 中文職稱（精確匹配或包含關鍵職稱字詞）
   chineseTitle: /^(董事長|總經理|執行長|副總經理|副總裁|總裁|經理|主任|部長|課長|組長|專員|主管|顧問|總監)$/,
+  titleKeywords: /(董事長|總經理|執行長|副總|總裁|經理|主任|部長|課長|組長|專員|主管|顧問|總監|.*長)$/,
 
   // Company registration number (Taiwan)
   // 公司統一編號（台灣）
@@ -327,9 +328,19 @@ export function parseCardFields(ocrText: string): CardData {
       continue
     }
 
-    // Check if it matches a known Chinese title
-    if (PATTERNS.chineseTitle.test(line.trim())) {
-      cardData.title = line
+    // Clean up line: remove leading single letters/numbers and excessive spaces
+    const cleanedLine = line.replace(/^[A-Za-z0-9]\s+/, '').trim()
+
+    // Check if it matches a known Chinese title (exact match)
+    if (PATTERNS.chineseTitle.test(cleanedLine)) {
+      cardData.title = cleanedLine
+      titleFound = true
+      break
+    }
+
+    // Check if it contains title keywords (broader match)
+    if (PATTERNS.titleKeywords.test(cleanedLine) && cleanedLine.length < 20) {
+      cardData.title = cleanedLine
       titleFound = true
       break
     }
@@ -407,7 +418,7 @@ export function parseCardFields(ocrText: string): CardData {
   if (addressLines.length > 0) {
     // Clean up address keywords and join multiple addresses
     const cleanedAddresses = addressLines.map((line) =>
-      line.replace(PATTERNS.addressKeywords, '').trim()
+      line.replace(PATTERNS.addressKeywords, '').replace(/^[\/\\]+\s*/, '').trim()
     )
     // For now, just use the first address found
     // You could join multiple addresses with separator if needed
@@ -426,7 +437,8 @@ export function parseCardFields(ocrText: string): CardData {
         line !== cardData.company,
     )
     if (fallbackAddressLine) {
-      cardData.address = fallbackAddressLine
+      // Clean leading slashes from fallback address too
+      cardData.address = fallbackAddressLine.replace(/^[\/\\]+\s*/, '').trim()
     }
   }
 
