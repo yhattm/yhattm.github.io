@@ -375,10 +375,40 @@ function viewImage(imageId: string) {
               <CardContent class="space-y-2">
                 <CardTitle class="text-lg">{{ card.data.name || 'Unknown' }}</CardTitle>
                 <CardDescription>{{ card.data.title }}</CardDescription>
-                <p v-if="card.data.company" class="text-sm">{{ card.data.company }}</p>
-                <p v-if="card.data.email" class="text-sm text-muted-foreground">{{ card.data.email }}</p>
-                <p v-if="card.data.phone" class="text-sm text-muted-foreground">{{ card.data.phone }}</p>
-                <div class="flex items-center justify-between pt-2">
+
+                <!-- All Contact Fields -->
+                <div class="space-y-1 text-sm">
+                  <p v-if="card.data.company" class="flex items-start gap-2">
+                    <span class="text-muted-foreground min-w-[60px]">{{ t('businessCardScanner.fields.company') }}:</span>
+                    <span class="flex-1">{{ card.data.company }}</span>
+                  </p>
+                  <p v-if="card.data.phone" class="flex items-start gap-2">
+                    <span class="text-muted-foreground min-w-[60px]">{{ t('businessCardScanner.fields.phone') }}:</span>
+                    <span class="flex-1">{{ card.data.phone }}</span>
+                  </p>
+                  <p v-if="card.data.email" class="flex items-start gap-2">
+                    <span class="text-muted-foreground min-w-[60px]">{{ t('businessCardScanner.fields.email') }}:</span>
+                    <span class="flex-1 break-all">{{ card.data.email }}</span>
+                  </p>
+                  <p v-if="card.data.website" class="flex items-start gap-2">
+                    <span class="text-muted-foreground min-w-[60px]">{{ t('businessCardScanner.fields.website') }}:</span>
+                    <span class="flex-1 break-all">{{ card.data.website }}</span>
+                  </p>
+                  <p v-if="card.data.fax" class="flex items-start gap-2">
+                    <span class="text-muted-foreground min-w-[60px]">{{ t('businessCardScanner.fields.fax') }}:</span>
+                    <span class="flex-1">{{ card.data.fax }}</span>
+                  </p>
+                  <p v-if="card.data.socialMedia" class="flex items-start gap-2">
+                    <span class="text-muted-foreground min-w-[60px]">{{ t('businessCardScanner.fields.socialMedia') }}:</span>
+                    <span class="flex-1 break-all">{{ card.data.socialMedia }}</span>
+                  </p>
+                  <p v-if="card.data.address" class="flex items-start gap-2">
+                    <span class="text-muted-foreground min-w-[60px]">{{ t('businessCardScanner.fields.address') }}:</span>
+                    <span class="flex-1">{{ card.data.address }}</span>
+                  </p>
+                </div>
+
+                <div class="flex items-center justify-between pt-2 border-t">
                   <Badge variant="secondary">{{ formatDate(card.timestamp) }}</Badge>
                   <Button @click="deleteCard(card.id)" variant="ghost" size="sm">
                     {{ t('businessCardScanner.actions.delete') }}
