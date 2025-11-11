@@ -15,8 +15,9 @@ const PATTERNS = {
   // Phone: various formats including international, parentheses, dashes, spaces
   // 電話：各種格式，包括國際、括號、破折號、空格
   // Enhanced to handle more formats and OCR errors
+  // Use word boundaries to avoid matching long number sequences
   phone:
-    /(\+?886[-.\s])?\(?0?\d{2,4}\)?[-.\s]?\d{3,4}[-.\s]?\d{3,4}|(\+?\d{1,3}[-.\s])?\(?\d{2,4}\)?[-.\s]\d{3,4}[-.\s]\d{3,4}|\d{2,4}-\d{3,4}-\d{3,4}|\d{10}/g,
+    /(\+?886[-.\s])?\(?0?\d{2,4}\)?[-.\s]?\d{3,4}[-.\s]?\d{3,4}|(\+?\d{1,3}[-.\s])?\(?\d{2,4}\)?[-.\s]\d{3,4}[-.\s]\d{3,4}|\d{2,4}-\d{3,4}-\d{3,4}|\b\d{10}\b/g,
 
   // URL: http/https URLs
   // 網址：http/https 網址
@@ -116,8 +117,9 @@ function cleanOcrLine(line: string): string {
   // Normalize excessive spaces
   cleaned = cleaned.replace(PATTERNS.excessiveSpaces, ' ')
 
-  // Remove repeating characters (keep only 2 repetitions)
-  cleaned = cleaned.replace(/(.)\1{2,}/g, '$1$1')
+  // Remove repeating non-alphanumeric characters (keep only 2 repetitions)
+  // Don't touch digits and letters to preserve valid data like "555", "www"
+  cleaned = cleaned.replace(/([^a-zA-Z0-9\u4e00-\u9fff])\1{2,}/g, '$1$1')
 
   return cleaned.trim()
 }
@@ -217,13 +219,25 @@ export function parseCardFields(ocrText: string): CardData {
   // Extract phone (excluding fax)
   const phoneMatches = cleanedText.match(PATTERNS.phone)
   if (phoneMatches && phoneMatches.length > 0) {
-    // Filter out fax numbers if they're labeled
+    // Filter out fax numbers if they're labeled, and numbers from long digit sequences
     const phones = phoneMatches.filter((p) => {
-      const context = cleanedText.substring(
-        Math.max(0, cleanedText.indexOf(p) - 10),
-        cleanedText.indexOf(p),
-      )
-      return !/(fax|傳真)/i.test(context)
+      const matchIndex = cleanedText.indexOf(p)
+      const beforeContext = cleanedText.substring(Math.max(0, matchIndex - 10), matchIndex)
+
+      // Skip if labeled as fax
+      if (/(fax|傳真)/i.test(beforeContext)) {
+        return false
+      }
+
+      // Skip if part of a longer number sequence
+      // Check characters immediately before and after the match
+      const charBefore = cleanedText[matchIndex - 1] || ''
+      const charAfter = cleanedText[matchIndex + p.length] || ''
+      if (/\d/.test(charBefore) || /\d/.test(charAfter)) {
+        return false
+      }
+
+      return true
     })
     if (phones.length > 0 && phones[0]) {
       // Normalize phone number to fix OCR errors
