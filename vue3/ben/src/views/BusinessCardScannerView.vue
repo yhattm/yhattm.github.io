@@ -267,6 +267,7 @@ function viewImage(imageId: string) {
           <div v-if="capturedImage && !isScanning" class="space-y-4 border-t pt-4 mt-4">
             <h3 class="font-semibold">{{ t('businessCardScanner.form.title') }}</h3>
 
+            <!-- Contact Fields -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label>{{ t('businessCardScanner.fields.name') }}</Label>
@@ -292,6 +293,31 @@ function viewImage(imageId: string) {
                 <Label>{{ t('businessCardScanner.fields.website') }}</Label>
                 <Input v-model="formData.website" />
               </div>
+              <div>
+                <Label>{{ t('businessCardScanner.fields.fax') }}</Label>
+                <Input v-model="formData.fax" />
+              </div>
+              <div>
+                <Label>{{ t('businessCardScanner.fields.socialMedia') }}</Label>
+                <Input v-model="formData.socialMedia" />
+              </div>
+            </div>
+
+            <!-- Address Field (full width) -->
+            <div>
+              <Label>{{ t('businessCardScanner.fields.address') }}</Label>
+              <Input v-model="formData.address" />
+            </div>
+
+            <!-- Raw OCR Text -->
+            <div>
+              <Label>{{ t('businessCardScanner.fields.rawOcr') }}</Label>
+              <textarea
+                v-model="rawOcrText"
+                readonly
+                class="w-full min-h-[100px] p-2 border rounded-md bg-muted text-sm font-mono"
+                :placeholder="t('businessCardScanner.fields.rawOcr')"
+              />
             </div>
 
             <div class="flex gap-2">
