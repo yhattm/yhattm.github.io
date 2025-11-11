@@ -368,9 +368,216 @@
 
 ---
 
-## Phase 10: Testing
+## Phase 10: Mobile Camera Features
 
-### 10.1 Unit Tests
+### 10.1 Implement getUserMedia Camera Access
+- [ ] Create `src/composables/useCamera.ts` composable
+- [ ] Check browser support for `navigator.mediaDevices.getUserMedia`
+- [ ] Request video stream with `facingMode: 'environment'` (rear camera)
+- [ ] Handle camera permission requests and denials
+- [ ] Provide fallback to HTML5 `<input capture="environment">`
+- [ ] Stop camera stream properly on component unmount
+
+**Validation**: Camera opens with rear camera on mobile devices
+
+### 10.2 Build Live Camera Preview
+- [ ] Create video element for camera preview
+- [ ] Set proper aspect ratio (4:3 or 16:9)
+- [ ] Mirror preview for front camera, don't mirror for rear
+- [ ] Add camera controls overlay (capture, flash, focus, switch)
+- [ ] Position controls for easy thumb access on mobile
+- [ ] Handle orientation changes gracefully
+
+**Validation**: Live preview displays with proper controls overlay
+
+### 10.3 Implement Flash/Torch Control
+- [ ] Check torch capability via `track.getCapabilities().torch`
+- [ ] Add flash toggle button (show only if supported)
+- [ ] Toggle torch on/off via `applyConstraints({ advanced: [{ torch: true }] })`
+- [ ] Update button icon to reflect current state
+- [ ] Handle torch not supported gracefully
+
+**Validation**: Flash toggles on supported devices, hidden on others
+
+### 10.4 Implement Auto-Focus Control
+- [ ] Enable continuous auto-focus by default (`focusMode: 'continuous'`)
+- [ ] Add tap-to-focus functionality on preview
+- [ ] Show focus indicator animation at tap location
+- [ ] Add manual/continuous focus mode toggle button
+- [ ] Provide visual feedback for focus confirmation
+
+**Validation**: Camera focuses automatically and responds to taps
+
+### 10.5 Implement Camera Switching
+- [ ] Enumerate available video devices
+- [ ] Show camera switch button only if multiple cameras exist
+- [ ] Switch between front (`facingMode: 'user'`) and rear (`facingMode: 'environment'`)
+- [ ] Stop current stream before requesting new camera
+- [ ] Update preview mirroring based on active camera
+
+**Validation**: Can switch between front and rear cameras
+
+### 10.6 Capture Still Image from Stream
+- [ ] Draw current video frame to canvas element
+- [ ] Convert canvas to Blob in JPEG format (quality: 0.9)
+- [ ] Pause or stop video stream after capture
+- [ ] Display captured image for review
+- [ ] Provide "Use This Image" and "Retake" buttons
+
+**Validation**: Captures high-quality still images from live preview
+
+### 10.7 Implement Image Rotation Tool
+- [ ] Add rotate button to image preview
+- [ ] Rotate image 90° clockwise on each click
+- [ ] Use canvas rotation transformation
+- [ ] Preserve image quality during rotation
+- [ ] Apply rotation before OCR processing
+
+**Validation**: Can rotate captured images before processing
+
+### 10.8 Implement Image Cropping Tool
+- [ ] Create cropping overlay with draggable corners
+- [ ] Show highlighted area to be kept
+- [ ] Implement touch/mouse drag for corner handles
+- [ ] Apply crop via canvas drawing
+- [ ] Provide confirm and cancel buttons
+
+**Validation**: Can crop images to focus on business card area
+
+### 10.9 Implement Touch Gestures
+- [ ] Add pinch-to-zoom gesture handler (1x to 4x)
+- [ ] Add pan gesture for zoomed images
+- [ ] Add double-tap to toggle zoom (1x ↔ 2x)
+- [ ] Constrain pan to image bounds
+- [ ] Add reset zoom button
+
+**Validation**: Touch gestures work smoothly on mobile
+
+### 10.10 Implement Orientation Detection
+- [ ] Listen to `window.orientation` or Screen Orientation API
+- [ ] Adjust UI layout on orientation change
+- [ ] Read EXIF orientation data from images
+- [ ] Auto-rotate images to correct orientation
+- [ ] Optionally lock orientation during capture
+
+**Validation**: UI adapts to device orientation changes
+
+### 10.11 Build Tabbed Interface
+- [ ] Create tab component with "Camera" and "Upload" tabs
+- [ ] Default to Camera tab on mobile, Upload tab on desktop
+- [ ] Stop camera stream when switching to Upload tab
+- [ ] Initialize camera when switching to Camera tab
+- [ ] Remember last selected tab (optional)
+
+**Validation**: Tab switching works smoothly, camera released properly
+
+### 10.12 Optimize for Mobile UI
+- [ ] Ensure minimum 44x44px touch targets for all buttons
+- [ ] Add adequate spacing between buttons
+- [ ] Position buttons for comfortable thumb reach
+- [ ] Add haptic feedback for button presses (if supported)
+- [ ] Implement full-screen camera mode
+
+**Validation**: All controls are easily tappable on mobile devices
+
+---
+
+## Phase 11: PWA Setup
+
+### 11.1 Create Web App Manifest
+- [ ] Create `public/manifest.json` with app metadata:
+  - name: "Ben's Business Card Scanner"
+  - short_name: "Card Scanner"
+  - description, start_url, display: "standalone"
+  - theme_color, background_color
+- [ ] Generate app icons (192x192, 512x512) in PNG format
+- [ ] Add icons to `public/icons/` directory
+- [ ] Link manifest in `index.html`: `<link rel="manifest" href="/manifest.json">`
+
+**Validation**: Manifest validates with no errors, icons display
+
+### 11.2 Create Service Worker
+- [ ] Create `public/sw.js` service worker file
+- [ ] Implement install event to cache critical assets:
+  - HTML, CSS, JS bundles
+  - Tesseract.js worker files
+  - App icons and manifest
+  - Fonts and UI components
+- [ ] Implement activate event to clean old caches
+- [ ] Implement fetch event with caching strategy:
+  - Cache-first for static assets
+  - Network-first for API calls (if any)
+
+**Validation**: Service worker installs and caches assets
+
+### 11.3 Register Service Worker
+- [ ] Add service worker registration in `src/main.ts`
+- [ ] Register after page load (not blocking initial render)
+- [ ] Skip registration in development mode
+- [ ] Handle registration success and errors
+- [ ] Log service worker lifecycle events
+
+**Validation**: Service worker registers successfully in production
+
+### 11.4 Implement Offline Functionality
+- [ ] Test app loads offline after first visit
+- [ ] Ensure Tesseract.js works offline (cached)
+- [ ] Verify IndexedDB works offline
+- [ ] Add offline status indicator
+- [ ] Test OCR processing works offline
+
+**Validation**: Core features work without internet connection
+
+### 11.5 Implement Install Prompts
+- [ ] Listen for `beforeinstallprompt` event
+- [ ] Create custom install prompt UI component
+- [ ] Show prompt after user engagement (30s or action completed)
+- [ ] Trigger browser install dialog on "Install" click
+- [ ] Handle prompt dismissal (store timestamp, don't show for 7 days)
+- [ ] Listen for `appinstalled` event
+
+**Validation**: Install prompt shows, installation works
+
+### 11.6 Implement Standalone Mode Detection
+- [ ] Detect standalone mode: `window.matchMedia('(display-mode: standalone)')`
+- [ ] Detect iOS standalone: `window.navigator.standalone`
+- [ ] Adapt UI for standalone mode (hide browser-specific elements)
+- [ ] Handle navigation within standalone app
+- [ ] Style status bar for standalone mode
+
+**Validation**: App detects and adapts to standalone mode
+
+### 11.7 Implement Update Notifications
+- [ ] Detect new service worker waiting to activate
+- [ ] Show update notification: "New version available"
+- [ ] Add "Reload" button to apply update
+- [ ] Activate new worker via `skipWaiting()`
+- [ ] Reload page to use new version
+- [ ] Auto-update on app reopen if user dismissed notification
+
+**Validation**: Users are notified of updates and can apply them
+
+### 11.8 Create Splash Screen Assets
+- [ ] Use manifest icons and background_color for splash
+- [ ] Test splash screen on various devices
+- [ ] Ensure smooth transition from splash to app
+
+**Validation**: Splash screen displays on standalone launch
+
+### 11.9 Configure Caching Strategy
+- [ ] Set cache names with version numbers
+- [ ] Implement cache-first for static assets
+- [ ] Implement network-first for dynamic data
+- [ ] Set cache expiration policies
+- [ ] Clean up old caches on service worker activation
+
+**Validation**: Caching strategy balances freshness and offline capability
+
+---
+
+## Phase 12: Testing
+
+### 12.1 Unit Tests
 - [ ] Test field parser utility with various OCR texts
 - [ ] Test image compression utility
 - [ ] Test store actions (mocked IndexedDB)
@@ -379,7 +586,7 @@
 
 **Validation**: Run `npm run test:unit`, all tests pass
 
-### 10.2 Component Tests
+### 12.2 Component Tests
 - [ ] Test CameraCapture component (mock camera API)
 - [ ] Test CardForm validation
 - [ ] Test CardListItem rendering
@@ -387,7 +594,7 @@
 
 **Validation**: Component tests pass
 
-### 10.3 E2E Tests (Playwright)
+### 12.3 E2E Tests (Playwright)
 - [ ] Test complete scan workflow (with mocked camera)
 - [ ] Test upload image and save card
 - [ ] Test edit card flow
@@ -399,9 +606,9 @@
 
 ---
 
-## Phase 11: Accessibility & Performance
+## Phase 13: Accessibility & Performance
 
-### 11.1 Accessibility Audit
+### 13.1 Accessibility Audit
 - [ ] Ensure all interactive elements have focus indicators
 - [ ] Add ARIA labels to all buttons and inputs
 - [ ] Test keyboard navigation (Tab, Enter, ESC)
@@ -411,7 +618,7 @@
 
 **Validation**: Accessibility checklist complete, no major issues
 
-### 11.2 Performance Optimization
+### 13.2 Performance Optimization
 - [ ] Lazy load Tesseract.js worker
 - [ ] Optimize image compression settings
 - [ ] Add virtual scrolling if card list >100 items
@@ -420,7 +627,7 @@
 
 **Validation**: App remains responsive with many cards
 
-### 11.3 Storage Management
+### 13.3 Storage Management
 - [ ] Add storage usage indicator
 - [ ] Handle quota exceeded errors
 - [ ] Warn users when storage is >80% full
@@ -430,9 +637,9 @@
 
 ---
 
-## Phase 12: Documentation & Deployment
+## Phase 14: Documentation & Deployment
 
-### 12.1 Code Documentation
+### 14.1 Code Documentation
 - [ ] Add JSDoc comments to complex functions
 - [ ] Document OCR service interface
 - [ ] Document store actions
@@ -440,7 +647,7 @@
 
 **Validation**: Code is well-documented
 
-### 12.2 User Documentation (Optional)
+### 14.2 User Documentation (Optional)
 - [ ] Add help/guide section in app
 - [ ] Explain how to get best OCR results
 - [ ] Provide tips for capturing business cards
@@ -448,7 +655,7 @@
 
 **Validation**: Users have guidance on using the feature
 
-### 12.3 Build & Deploy
+### 14.3 Build & Deploy
 - [ ] Run type-check: `npm run type-check`
 - [ ] Run linter: `npm run lint`
 - [ ] Fix any linting errors
@@ -466,14 +673,16 @@
 - Phase 1.1-1.5 (Foundation) - all tasks can run concurrently once dependencies installed
 - Phase 2.1-2.5 (OCR components) - after Phase 1 complete
 - Phase 8.1-8.2 (i18n) - can be done anytime, independent of other phases
-- Phase 10.1-10.3 (Testing) - write tests as features are implemented
+- Phase 11 (PWA Setup) - can be done in parallel with most phases, only requires Phase 1 complete
+- Phase 12.1-12.3 (Testing) - write tests as features are implemented
 
 **Must be sequential**:
 - Phase 1 → Phase 2 → Phase 3 → Phase 4 (setup before UI)
 - Phase 4 → Phase 5 (scanner view before card list)
 - Phase 5 → Phase 6 (card list before edit/delete)
 - Phase 7 depends on Phase 3 (store) and Phase 5 (card list)
-- Phase 11 and 12 should be done last (polish and deploy)
+- Phase 10 (Mobile Camera) depends on Phase 2 (OCR components) and Phase 4 (Scanner View)
+- Phase 13 and 14 should be done last (polish and deploy)
 
 ---
 
@@ -490,12 +699,14 @@
 | 7 | Export Functionality | 2-3 hours |
 | 8 | Internationalization | 1-2 hours |
 | 9 | Styling & Responsiveness | 2-3 hours |
-| 10 | Testing | 3-4 hours |
-| 11 | Accessibility & Performance | 2-3 hours |
-| 12 | Documentation & Deployment | 1-2 hours |
-| **Total** | **All Phases** | **27-41 hours** |
+| 10 | Mobile Camera Features | 4-6 hours |
+| 11 | PWA Setup | 3-4 hours |
+| 12 | Testing | 3-4 hours |
+| 13 | Accessibility & Performance | 2-3 hours |
+| 14 | Documentation & Deployment | 1-2 hours |
+| **Total** | **All Phases** | **34-51 hours** |
 
-This is a substantial feature, estimated at **3-5 full working days** for a single developer.
+This is a substantial feature, estimated at **4-6 full working days** for a single developer.
 
 ---
 
