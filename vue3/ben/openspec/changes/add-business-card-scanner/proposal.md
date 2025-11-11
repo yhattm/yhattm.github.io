@@ -40,7 +40,11 @@ This tool serves as a practical utility within the personal tools collection, de
 ## Scope
 ### In Scope
 - New route and view component for business card scanner
-- Camera capture and image upload functionality
+- **Dual camera capture methods**:
+  - HTML5 `<input capture="environment">` for simple mobile camera access
+  - `getUserMedia()` API for advanced camera features (live preview, flash control, focus)
+- **Tabbed interface**: Separate tabs for "Camera" and "Upload" modes
+- Image upload functionality with drag-and-drop support
 - OCR integration using Tesseract.js with extensible architecture
 - Structured data extraction for contact fields:
   - Name (姓名)
@@ -61,6 +65,18 @@ This tool serves as a practical utility within the personal tools collection, de
 - Timestamp tracking for each scan
 - Bilingual UI (English/Chinese)
 - Responsive design for mobile and desktop
+- **Mobile-first features**:
+  - Auto-focus control for sharp card images
+  - Flash/torch control for low-light environments
+  - Image rotation and cropping tools
+  - Touch gestures for zoom and pan
+  - Orientation detection and auto-rotation
+- **Progressive Web App (PWA) capabilities**:
+  - Service worker for offline functionality
+  - App manifest for "Add to Home Screen"
+  - Install prompts and standalone mode
+  - Offline OCR processing
+  - App icons and splash screens
 
 ### Out of Scope
 - Cloud synchronization
@@ -74,11 +90,13 @@ This tool serves as a practical utility within the personal tools collection, de
 
 ## Constraints
 - **Pure Frontend**: No backend required, all processing happens in browser
-- **Browser Compatibility**: Requires modern browsers with Camera API and IndexedDB support
+- **Browser Compatibility**: Requires modern browsers with Camera API, IndexedDB, and Service Worker support
+- **HTTPS Requirement**: `getUserMedia()` API requires HTTPS (except for localhost development)
 - **Storage Limits**: IndexedDB typically allows 50MB+ per origin, but recommend image compression
 - **OCR Accuracy**: Tesseract.js has moderate accuracy; users may need to edit results
-- **Performance**: OCR processing can take several seconds per image
-- **Privacy**: All data stays local in user's browser
+- **Performance**: OCR processing can take several seconds per image, especially on mobile devices
+- **Privacy**: All data stays local in user's browser, no data transmitted to servers
+- **PWA Limitations**: Some browsers (e.g., iOS Safari) have limited PWA support
 
 ## Risks
 1. **OCR Accuracy**: Tesseract.js may not accurately extract all fields
@@ -91,7 +109,16 @@ This tool serves as a practical utility within the personal tools collection, de
    - **Mitigation**: Show storage usage, allow users to delete old cards
 
 4. **Camera Access**: Some devices/browsers may not support camera API
-   - **Mitigation**: Always provide file upload as fallback
+   - **Mitigation**: Always provide file upload as fallback, dual camera implementation (HTML5 + getUserMedia)
+
+5. **HTTPS Deployment**: Advanced camera features require HTTPS
+   - **Mitigation**: Deploy to HTTPS-enabled hosting (GitHub Pages supports HTTPS), provide fallback to simple capture
+
+6. **PWA Adoption**: Users may not understand "Add to Home Screen" prompts
+   - **Mitigation**: Clear instructions, dismissible prompts, works fine as regular web app too
+
+7. **Mobile Performance**: OCR processing may be slower on mobile devices
+   - **Mitigation**: Show clear progress indicators, optimize image size, consider Web Workers
 
 ## Related Work
 - Existing tool pattern: `/mrt-fare-finder` (MrtFareFinderView.vue)
