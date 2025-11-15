@@ -25,4 +25,12 @@ export default defineConfig({
     'import.meta.env.VITE_APP_VERSION': JSON.stringify(packageJson.version),
     'import.meta.env.VITE_BUILD_DATE': JSON.stringify(new Date().toISOString()),
   },
+  server: {
+    // Allow ngrok and other proxy hosts
+    allowedHosts: [
+      '.ngrok-free.app',
+      '.ngrok.io',
+      'localhost',
+    ],
+  },
 })
