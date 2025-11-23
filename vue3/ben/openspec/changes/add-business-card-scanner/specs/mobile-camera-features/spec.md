@@ -8,18 +8,28 @@ Provides advanced mobile camera capabilities using the MediaDevices API for enha
 ## ADDED Requirements
 
 ### Requirement: getUserMedia Camera Access
-The application MUST use the MediaDevices.getUserMedia() API for advanced camera control on supported devices.
+The application MUST use the MediaDevices.getUserMedia() API for advanced camera control on supported devices, with lazy initialization.
 
 #### Scenario: Check getUserMedia support
 **Given** the user opens the camera tab on a mobile device
 **When** the camera component initializes
 **Then** the application checks if `navigator.mediaDevices.getUserMedia` is available
-**And** if supported, the advanced camera mode is enabled
+**And** if supported, the advanced camera mode is available
 **And** if not supported, falls back to HTML5 file input with capture attribute
+**And** the camera does NOT start automatically
+
+#### Scenario: Lazy camera initialization on first capture
+**Given** getUserMedia is supported
+**And** the camera has not been started yet
+**When** the user taps the capture button for the first time
+**Then** the application requests video stream with `facingMode: 'environment'`
+**And** the rear camera is preferred for scanning
+**And** permission prompt is shown to the user
+**And** subsequent captures reuse the active camera stream
 
 #### Scenario: Request camera with rear camera preference
 **Given** getUserMedia is supported
-**When** the user activates the camera
+**When** the user activates the camera (via first capture or manual start)
 **Then** the application requests video stream with `facingMode: 'environment'`
 **And** the rear camera is preferred for scanning
 **And** permission prompt is shown to the user
@@ -268,9 +278,10 @@ The application MUST provide a tabbed interface to switch between Camera and Upl
 #### Scenario: Switch to Camera tab
 **Given** the Upload tab is active
 **When** the user taps the Camera tab
-**Then** camera initialization begins
-**And** the camera preview is displayed
+**Then** the camera interface is displayed
 **And** the Camera tab is visually marked as active
+**And** the camera does NOT start automatically
+**And** camera will start on first capture button press
 
 #### Scenario: Tab state persistence
 **Given** the user switches between tabs
@@ -302,7 +313,49 @@ The application MUST optimize camera controls for mobile touch interaction.
 **And** a "Exit Full Screen" button is provided
 
 ## MODIFIED Requirements
-None - this is a new capability enhancing ocr-capture.
+
+### Requirement: Camera Lazy Initialization
+The camera MUST NOT start automatically when the camera tab is opened, and MUST only initialize when the user performs their first capture action.
+
+**Changed from**: Camera starts automatically in `onMounted()` lifecycle hook
+**Changed to**: Camera starts lazily on first capture button press
+
+**Rationale**:
+- Reduces unnecessary camera permission requests when users are just browsing
+- Saves battery and resources by not activating camera until actually needed
+- Provides better user control over when camera access is granted
+- Applies to all platforms (mobile and desktop) for consistent behavior
+
+#### Scenario: Camera tab opened without auto-start
+**Given** the user opens the camera tab
+**When** the camera component mounts
+**Then** the camera does NOT automatically request permissions
+**And** the camera does NOT start streaming
+**And** the capture button is displayed and ready for interaction
+**And** appropriate messaging indicates camera will start on capture
+
+#### Scenario: First capture triggers initialization
+**Given** the camera tab is open
+**And** the camera has not been started yet
+**When** the user presses the capture button for the first time
+**Then** the camera initialization begins
+**And** permission request is shown if not previously granted
+**And** camera stream starts after permission is granted
+**And** camera is ready for capture
+
+#### Scenario: Subsequent captures reuse stream
+**Given** the camera has been initialized via first capture
+**And** the camera stream is active
+**When** the user presses the capture button again
+**Then** the existing camera stream is used
+**And** no new permission request is made
+**And** capture happens immediately
+
+**Impact**:
+- Camera component no longer calls `startCamera()` in `onMounted()` lifecycle hook
+- First press of capture button triggers camera initialization
+- Subsequent presses use already-active camera stream
+- No impact on fallback HTML5 file input capture method
 
 ## REMOVED Requirements
 None - this is a new capability.

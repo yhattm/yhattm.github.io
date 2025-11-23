@@ -377,8 +377,12 @@
 - [x] Handle camera permission requests and denials
 - [x] Provide fallback to HTML5 `<input capture="environment">`
 - [x] Stop camera stream properly on component unmount
+- [ ] **Change**: Remove automatic camera start from `onMounted()` in CameraCapture.vue
+- [ ] **Change**: Implement lazy camera initialization on first capture button press
+- [ ] **Change**: Track camera initialization state to avoid re-requesting on subsequent captures
+- [ ] **Change**: Update UI to show appropriate messaging before camera starts
 
-**Validation**: Camera opens with rear camera on mobile devices
+**Validation**: Camera does NOT start automatically, only starts when capture button is pressed
 
 ### 10.2 Build Live Camera Preview
 - [x] Create video element for camera preview

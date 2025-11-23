@@ -134,3 +134,6 @@ This tool serves as a practical utility within the personal tools collection, de
 - Card management (edit, delete, export) functions properly
 - App remains responsive even with 50+ stored cards
 - No data loss on browser refresh or navigation
+
+## Why
+This business card scanner tool addresses the practical need to digitize physical business cards, a common pain point for professionals who collect many cards at networking events and conferences. By leveraging modern web capabilities (Camera API, OCR, IndexedDB), the tool provides a serverless, privacy-focused solution that keeps all data local while offering advanced features like mobile camera controls, offline access via PWA, and structured contact extraction. The lazy camera initialization approach improves user experience by reducing intrusive permission requests and conserving battery until the camera is actually needed for capture.
