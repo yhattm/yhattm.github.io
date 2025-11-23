@@ -102,8 +102,13 @@
 - [x] Add form validation (email format, phone format)
 - [x] Add save/cancel buttons
 - [x] Emit save event with form data
+- [ ] **Enhancement**: Ensure raw OCR text display preserves layout
+  - [ ] Verify `font-mono` class is applied to raw OCR textarea
+  - [ ] Add `whitespace-pre-wrap` class or equivalent CSS for whitespace preservation
+  - [ ] Test with sample business cards to ensure layout mirrors card arrangement
+  - [ ] Verify line breaks and spacing are preserved in both edit form and card list view
 
-**Validation**: Form displays OCR-extracted data, allows editing
+**Validation**: Form displays OCR-extracted data with layout-preserved raw text, allows editing
 
 ---
 

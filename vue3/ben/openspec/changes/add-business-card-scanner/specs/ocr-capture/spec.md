@@ -153,12 +153,22 @@ The application MUST parse OCR text into structured contact fields.
 **Then** social media URLs are identified
 **And** the socialMedia field is populated
 
-#### Scenario: Store raw OCR text
+#### Scenario: Store raw OCR text with layout preservation
 **Given** OCR processing completes
 **When** fields are extracted
-**Then** the complete raw OCR text is preserved
+**Then** the complete raw OCR text is preserved with original line breaks and spacing
+**And** the raw text maintains the ASCII string layout representing the business card's visual arrangement
 **And** the raw text is stored alongside structured fields
 **And** users can view the raw text for reference
+
+#### Scenario: Display raw OCR text with layout
+**Given** a business card has been scanned with OCR
+**When** the user views the card details or editing form
+**Then** the raw OCR text is displayed in a monospace font
+**And** line breaks and whitespace are preserved (`white-space: pre-wrap` or similar)
+**And** the text layout visually represents the business card's original arrangement
+**And** users can easily identify OCR recognition errors by comparing layout to the original image
+**And** users can detect if image rotation affected recognition quality by observing text orientation in the raw output
 
 ### Requirement: Image Preprocessing
 The application MUST optimize images before OCR processing for better accuracy.
@@ -194,7 +204,41 @@ The application MUST be designed to support multiple OCR providers.
 **And** the same data structure is returned
 
 ## MODIFIED Requirements
-None - this is a new capability.
+
+### Requirement: Raw OCR Text Display with Layout Preservation
+The raw OCR text MUST be displayed with preserved formatting to help users identify recognition errors and image orientation issues.
+
+**Changed from**: Raw OCR text displayed in basic textarea without specific layout preservation
+**Changed to**: Raw OCR text displayed with monospace font and `white-space: pre-wrap` to preserve ASCII layout
+
+**Rationale**:
+- Helps users quickly identify OCR recognition errors by comparing text layout with original card image
+- Makes image rotation issues obvious (e.g., if text appears sideways or upside down in raw output)
+- Provides visual debugging aid for OCR quality assessment
+- Preserves spatial relationship between text elements as they appeared on the card
+
+#### Scenario: Enhanced raw text visualization for error detection
+**Given** a business card has been scanned
+**When** the user views the raw OCR text
+**Then** the text is displayed in a monospace font (e.g., `font-family: monospace`)
+**And** whitespace and line breaks are preserved using `white-space: pre-wrap` or equivalent
+**And** the text layout mirrors the visual arrangement on the business card
+**And** users can immediately spot recognition errors by layout misalignment
+**And** rotated or misoriented images produce visibly abnormal text arrangements
+
+#### Scenario: Side-by-side comparison with image
+**Given** the user is editing a scanned business card
+**When** viewing both the card image and raw OCR text
+**Then** the text layout approximately matches the spatial arrangement in the image
+**And** fields appearing on the left side of the card appear in the left portion of the text
+**And** top-to-bottom reading order is preserved
+**And** discrepancies suggest OCR errors or rotation issues
+
+**Impact**:
+- Requires `white-space: pre-wrap` CSS on raw OCR text display elements
+- Monospace font already applied (`font-mono` class) but needs verification
+- No changes to OCR processing or data storage
+- Enhanced user experience for troubleshooting OCR quality
 
 ## REMOVED Requirements
 None - this is a new capability.

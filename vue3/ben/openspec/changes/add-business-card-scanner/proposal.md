@@ -56,7 +56,7 @@ This tool serves as a practical utility within the personal tools collection, de
   - Website/URL (網站)
   - Social Media (社群媒體)
   - Fax (傳真)
-  - Raw OCR text (原始 OCR 文字)
+  - Raw OCR text with layout preservation (原始 OCR 文字，保留排版)
 - IndexedDB storage for cards and images
 - Card list display with thumbnail preview
 - Full-size image viewer
@@ -65,6 +65,10 @@ This tool serves as a practical utility within the personal tools collection, de
 - Timestamp tracking for each scan
 - Bilingual UI (English/Chinese)
 - Responsive design for mobile and desktop
+- **Raw OCR text visualization**:
+  - Monospace font display with preserved whitespace (`white-space: pre-wrap`)
+  - ASCII-like layout representation of business card arrangement
+  - Visual debugging aid for identifying OCR errors and image rotation issues
 - **Mobile-first features**:
   - Auto-focus control for sharp card images
   - Flash/torch control for low-light environments
@@ -100,7 +104,7 @@ This tool serves as a practical utility within the personal tools collection, de
 
 ## Risks
 1. **OCR Accuracy**: Tesseract.js may not accurately extract all fields
-   - **Mitigation**: Provide easy editing interface, store raw OCR text for reference
+   - **Mitigation**: Provide easy editing interface, store raw OCR text with layout preservation for visual error detection and debugging
 
 2. **Performance**: Large images or many cards could slow down the app
    - **Mitigation**: Compress images before storage, lazy load thumbnails
