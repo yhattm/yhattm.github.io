@@ -83,6 +83,8 @@ export function useCamera() {
 
     try {
       const videoTrack = stream.value.getVideoTracks()[0]
+      if (!videoTrack) return false
+
       await videoTrack.applyConstraints({
         // @ts-ignore - torch is not in standard types yet
         advanced: [{ torch: enabled }]
@@ -100,6 +102,8 @@ export function useCamera() {
 
     try {
       const videoTrack = stream.value.getVideoTracks()[0]
+      if (!videoTrack) return false
+
       await videoTrack.applyConstraints({
         // @ts-ignore - focusMode may not be in standard types
         advanced: [{ focusMode: mode }]

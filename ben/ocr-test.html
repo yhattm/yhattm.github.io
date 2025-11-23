@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OCR Integration Test</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h1 { color: #333; }
+    h2 { color: #666; margin-top: 0; }
+    .image-container {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .image-container img {
+      max-width: 100%;
+      border: 2px solid #ddd;
+      border-radius: 4px;
+    }
+    .results {
+      font-family: 'Courier New', monospace;
+      background: #f8f8f8;
+      padding: 15px;
+      border-radius: 4px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    .metric {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .metric:last-child { border-bottom: none; }
+    .metric-label { font-weight: bold; color: #666; }
+    .metric-value { color: #333; }
+    .success { color: #28a745; }
+    .warning { color: #ffc107; }
+    .error { color: #dc3545; }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+    button:hover { background: #0056b3; }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .progress {
+      margin: 20px 0;
+      text-align: center;
+      font-size: 18px;
+      color: #007bff;
+    }
+    .ground-truth {
+      background: #e7f3ff;
+      padding: 15px;
+      border-left: 4px solid #007bff;
+      margin: 15px 0;
+    }
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    .comparison div {
+      padding: 8px;
+      background: #f8f8f8;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔍 OCR Integration Test</h1>
+  <p>Test OCR accuracy with the business card test image</p>
+
+  <div class="container">
+    <h2>Test Image</h2>
+    <div class="image-container">
+      <img id="testImage" src="" alt="Test business card" />
+    </div>
+    <input type="file" id="fileInput" accept="image/*" />
+    <button id="loadTestBtn">Load Test Card (test/image/card.jpg)</button>
+    <button id="runOcrBtn" disabled>Run OCR Test</button>
+  </div>
+
+  <div class="container" id="groundTruthSection" style="display: none;">
+    <h2>Ground Truth</h2>
+    <div class="ground-truth">
+      <div class="metric">
+        <span class="metric-label">Name (姓名):</span>
+        <span class="metric-value">鄭禾珈 Appa</span>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Title (職稱):</span>
+        <span class="metric-value">董事長</span>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Company (公司):</span>
+        <span class="metric-value">郡暉有限公司</span>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Phone (電話):</span>
+        <span class="metric-value">0928-568-881</span>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Tax ID (統編):</span>
+        <span class="metric-value">60681878</span>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Address (地址):</span>
+        <span class="metric-value">台北市大同區承德路一段17號9樓</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="progressSection" style="display: none;">
+    <div class="progress" id="progressText">Initializing OCR...</div>
+  </div>
+
+  <div class="container" id="resultsSection" style="display: none;">
+    <h2>OCR Results</h2>
+
+    <h3>Metrics</h3>
+    <div id="metrics"></div>
+
+    <h3>Extracted Fields</h3>
+    <div id="extractedFields"></div>
+
+    <h3>Field Comparison</h3>
+    <div class="comparison">
+      <div><strong>Field</strong></div>
+      <div><strong>Expected</strong></div>
+      <div><strong>Actual (OCR)</strong></div>
+    </div>
+    <div id="fieldComparison"></div>
+
+    <h3>Raw OCR Text (first 500 chars)</h3>
+    <div class="results" id="rawText"></div>
+  </div>
+
+  <script type="module">
+    import { createWorker } from 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.esm.min.js';
+
+    const GROUND_TRUTH = {
+      name: '鄭禾珈',
+      nameEn: 'Appa',
+      title: '董事長',
+      company: '郡暉有限公司',
+      phone: '0928-568-881',
+      taxId: '60681878',
+      address: '台北市大同區承德路一段17號9樓',
+    };
+
+    let currentImage = null;
+    let worker = null;
+
+    // Calculate Character Error Rate (Levenshtein distance)
+    function calculateCER(expected, actual) {
+      const m = expected.length;
+      const n = actual.length;
+      const dp = Array(m + 1).fill(0).map(() => Array(n + 1).fill(0));
+
+      for (let i = 0; i <= m; i++) dp[i][0] = i;
+      for (let j = 0; j <= n; j++) dp[0][j] = j;
+
+      for (let i = 1; i <= m; i++) {
+        for (let j = 1; j <= n; j++) {
+          if (expected[i - 1] === actual[j - 1]) {
+            dp[i][j] = dp[i - 1][j - 1];
+          } else {
+            dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1;
+          }
+        }
+      }
+
+      return ((dp[m][n] / m) * 100).toFixed(2);
+    }
+
+    // Simplified field parser for testing
+    function parseCardFields(text) {
+      const lines = text.split('\n').filter(l => l.trim().length > 0);
+      const result = {};
+
+      // Phone pattern
+      const phoneMatch = text.match(/[\d\-\(\)\+\s]{10,}/);
+      if (phoneMatch) result.phone = phoneMatch[0].trim();
+
+      // Name (assume first line with both Chinese and English)
+      const nameMatch = text.match(/[鄭郭陳林王李張劉黃][^\n]*[A-Z][a-z]+/);
+      if (nameMatch) result.name = nameMatch[0].trim();
+
+      // Title (董事長, etc.)
+      const titleMatch = text.match(/[董總經副][^\n]*長/);
+      if (titleMatch) result.title = titleMatch[0].trim();
+
+      // Company
+      const companyMatch = text.match(/[^\n]*有限公司/);
+      if (companyMatch) result.company = companyMatch[0].trim();
+
+      return result;
+    }
+
+    // Preprocess image (same as ocr-service.ts)
+    async function preprocessImage(imageElement) {
+      return new Promise((resolve) => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        const scale = 2;
+        canvas.width = imageElement.width * scale;
+        canvas.height = imageElement.height * scale;
+
+        ctx.drawImage(imageElement, 0, 0, canvas.width, canvas.height);
+
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+
+        // Convert to grayscale
+        const grayscale = new Uint8Array(data.length / 4);
+        for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+          grayscale[j] = Math.round(0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2]);
+        }
+
+        // Otsu's thresholding
+        const histogram = new Array(256).fill(0);
+        grayscale.forEach((value) => histogram[value]++);
+
+        const total = grayscale.length;
+        let sum = 0;
+        for (let i = 0; i < 256; i++) {
+          sum += i * histogram[i];
+        }
+
+        let sumB = 0, wB = 0, wF = 0, maxVariance = 0, threshold = 128;
+
+        for (let t = 0; t < 256; t++) {
+          wB += histogram[t];
+          if (wB === 0) continue;
+
+          wF = total - wB;
+          if (wF === 0) break;
+
+          sumB += t * histogram[t];
+          const mB = sumB / wB;
+          const mF = (sum - sumB) / wF;
+          const variance = wB * wF * (mB - mF) * (mB - mF);
+
+          if (variance > maxVariance) {
+            maxVariance = variance;
+            threshold = t;
+          }
+        }
+
+        threshold = Math.min(threshold + 20, 255);
+
+        // Apply threshold
+        for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+          const value = grayscale[j] > threshold ? 255 : 0;
+          data[i] = value;
+          data[i + 1] = value;
+          data[i + 2] = value;
+        }
+
+        ctx.putImageData(imageData, 0, 0);
+        resolve(canvas);
+      });
+    }
+
+    // Load test image
+    document.getElementById('loadTestBtn').addEventListener('click', async () => {
+      try {
+        const response = await fetch('/test/image/card.jpg');
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const img = document.getElementById('testImage');
+        img.src = url;
+        currentImage = img;
+        document.getElementById('runOcrBtn').disabled = false;
+        document.getElementById('groundTruthSection').style.display = 'block';
+      } catch (error) {
+        alert('Failed to load test image: ' + error.message);
+      }
+    });
+
+    // File input
+    document.getElementById('fileInput').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const url = URL.createObjectURL(file);
+        const img = document.getElementById('testImage');
+        img.src = url;
+        currentImage = img;
+        document.getElementById('runOcrBtn').disabled = false;
+        document.getElementById('groundTruthSection').style.display = 'none';
+      }
+    });
+
+    // Run OCR
+    document.getElementById('runOcrBtn').addEventListener('click', async () => {
+      if (!currentImage) return;
+
+      document.getElementById('progressSection').style.display = 'block';
+      document.getElementById('resultsSection').style.display = 'none';
+      document.getElementById('runOcrBtn').disabled = true;
+
+      try {
+        // Initialize worker
+        document.getElementById('progressText').textContent = 'Initializing Tesseract worker...';
+
+        if (!worker) {
+          worker = await createWorker('chi_tra+eng', 1, {
+            logger: (m) => {
+              if (m.status === 'recognizing text') {
+                document.getElementById('progressText').textContent =
+                  `OCR Progress: ${Math.round(m.progress * 100)}%`;
+              }
+            }
+          });
+
+          await worker.setParameters({
+            tessedit_pageseg_mode: '6',
+            preserve_interword_spaces: '1',
+          });
+        }
+
+        // Preprocess image
+        document.getElementById('progressText').textContent = 'Preprocessing image...';
+        const processedCanvas = await preprocessImage(currentImage);
+
+        // Run OCR
+        document.getElementById('progressText').textContent = 'Running OCR...';
+        const result = await worker.recognize(processedCanvas);
+
+        // Display results
+        displayResults(result.data);
+      } catch (error) {
+        alert('OCR failed: ' + error.message);
+        console.error(error);
+      } finally {
+        document.getElementById('progressSection').style.display = 'none';
+        document.getElementById('runOcrBtn').disabled = false;
+      }
+    });
+
+    function displayResults(data) {
+      const text = data.text;
+      const confidence = data.confidence;
+
+      // Parse fields
+      const extractedData = parseCardFields(text);
+
+      // Calculate metrics
+      let phoneCER = 'N/A';
+      if (extractedData.phone) {
+        const cleanExpected = GROUND_TRUTH.phone.replace(/[-\s]/g, '');
+        const cleanActual = extractedData.phone.replace(/[-\s]/g, '');
+        phoneCER = calculateCER(cleanExpected, cleanActual) + '%';
+      }
+
+      // Display metrics
+      document.getElementById('metrics').innerHTML = `
+        <div class="metric">
+          <span class="metric-label">Confidence:</span>
+          <span class="metric-value ${confidence > 60 ? 'success' : confidence > 30 ? 'warning' : 'error'}">
+            ${confidence.toFixed(2)}%
+          </span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Phone CER:</span>
+          <span class="metric-value">${phoneCER}</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Text Length:</span>
+          <span class="metric-value">${text.length} chars</span>
+        </div>
+      `;
+
+      // Display extracted fields
+      document.getElementById('extractedFields').innerHTML = `
+        <div class="results">${JSON.stringify(extractedData, null, 2)}</div>
+      `;
+
+      // Field comparison
+      const comparisons = [
+        { field: 'Name', expected: GROUND_TRUTH.name + ' ' + GROUND_TRUTH.nameEn, actual: extractedData.name || '-' },
+        { field: 'Title', expected: GROUND_TRUTH.title, actual: extractedData.title || '-' },
+        { field: 'Company', expected: GROUND_TRUTH.company, actual: extractedData.company || '-' },
+        { field: 'Phone', expected: GROUND_TRUTH.phone, actual: extractedData.phone || '-' },
+      ];
+
+      document.getElementById('fieldComparison').innerHTML = comparisons.map(c => `
+        <div class="comparison">
+          <div><strong>${c.field}</strong></div>
+          <div>${c.expected}</div>
+          <div class="${c.actual === c.expected ? 'success' : c.actual === '-' ? 'error' : 'warning'}">${c.actual}</div>
+        </div>
+      `).join('');
+
+      // Raw text
+      document.getElementById('rawText').textContent = text.substring(0, 500);
+
+      // Show results
+      document.getElementById('resultsSection').style.display = 'block';
+
+      // Console output
+      console.log('=== OCR Test Results ===');
+      console.log('Confidence:', confidence);
+      console.log('Extracted Data:', extractedData);
+      console.log('Phone CER:', phoneCER);
+      console.log('Raw Text:', text);
+    }
+  </script>
+</body>
+</html>

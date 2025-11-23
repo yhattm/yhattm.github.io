@@ -43,7 +43,7 @@ export class TesseractOcrService implements OcrService {
       // PSM 6 = Assume a single uniform block of text (good for business cards)
       // Note: tessedit_ocr_engine_mode must be set during createWorker, not here
       await this.worker.setParameters({
-        tessedit_pageseg_mode: '6', // Single block of text
+        tessedit_pageseg_mode: 6 as any, // Single block of text
         preserve_interword_spaces: '1', // Preserve spacing
       })
 
@@ -155,7 +155,10 @@ export class TesseractOcrService implements OcrService {
           // 2. Apply adaptive thresholding (Otsu-like approach)
           const grayscale = new Uint8Array(data.length / 4)
           for (let i = 0, j = 0; i < data.length; i += 4, j++) {
-            grayscale[j] = Math.round(0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2])
+            const r = data[i] ?? 0
+            const g = data[i + 1] ?? 0
+            const b = data[i + 2] ?? 0
+            grayscale[j] = Math.round(0.299 * r + 0.587 * g + 0.114 * b)
           }
 
           // Calculate histogram and optimal threshold (simplified Otsu's method)
@@ -200,7 +203,7 @@ export class TesseractOcrService implements OcrService {
 
           // Apply binary threshold
           for (let i = 0, j = 0; i < data.length; i += 4, j++) {
-            const value = grayscale[j] > threshold ? 255 : 0
+            const value = (grayscale[j] ?? 0) > threshold ? 255 : 0
             data[i] = value // R
             data[i + 1] = value // G
             data[i + 2] = value // B

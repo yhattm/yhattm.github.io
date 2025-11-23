@@ -173,7 +173,7 @@ export function parseCardFields(ocrText: string): CardData {
   const lines = filterNoiseLines(rawLines)
 
   // Debug: log quality scores for inspection
-  if (process.env.NODE_ENV === 'development') {
+  if (import.meta.env.DEV) {
     console.log('=== OCR Line Quality Analysis ===')
     rawLines.forEach((line, idx) => {
       const quality = calculateLineQuality(line)
