@@ -186,6 +186,47 @@ The application MUST optimize images before OCR processing for better accuracy.
 **Then** the image is converted to a format suitable for Tesseract.js
 **And** the conversion preserves text clarity
 
+### Requirement: Region-Based OCR for Improved Recognition
+The application MUST support cropping different regions of the business card image to improve OCR accuracy through manual and automatic region selection.
+
+#### Scenario: Multi-region OCR processing
+**Given** a business card image has been captured or uploaded
+**When** OCR processing is initiated
+**Then** the image MAY be divided into logical regions (e.g., top, middle, bottom sections)
+**And** OCR is performed on each region independently
+**And** results from all regions are combined
+**And** the combined results provide better overall recognition accuracy
+
+#### Scenario: Manual region selection for OCR
+**Given** the user has captured a business card image
+**When** initial OCR results have low confidence or missing fields
+**Then** the user can optionally select a specific region of the image to re-scan
+**And** a cropping tool allows the user to define the region boundaries
+**And** OCR is re-run on only the selected region
+**And** extracted data from the region updates the corresponding fields
+
+#### Scenario: Automatic region detection
+**Given** a business card image is being processed
+**When** the preprocessing stage analyzes the image
+**Then** the system MAY detect distinct text regions using contrast and edge detection
+**And** high-contrast regions with dense text are prioritized for OCR
+**And** each detected region is processed with optimized parameters
+**And** region-specific results are merged intelligently
+
+#### Scenario: Re-scan with different crop for failed recognition
+**Given** initial full-image OCR produces poor results (low confidence < 50%)
+**When** the system detects low recognition quality
+**Then** the system MAY automatically retry OCR with alternative cropping strategies
+**And** different crop regions are tested (e.g., excluding borders, focusing on center)
+**And** the best-performing crop result is selected
+**And** the user is informed if recognition improved with cropping
+
+**Rationale**:
+- Business cards often have complex backgrounds, borders, or logos that interfere with OCR
+- Focusing on specific text-dense regions can significantly improve recognition accuracy
+- Different regions may benefit from different OCR parameters (e.g., contrast adjustment)
+- Users can manually refine OCR by re-scanning problematic areas
+
 ### Requirement: Extensible OCR Architecture
 The application MUST be designed to support multiple OCR providers.
 

@@ -69,6 +69,11 @@ This tool serves as a practical utility within the personal tools collection, de
   - Monospace font display with preserved whitespace (`white-space: pre-wrap`)
   - ASCII-like layout representation of business card arrangement
   - Visual debugging aid for identifying OCR errors and image rotation issues
+- **Region-based OCR optimization**:
+  - Multi-region OCR processing for improved accuracy
+  - Manual region selection for re-scanning specific areas
+  - Automatic retry with different cropping strategies for low-confidence results
+  - Region detection and intelligent result merging
 - **Mobile-first features**:
   - Auto-focus control for sharp card images
   - Flash/torch control for low-light environments

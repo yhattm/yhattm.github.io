@@ -36,8 +36,17 @@
 - [x] Configure Tesseract with English and Chinese language support
 - [x] Add loading/progress tracking for OCR operations
 - [x] Add error handling for OCR failures
+- [ ] **Enhancement**: Implement region-based OCR for improved recognition
+  - [ ] Add multi-region OCR processing (divide image into top/middle/bottom sections)
+  - [ ] Implement automatic retry with different crop regions for low-confidence results (< 50%)
+  - [ ] Add region detection using contrast and edge detection
+  - [ ] Implement intelligent merging of results from multiple regions
+  - [ ] Add manual region selection UI for re-scanning specific areas
+  - [ ] Create cropping tool overlay for user-defined region boundaries
+  - [ ] Track and display confidence scores per region
+  - [ ] Add option to compare full-image vs region-based results
 
-**Validation**: OCR service can process test image and return text
+**Validation**: OCR service can process test image and return text, with improved accuracy through region-based processing
 
 ### 1.5 Create Image Processing Utilities
 - [x] Create `src/utils/image-processing.ts`
