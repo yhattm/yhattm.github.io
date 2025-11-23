@@ -111,13 +111,13 @@
 - [x] Add form validation (email format, phone format)
 - [x] Add save/cancel buttons
 - [x] Emit save event with form data
-- [ ] **Enhancement**: Ensure raw OCR text display preserves layout
-  - [ ] Verify `font-mono` class is applied to raw OCR textarea
-  - [ ] Add `whitespace-pre-wrap` class or equivalent CSS for whitespace preservation
-  - [ ] Test with sample business cards to ensure layout mirrors card arrangement
-  - [ ] Verify line breaks and spacing are preserved in both edit form and card list view
+- [x] **Enhancement**: Ensure raw OCR text display preserves layout
+  - [x] Verify `font-mono` class is applied to raw OCR textarea
+  - [x] Add `whitespace-pre-wrap` class or equivalent CSS for whitespace preservation
+  - [x] Test with sample business cards to ensure layout mirrors card arrangement
+  - [x] Verify line breaks and spacing are preserved in both edit form and card list view
 
-**Validation**: Form displays OCR-extracted data with layout-preserved raw text, allows editing
+**Validation**: ✅ Form displays OCR-extracted data with layout-preserved raw text, allows editing
 
 ---
 
@@ -391,12 +391,12 @@
 - [x] Handle camera permission requests and denials
 - [x] Provide fallback to HTML5 `<input capture="environment">`
 - [x] Stop camera stream properly on component unmount
-- [ ] **Change**: Remove automatic camera start from `onMounted()` in CameraCapture.vue
-- [ ] **Change**: Implement lazy camera initialization on first capture button press
-- [ ] **Change**: Track camera initialization state to avoid re-requesting on subsequent captures
-- [ ] **Change**: Update UI to show appropriate messaging before camera starts
+- [x] **Change**: Remove automatic camera start from `onMounted()` in CameraCapture.vue
+- [x] **Change**: Implement lazy camera initialization on first capture button press
+- [x] **Change**: Track camera initialization state to avoid re-requesting on subsequent captures
+- [x] **Change**: Update UI to show appropriate messaging before camera starts
 
-**Validation**: Camera does NOT start automatically, only starts when capture button is pressed
+**Validation**: ✅ Camera does NOT start automatically, only starts when capture button is pressed
 
 ### 10.2 Build Live Camera Preview
 - [x] Create video element for camera preview

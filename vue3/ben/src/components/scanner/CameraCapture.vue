@@ -38,13 +38,10 @@ const videoRef = ref<HTMLVideoElement | null>(null)
 const capturedImageUrl = ref<string | null>(null)
 const isTorchOn = ref(false)
 const isCapturing = ref(false)
+const cameraInitialized = ref(false)
 
-// Initialize camera on mount
-onMounted(async () => {
-  if (isSupported()) {
-    await startCamera('environment')
-  }
-})
+// Note: Camera is NOT started automatically on mount (lazy initialization)
+// Camera will start on first capture button press
 
 // Clean up on unmount
 onUnmounted(() => {
@@ -74,8 +71,21 @@ async function handleCameraSwitch() {
   await switchCamera()
 }
 
-// Handle capture
+// Handle capture (with lazy camera initialization)
 async function handleCapture() {
+  // Lazy initialization: Start camera on first capture if not already active
+  if (!cameraInitialized.value && !isActive.value) {
+    const started = await startCamera('environment')
+    if (started) {
+      cameraInitialized.value = true
+      // Give camera a moment to stabilize before capturing
+      await new Promise(resolve => setTimeout(resolve, 500))
+    } else {
+      // Camera failed to start, cannot capture
+      return
+    }
+  }
+
   if (!videoRef.value) return
 
   isCapturing.value = true
@@ -108,12 +118,13 @@ function confirmImage() {
 }
 
 // Retake image
-function retake() {
+async function retake() {
   if (capturedImageUrl.value) {
     URL.revokeObjectURL(capturedImageUrl.value)
     capturedImageUrl.value = null
   }
-  startCamera(facingMode.value)
+  // Restart camera (already initialized, so just start the stream)
+  await startCamera(facingMode.value)
 }
 </script>
 

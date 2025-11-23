@@ -344,7 +344,7 @@ async function rescanCard(cardId: string) {
               <textarea
                 v-model="rawOcrText"
                 readonly
-                class="w-full min-h-[100px] p-2 border rounded-md bg-muted text-sm font-mono"
+                class="w-full min-h-[100px] p-2 border rounded-md bg-muted text-sm font-mono whitespace-pre-wrap"
                 :placeholder="t('businessCardScanner.fields.rawOcr')"
               />
             </div>
