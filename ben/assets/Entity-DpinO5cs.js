@@ -1,0 +1,1 @@
+class e{_id;_createdAt;_updatedAt;constructor(t,d,r){this._id=t,this._createdAt=d||new Date,this._updatedAt=r||new Date}get id(){return this._id}get createdAt(){return this._createdAt}get updatedAt(){return this._updatedAt}markAsUpdated(){this._updatedAt=new Date}equals(t){return t==null?!1:this===t?!0:t instanceof e?this._id.equals(t._id):!1}}export{e as E};

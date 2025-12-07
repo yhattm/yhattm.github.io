@@ -1,0 +1,1 @@
+class r{constructor(t){if(this._value=t,!t||t.trim().length===0)throw new Error("Identifier cannot be empty")}get value(){return this._value}equals(t){return t==null||!(t instanceof this.constructor)?!1:t.value===this._value}toString(){return this._value}}export{r as I};
