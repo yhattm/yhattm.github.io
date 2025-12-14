@@ -1,0 +1,15 @@
+# Icon Generation
+
+SVG source files are available. To generate PNG icons:
+
+1. Open `convert-icons.html` in a browser: `open public/icons/convert-icons.html`
+2. Click "Load & Convert SVGs"
+3. Download icon-192.png and icon-512.png
+4. Place them in this directory
+
+Alternatively, use the conversion script:
+```bash
+node scripts/generate-icons.cjs
+```
+
+Or manually convert with tools like rsvg-convert or ImageMagick.

@@ -1,0 +1,23 @@
+<svg width="192" height="192" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="192" height="192" fill="#3b82f6" rx="32"/>
+
+  <!-- Business card icon -->
+  <g transform="translate(32, 48)">
+    <!-- Card background -->
+    <rect x="0" y="0" width="128" height="80" fill="white" rx="8"/>
+
+    <!-- Card details (simplified contact info) -->
+    <rect x="12" y="12" width="64" height="8" fill="#3b82f6" rx="2"/>
+    <rect x="12" y="28" width="48" height="6" fill="#60a5fa" rx="2"/>
+    <rect x="12" y="40" width="56" height="6" fill="#60a5fa" rx="2"/>
+    <rect x="12" y="52" width="40" height="6" fill="#60a5fa" rx="2"/>
+
+    <!-- Scan lines effect -->
+    <line x1="0" y1="40" x2="128" y2="40" stroke="#93c5fd" stroke-width="2" opacity="0.3"/>
+  </g>
+
+  <!-- Camera/scan indicator -->
+  <circle cx="144" cy="144" r="24" fill="white" opacity="0.9"/>
+  <path d="M 144 132 L 144 156 M 132 144 L 156 144" stroke="#3b82f6" stroke-width="4" stroke-linecap="round"/>
+</svg>

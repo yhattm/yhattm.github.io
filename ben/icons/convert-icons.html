@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PWA Icon Converter</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #3b82f6;
+      margin-top: 0;
+    }
+    button {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 10px 10px 10px 0;
+    }
+    button:hover {
+      background: #2563eb;
+    }
+    button:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+    }
+    .preview {
+      display: flex;
+      gap: 20px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+    .icon-preview {
+      text-align: center;
+    }
+    .icon-preview canvas {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .icon-preview p {
+      margin: 8px 0 0 0;
+      color: #64748b;
+      font-size: 14px;
+    }
+    .status {
+      padding: 12px;
+      border-radius: 6px;
+      margin: 10px 0;
+    }
+    .status.success {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .status.info {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    .instructions {
+      background: #f8fafc;
+      padding: 16px;
+      border-radius: 6px;
+      margin: 20px 0;
+      border-left: 4px solid #3b82f6;
+    }
+    .instructions ol {
+      margin: 8px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎨 PWA Icon Converter</h1>
+
+    <div class="instructions">
+      <strong>Instructions:</strong>
+      <ol>
+        <li>Click "Load & Convert SVGs" to render the icons</li>
+        <li>Preview the generated icons below</li>
+        <li>Click "Download icon-192.png" and "Download icon-512.png" to save them</li>
+        <li>Move the downloaded PNG files to <code>public/icons/</code></li>
+      </ol>
+    </div>
+
+    <div>
+      <button id="convertBtn" onclick="convertIcons()">Load & Convert SVGs</button>
+    </div>
+
+    <div id="status"></div>
+
+    <div class="preview" id="preview"></div>
+  </div>
+
+  <script>
+    async function convertIcons() {
+      const statusDiv = document.getElementById('status')
+      const previewDiv = document.getElementById('preview')
+      const convertBtn = document.getElementById('convertBtn')
+
+      convertBtn.disabled = true
+      statusDiv.innerHTML = '<div class="status info">Loading SVG files...</div>'
+      previewDiv.innerHTML = ''
+
+      try {
+        const icons = [
+          { name: 'icon-192', size: 192, file: 'icon-192.svg' },
+          { name: 'icon-512', size: 512, file: 'icon-512.svg' }
+        ]
+
+        for (const icon of icons) {
+          await convertSVGtoPNG(icon)
+        }
+
+        statusDiv.innerHTML = '<div class="status success">✓ Icons converted successfully! Click the download buttons below.</div>'
+      } catch (error) {
+        statusDiv.innerHTML = `<div class="status" style="background:#fee2e2;color:#991b1b;">Error: ${error.message}</div>`
+        convertBtn.disabled = false
+      }
+    }
+
+    async function convertSVGtoPNG(icon) {
+      const previewDiv = document.getElementById('preview')
+
+      // Fetch SVG file
+      const response = await fetch(icon.file)
+      if (!response.ok) throw new Error(`Failed to load ${icon.file}`)
+
+      const svgText = await response.text()
+
+      // Create an image from SVG
+      const img = new Image()
+      const svgBlob = new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' })
+      const url = URL.createObjectURL(svgBlob)
+
+      await new Promise((resolve, reject) => {
+        img.onload = resolve
+        img.onerror = reject
+        img.src = url
+      })
+
+      // Create canvas and draw image
+      const canvas = document.createElement('canvas')
+      canvas.width = icon.size
+      canvas.height = icon.size
+      const ctx = canvas.getContext('2d')
+
+      ctx.drawImage(img, 0, 0, icon.size, icon.size)
+
+      // Clean up
+      URL.revokeObjectURL(url)
+
+      // Add to preview
+      const previewContainer = document.createElement('div')
+      previewContainer.className = 'icon-preview'
+
+      const previewCanvas = canvas.cloneNode(true)
+      const previewCtx = previewCanvas.getContext('2d')
+      previewCtx.drawImage(canvas, 0, 0)
+
+      const downloadBtn = document.createElement('button')
+      downloadBtn.textContent = `Download ${icon.name}.png`
+      downloadBtn.onclick = () => downloadCanvas(canvas, `${icon.name}.png`)
+
+      const label = document.createElement('p')
+      label.textContent = `${icon.size}x${icon.size}px`
+
+      previewContainer.appendChild(previewCanvas)
+      previewContainer.appendChild(label)
+      previewContainer.appendChild(downloadBtn)
+
+      previewDiv.appendChild(previewContainer)
+    }
+
+    function downloadCanvas(canvas, filename) {
+      canvas.toBlob(blob => {
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = filename
+        a.click()
+        URL.revokeObjectURL(url)
+      }, 'image/png')
+    }
+  </script>
+</body>
+</html>
